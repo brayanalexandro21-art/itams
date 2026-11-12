@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import api from '../services/api';
+import { categoria } from '../components/ui';
 import { Icono } from '../components/Icono';
 
 function AiInsights() {
@@ -104,7 +105,7 @@ function AiInsights() {
                     return (
                       <div key={stat.category}>
                         <div className="flex justify-between text-sm mb-1">
-                          <span className="text-gray-700 capitalize">{stat.category}</span>
+                          <span className="text-gray-700 ">{categoria(stat.category)}</span>
                           <span className="text-gray-500">{stat.count}</span>
                         </div>
                         <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
@@ -228,7 +229,7 @@ function AiInsights() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div>
                 <p className="text-sm text-gray-500">Categoría</p>
-                <p className="font-medium text-gray-800 capitalize">{categorizeResult.category}</p>
+                <p className="font-medium text-gray-800 ">{categoria(categorizeResult.category)}</p>
               </div>
               <div>
                 <p className="text-sm text-gray-500">Prioridad</p>

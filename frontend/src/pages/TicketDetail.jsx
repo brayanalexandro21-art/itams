@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../services/api';
+import { categoria } from '../components/ui';
 
 function TicketDetail() {
   const { id } = useParams();
@@ -136,7 +137,7 @@ function TicketDetail() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="text-sm font-medium text-gray-500">Categoría</label>
-                  <p className="mt-1 text-gray-700">{ticket.category || '-'}</p>
+                  <p className="mt-1 text-gray-700">{categoria(ticket.category) || '-'}</p>
                 </div>
                 <div>
                   <label className="text-sm font-medium text-gray-500">Creado</label>

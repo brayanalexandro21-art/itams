@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import { tipoActivo } from '../components/ui';
 import { Icono, IconoTitulo } from '../components/Icono';
 
 const AssetHealthMonitor = () => {
@@ -105,7 +106,7 @@ const AssetHealthMonitor = () => {
           <div className="space-y-2">
             {data?.byType?.slice(0, 6).map((t, i) => (
               <div key={i} className="flex justify-between items-center p-2 bg-gray-50 rounded text-sm">
-                <span className="capitalize">{t.type}</span>
+                <span>{tipoActivo(t.type)}</span>
                 <span className="font-bold">{t.count}</span>
               </div>
             ))}

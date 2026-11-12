@@ -95,3 +95,11 @@ export const campo =
 
 export const fecha = (d) =>
   d ? new Date(String(d).replace(' ', 'T') + (String(d).includes('Z') || String(d).includes('T') ? '' : 'Z')).toLocaleDateString('es-CO', { day: 'numeric', month: 'short', year: 'numeric' }) : '—';
+
+// Categorías de tickets (el valor guardado sigue en inglés)
+const CATEGORIAS = { hardware: 'Hardware', software: 'Software', network: 'Red', email: 'Correo', access: 'Accesos y permisos', other: 'Otro' };
+export const categoria = (c) => (c ? CATEGORIAS[String(c).toLowerCase()] || c : '');
+
+// Tipos de activo (el valor guardado sigue en inglés)
+const TIPOS_ACTIVO = { computer: 'Computador', laptop: 'Portátil', monitor: 'Monitor', printer: 'Impresora', phone: 'Teléfono', server: 'Servidor', network: 'Red', software: 'Software', other: 'Otro' };
+export const tipoActivo = (t) => (t ? TIPOS_ACTIVO[String(t).toLowerCase()] || t : '');

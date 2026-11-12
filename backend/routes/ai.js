@@ -11,19 +11,24 @@ router.post('/categorize', auth, (req, res) => {
 
     // Simple keyword-based categorization (in production, use ML model)
     const categories = {
-      hardware: ['computer', 'laptop', 'printer', 'monitor', 'keyboard', 'mouse', 'hardware', 'pc', 'desktop', 'screen'],
-      software: ['software', 'install', 'update', 'application', 'program', 'windows', 'office', 'browser', 'email'],
-      network: ['network', 'internet', 'wifi', 'connection', 'router', 'switch', 'vpn', 'lan', 'wan'],
-      access: ['password', 'login', 'access', 'permission', 'account', 'locked', 'reset', 'forgot'],
-      email: ['email', 'outlook', 'gmail', 'mail', 'inbox', 'smtp', 'exchange'],
-      security: ['virus', 'malware', 'security', 'firewall', 'antivirus', 'hack', 'breach'],
+      hardware: ['computer', 'laptop', 'printer', 'monitor', 'keyboard', 'mouse', 'hardware', 'pc', 'desktop', 'screen',
+        'computador', 'portátil', 'portatil', 'impresora', 'teclado', 'pantalla', 'no enciende', 'equipo'],
+      software: ['software', 'install', 'update', 'application', 'program', 'windows', 'office', 'browser',
+        'instalar', 'programa', 'aplicación', 'actualizar', 'erp', 'licencia'],
+      network: ['network', 'internet', 'wifi', 'connection', 'router', 'switch', 'vpn', 'lan', 'wan',
+        'red', 'conexión', 'conexion', 'wi-fi', 'señal'],
+      access: ['password', 'login', 'access', 'permission', 'account', 'locked', 'reset', 'forgot',
+        'contraseña', 'clave', 'acceso', 'permiso', 'cuenta', 'bloqueada'],
+      email: ['email', 'outlook', 'gmail', 'mail', 'inbox', 'smtp', 'exchange', 'correo', 'buzón', 'buzon'],
+      security: ['virus', 'malware', 'security', 'firewall', 'antivirus', 'hack', 'breach', 'seguridad', 'phishing', 'sospechoso'],
     };
 
     const priorities = {
-      urgent: ['urgent', 'critical', 'down', 'broken', 'emergency', 'cannot work', 'not working'],
-      high: ['important', 'asap', 'quickly', 'priority', 'affecting work', 'deadline'],
-      medium: ['issue', 'problem', 'help', 'need', 'request', 'question'],
-      low: ['when possible', 'minor', 'small', 'suggestion', 'enhancement'],
+      urgent: ['urgent', 'critical', 'down', 'broken', 'emergency', 'cannot work', 'not working',
+        'urgente', 'crítico', 'critico', 'no funciona', 'caído', 'caido', 'no puedo trabajar'],
+      high: ['important', 'asap', 'quickly', 'priority', 'affecting work', 'deadline', 'importante', 'afecta', 'pronto'],
+      medium: ['issue', 'problem', 'help', 'need', 'request', 'question', 'problema', 'ayuda', 'necesito', 'solicitud'],
+      low: ['when possible', 'minor', 'small', 'suggestion', 'enhancement', 'cuando se pueda', 'menor', 'sugerencia'],
     };
 
     // Detect category
@@ -52,13 +57,13 @@ router.post('/categorize', auth, (req, res) => {
 
     // Generate suggested solution based on category
     const solutions = {
-      hardware: 'Check physical connections, restart the device, check for driver updates.',
-      software: 'Try restarting the application, check for updates, reinstall if necessary.',
-      network: 'Check network cables, restart router/modem, verify network settings.',
-      access: 'Reset password through self-service portal, check account status.',
-      email: 'Check email client settings, verify server connection, clear cache.',
-      security: 'Run antivirus scan, change passwords, contact security team.',
-      other: 'Please provide more details about the issue.',
+      hardware: 'Revisa las conexiones físicas, reinicia el equipo y verifica que los controladores estén actualizados.',
+      software: 'Reinicia la aplicación, busca actualizaciones y reinstálala si es necesario.',
+      network: 'Revisa los cables de red, reinicia el router o módem y verifica la configuración de red.',
+      access: 'Restablece la contraseña desde el portal de autoservicio y verifica el estado de la cuenta.',
+      email: 'Revisa la configuración del cliente de correo, la conexión con el servidor y borra la caché.',
+      security: 'Ejecuta un análisis antivirus, cambia tus contraseñas y avisa al equipo de seguridad.',
+      other: 'Por favor, describe el problema con más detalle.',
     };
 
     res.json({
@@ -178,7 +183,7 @@ router.get('/insights', auth, (req, res) => {
     if (categoryStats.length > 0) {
       insights.push({
         type: 'info',
-        message: `Most common issue: ${categoryStats[0].category} (${categoryStats[0].count} tickets)`,
+        message: `Problema más frecuente: ${({ hardware: 'hardware', software: 'software', network: 'red', email: 'correo', access: 'accesos y permisos', other: 'otros' })[categoryStats[0].category] || categoryStats[0].category} (${categoryStats[0].count} tickets)`,
       });
     }
 
@@ -186,7 +191,7 @@ router.get('/insights', auth, (req, res) => {
     if (urgentCount > 0) {
       insights.push({
         type: 'warning',
-        message: `${urgentCount} urgent tickets need immediate attention`,
+        message: urgentCount === 1 ? '1 ticket urgente requiere atención inmediata' : `${urgentCount} tickets urgentes requieren atención inmediata`,
       });
     }
 
@@ -196,7 +201,7 @@ router.get('/insights', auth, (req, res) => {
       if (trend > 0) {
         insights.push({
           type: 'trend',
-          message: `Ticket volume increased by ${trend} yesterday`,
+          message: `El volumen de tickets aumentó en ${trend} el último día`,
         });
       }
     }

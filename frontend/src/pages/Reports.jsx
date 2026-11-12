@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import api from '../services/api';
+import { categoria, tipoActivo } from '../components/ui';
 
 function Reports() {
   const [stats, setStats] = useState(null);
@@ -192,7 +193,7 @@ function Reports() {
                 ) : (
                   stats.ticketsByCategory.map((item) => (
                     <div key={item.category} className="flex items-center justify-between py-2 border-b">
-                      <span className="text-gray-700">{item.category}</span>
+                      <span className="text-gray-700">{categoria(item.category)}</span>
                       <span className="font-medium text-gray-800">{item.count}</span>
                     </div>
                   ))
@@ -261,7 +262,7 @@ function Reports() {
                 ) : (
                   stats.assetsByType.map((item) => (
                     <div key={item.type} className="flex items-center justify-between py-2 border-b">
-                      <span className="text-gray-700 capitalize">{({ computer: 'Computadores', laptop: 'Portátiles', monitor: 'Monitores', printer: 'Impresoras', phone: 'Teléfonos', server: 'Servidores', network: 'Red', other: 'Otros' })[item.type] || item.type}</span>
+                      <span className="text-gray-700 capitalize">{tipoActivo(item.type)}</span>
                       <span className="font-medium text-gray-800">{item.count}</span>
                     </div>
                   ))

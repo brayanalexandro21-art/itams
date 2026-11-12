@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Plus, Search, Ticket, FilterX } from 'lucide-react';
 import api from '../services/api';
-import { Card, EmptyState, PageHeader, PriorityBadge, Spinner, StatusBadge, botonPrimario, botonSecundario, campo, fecha } from '../components/ui';
+import { Card, EmptyState, PageHeader, PriorityBadge, Spinner, StatusBadge, categoria, botonPrimario, botonSecundario, campo, fecha } from '../components/ui';
 
 const PRIORIDADES = [
   ['low', 'Baja'],
@@ -144,7 +144,7 @@ function TicketList() {
                         <Link to={`/tickets/${t.id}`} onClick={(e) => e.stopPropagation()} className="block truncate font-medium text-gray-900 hover:text-brand-600">
                           {t.title}
                         </Link>
-                        {t.category && <p className="truncate text-xs capitalize text-gray-500">{t.category}</p>}
+                        {t.category && <p className="truncate text-xs text-gray-500">{categoria(t.category)}</p>}
                       </td>
                       <td className="whitespace-nowrap px-5 py-3.5"><StatusBadge status={t.status} /></td>
                       <td className="whitespace-nowrap px-5 py-3.5"><PriorityBadge priority={t.priority} /></td>

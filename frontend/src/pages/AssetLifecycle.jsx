@@ -117,7 +117,7 @@ const AssetLifecycle = () => {
                 {maintenance.map((item, index) => (
                   <tr key={index} className="border-t">
                     <td className="px-4 py-2">{item.asset_name}</td>
-                    <td className="px-4 py-2">{item.type}</td>
+                    <td className="px-4 py-2">{({ preventive: 'Preventivo', corrective: 'Correctivo', inspection: 'Inspección', upgrade: 'Actualización' })[item.type] || item.type}</td>
                     <td className="px-4 py-2">{item.scheduled_date}</td>
                     <td className="px-4 py-2">{item.description}</td>
                   </tr>

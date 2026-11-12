@@ -7,7 +7,8 @@
     "start": "node server.js",
     "dev": "node --watch server.js",
     "migrar-turso": "node scripts/migrar-a-turso.js",
-    "cambiar-contrasena": "node scripts/cambiar-contrasena.js"
+    "cambiar-contrasena": "node scripts/cambiar-contrasena.js",
+    "cargar-demo": "node scripts/cargar-demo.js"
   },
   "engines": {
     "node": ">=22"
