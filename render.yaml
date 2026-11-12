@@ -1,0 +1,28 @@
+# Despliegue de ITAMS en Render (plan gratuito)
+# Render lee este archivo al crear el servicio con "New > Blueprint".
+services:
+  - type: web
+    name: itams
+    runtime: node
+    plan: free
+    # Compila el frontend (React) y luego instala el backend, que sirve ambos en una sola URL
+    buildCommand: >-
+      cd frontend && npm install --include=dev && npm run build &&
+      cd ../backend && npm install --omit=dev
+    startCommand: cd backend && node server.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: NODE_ENV
+        value: production
+      # Render genera una clave aleatoria segura automáticamente
+      - key: JWT_SECRET
+        generateValue: true
+      # Estos tres los pegas tú en el panel de Render (sync: false = no se guardan en GitHub)
+      - key: TURSO_DATABASE_URL
+        sync: false
+      - key: TURSO_AUTH_TOKEN
+        sync: false
+      - key: CLOUDINARY_URL
+        sync: false

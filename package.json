@@ -1,0 +1,16 @@
+{
+  "name": "itams",
+  "version": "1.0.0",
+  "description": "Sistema de gestión de activos de TI y mesa de ayuda. **20 fases completadas - 90+ funcionalidades**",
+  "main": "serve.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1",
+    "http-proxy-middleware": "^4.2.0"
+  }
+}

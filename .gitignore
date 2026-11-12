@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build
+frontend/dist/
+frontend/build/
+
+# Database (los datos reales viven en Turso; nunca subir la base local)
+backend/*.db
+backend/*.db-*
+backend/*.db-journal
+backend/*.db-wal
+backend/*.db-shm
+
+# Archivos subidos y copias de seguridad locales
+backend/uploads/
+backend/backups/
+
+# Environment (claves secretas)
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# IDE
+.vscode/
+.idea/
+.claude/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+npm-debug.log*
