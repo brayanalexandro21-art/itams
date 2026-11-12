@@ -26,14 +26,10 @@ import BackupSettings from './pages/BackupSettings';
 import Integrations from './pages/Integrations';
 import TimeTracking from './pages/TimeTracking';
 // Phase 19 imports
-import AdvancedReports from './pages/AdvancedReports';
 import CustomDashboard from './pages/CustomDashboard';
 import AssetLifecycle from './pages/AssetLifecycle';
-import NotificationSettings from './pages/NotificationSettings';
-import BarcodeScanner from './pages/BarcodeScanner';
 import ExportTools from './pages/ExportTools';
 // Phase 20 imports
-import PerformanceMonitor from './pages/PerformanceMonitor';
 import BulkOperations from './pages/BulkOperations';
 import SearchAdvanced from './pages/SearchAdvanced';
 import KBAnalytics from './pages/KBAnalytics';
@@ -42,14 +38,11 @@ import UserActivity from './pages/UserActivity';
 import MLAnalytics from './pages/MLAnalytics';
 import VoiceCommands from './pages/VoiceCommands';
 import VideoConferencing from './pages/VideoConferencing';
-import AdvancedWorkflowBuilder from './pages/AdvancedWorkflowBuilder';
 import MultiCurrency from './pages/MultiCurrency';
 // Phase 22 imports
-import BrandingAdvanced from './pages/BrandingAdvanced';
 import NotificationPreferencesAdvanced from './pages/NotificationPreferencesAdvanced';
 import DataValidation from './pages/DataValidation';
 // Phase 23 imports
-import AIAdvanced from './pages/AIAdvanced';
 import Collaboration from './pages/Collaboration';
 import DocumentManager from './pages/DocumentManager';
 import SecurityDashboard from './pages/SecurityDashboard';
@@ -58,10 +51,8 @@ import ExecutiveDashboard from './pages/ExecutiveDashboard';
 import TechnicianPerformance from './pages/TechnicianPerformance';
 import SatisfactionReport from './pages/SatisfactionReport';
 // Phase 25 imports
-import AdvancedDashboard from './pages/AdvancedDashboard';
 import WorkflowTemplates from './pages/WorkflowTemplates';
 // Phase 26 imports
-import SearchAdvancedV2 from './pages/SearchAdvancedV2';
 import DataImportAdvanced from './pages/DataImportAdvanced';
 // Phase 27 imports
 import UserGroupsManagement from './pages/UserGroupsManagement';
@@ -80,23 +71,16 @@ import GamificationDashboard from './pages/GamificationDashboard';
 import SystemPerformance from './pages/SystemPerformance';
 import OnboardingGuide from './pages/OnboardingGuide';
 // Phase 31 imports
-import SLADashboard from './pages/SLADashboard';
-import BackupManagement from './pages/BackupManagement';
 import AssetHealthMonitor from './pages/AssetHealthMonitor';
 // Phase 32 imports
 import ApiUsageAnalytics from './pages/ApiUsageAnalytics';
-import NotificationCenter from './pages/NotificationCenter';
-import AuditTrailViewer from './pages/AuditTrailViewer';
 // Phase 33 imports
-import DashboardWidgetBuilder from './pages/DashboardWidgetBuilder';
 import ReportScheduler from './pages/ReportScheduler';
 import SystemSettings from './pages/SystemSettings';
 // Phase 34 imports
-import TicketTemplateManager from './pages/TicketTemplateManager';
 import ClientPortalDashboard from './pages/ClientPortalDashboard';
 import EmailCampaignManager from './pages/EmailCampaignManager';
 // Phase 35 imports
-import DashboardLayoutManager from './pages/DashboardLayoutManager';
 import SLATracker from './pages/SLATracker';
 import BarcodeGeneratorV2 from './pages/BarcodeGeneratorV2';
 // Phase 36 imports
@@ -116,7 +100,6 @@ import SystemHealth from './pages/SystemHealth';
 import CustomFieldManager from './pages/CustomFieldManager';
 import EscalationRules from './pages/EscalationRules';
 // Phase 40 imports
-import IntegrationHub from './pages/IntegrationHub';
 import NotificationRules from './pages/NotificationRules';
 import AnnouncementManager from './pages/AnnouncementManager';
 import Layout from './components/Layout';
@@ -165,7 +148,7 @@ function App() {
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="dashboard/custom" element={<CustomDashboard />} />
           <Route path="dashboard/executive" element={<ExecutiveDashboard />} />
-          <Route path="dashboard/advanced" element={<AdvancedDashboard />} />
+          <Route path="dashboard/advanced" element={<Navigate to="/dashboard" replace />} />
           <Route path="tickets" element={<TicketList />} />
           <Route path="tickets/new" element={<CreateTicket />} />
           <Route path="tickets/:id" element={<TicketDetail />} />
@@ -173,24 +156,24 @@ function App() {
           <Route path="assets/new" element={<CreateAsset />} />
           <Route path="assets/:id" element={<AssetDetail />} />
           <Route path="assets/lifecycle" element={<AssetLifecycle />} />
-          <Route path="assets/barcode" element={<BarcodeScanner />} />
+          <Route path="assets/barcode" element={<Navigate to="/barcode-generator-v2" replace />} />
           <Route path="assets/bulk" element={<BulkOperations />} />
           <Route path="knowledgebase" element={<KnowledgeBase />} />
           <Route path="knowledgebase/new" element={<CreateArticle />} />
           <Route path="knowledgebase/:id" element={<ArticleDetail />} />
           <Route path="knowledgebase/analytics" element={<KBAnalytics />} />
           <Route path="notifications" element={<Notifications />} />
-          <Route path="notifications/settings" element={<NotificationSettings />} />
+          <Route path="notifications/settings" element={<Navigate to="/notifications/preferences" replace />} />
           <Route path="notifications/preferences" element={<NotificationPreferencesAdvanced />} />
           <Route path="reports" element={<Reports />} />
-          <Route path="reports/advanced" element={<AdvancedReports />} />
-          <Route path="reports/executive" element={<ExecutiveDashboard />} />
+          <Route path="reports/advanced" element={<Navigate to="/reports" replace />} />
+          <Route path="reports/executive" element={<Navigate to="/dashboard/executive" replace />} />
           <Route path="reports/technician" element={<TechnicianPerformance />} />
           <Route path="reports/satisfaction" element={<SatisfactionReport />} />
           <Route path="reports/export" element={<ExportTools />} />
           <Route path="apikeys" element={<ApiKeys />} />
           <Route path="search" element={<SearchAdvanced />} />
-          <Route path="search/v2" element={<SearchAdvancedV2 />} />
+          <Route path="search/v2" element={<Navigate to="/search" replace />} />
           <Route path="import" element={<DataImportAdvanced />} />
           <Route path="validation" element={<DataValidation />} />
           <Route path="security" element={<SecurityDashboard />} />
@@ -199,16 +182,16 @@ function App() {
           <Route path="settings/email" element={<EmailSettings />} />
           <Route path="settings/2fa" element={<TwoFactorAuth />} />
           <Route path="settings/backup" element={<BackupSettings />} />
-          <Route path="settings/performance" element={<PerformanceMonitor />} />
-          <Route path="settings/branding" element={<BrandingAdvanced />} />
+          <Route path="settings/performance" element={<Navigate to="/system-performance" replace />} />
+          <Route path="settings/branding" element={<Navigate to="/branding-editor" replace />} />
           <Route path="audit" element={<AuditLogs />} />
           <Route path="sla" element={<SlaManagement />} />
           <Route path="workflows" element={<Workflows />} />
-          <Route path="workflows/advanced" element={<AdvancedWorkflowBuilder />} />
+          <Route path="workflows/advanced" element={<Navigate to="/workflows" replace />} />
           <Route path="workflows/templates" element={<WorkflowTemplates />} />
           <Route path="templates" element={<TicketTemplates />} />
           <Route path="ai-insights" element={<AiInsights />} />
-          <Route path="ai-advanced" element={<AIAdvanced />} />
+          <Route path="ai-advanced" element={<Navigate to="/ml-analytics" replace />} />
           <Route path="ml-analytics" element={<MLAnalytics />} />
           <Route path="voice-commands" element={<VoiceCommands />} />
           <Route path="video-conferencing" element={<VideoConferencing />} />
@@ -228,19 +211,19 @@ function App() {
           <Route path="gamification" element={<GamificationDashboard />} />
           <Route path="system-performance" element={<SystemPerformance />} />
           <Route path="onboarding" element={<OnboardingGuide />} />
-          <Route path="sla-dashboard" element={<SLADashboard />} />
-          <Route path="backup-management" element={<BackupManagement />} />
+          <Route path="sla-dashboard" element={<Navigate to="/sla" replace />} />
+          <Route path="backup-management" element={<Navigate to="/settings/backup" replace />} />
           <Route path="asset-health" element={<AssetHealthMonitor />} />
           <Route path="api-analytics" element={<ApiUsageAnalytics />} />
-          <Route path="notification-center" element={<NotificationCenter />} />
-          <Route path="audit-trail" element={<AuditTrailViewer />} />
-          <Route path="dashboard-builder" element={<DashboardWidgetBuilder />} />
+          <Route path="notification-center" element={<Navigate to="/notifications" replace />} />
+          <Route path="audit-trail" element={<Navigate to="/audit" replace />} />
+          <Route path="dashboard-builder" element={<Navigate to="/dashboard/custom" replace />} />
           <Route path="report-scheduler" element={<ReportScheduler />} />
           <Route path="system-settings" element={<SystemSettings />} />
-          <Route path="ticket-templates-manager" element={<TicketTemplateManager />} />
+          <Route path="ticket-templates-manager" element={<Navigate to="/templates" replace />} />
           <Route path="client-portal" element={<ClientPortalDashboard />} />
           <Route path="email-campaigns" element={<EmailCampaignManager />} />
-          <Route path="dashboard-layouts" element={<DashboardLayoutManager />} />
+          <Route path="dashboard-layouts" element={<Navigate to="/dashboard/custom" replace />} />
           <Route path="sla-tracker" element={<SLATracker />} />
           <Route path="barcode-generator-v2" element={<BarcodeGeneratorV2 />} />
           <Route path="role-manager" element={<RoleManager />} />
@@ -255,7 +238,7 @@ function App() {
           <Route path="system-health" element={<SystemHealth />} />
           <Route path="custom-fields" element={<CustomFieldManager />} />
           <Route path="escalation-rules" element={<EscalationRules />} />
-          <Route path="integration-hub" element={<IntegrationHub />} />
+          <Route path="integration-hub" element={<Navigate to="/integrations" replace />} />
           <Route path="notification-rules" element={<NotificationRules />} />
           <Route path="announcements" element={<AnnouncementManager />} />
           <Route path="*" element={<Navigate to="/dashboard" replace />} />

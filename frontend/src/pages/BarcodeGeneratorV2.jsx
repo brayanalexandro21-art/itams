@@ -52,7 +52,7 @@ const BarcodeGeneratorV2 = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6 flex items-center gap-3"><IconoTitulo e="🧾" />Generador de Código de Barras V2</h1>
+      <h1 className="text-2xl font-bold mb-6 flex items-center gap-3"><IconoTitulo e="🧾" />Códigos de barras</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         {/* Generar código */}
