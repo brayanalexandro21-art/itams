@@ -1,5 +1,6 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { Monitor, X } from 'lucide-react';
 import api from '../services/api';
 
 function CreateTicket() {
@@ -11,6 +12,20 @@ function CreateTicket() {
     category: '',
   });
   const [error, setError] = useState('');
+  // Ticket abierto desde la ficha o el QR de un equipo: queda vinculado a ese activo
+  const [params, setParams] = useSearchParams();
+  const [activo, setActivo] = useState(null);
+  const activoId = params.get('activo');
+
+  useEffect(() => {
+    if (!activoId) { setActivo(null); return; }
+    api.get('/assets/' + activoId)
+      .then((r) => {
+        setActivo(r.data);
+        setFormData((f) => ({ ...f, category: f.category || 'hardware' }));
+      })
+      .catch(() => setActivo(null));
+  }, [activoId]);
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
@@ -23,7 +38,7 @@ function CreateTicket() {
     setLoading(true);
 
     try {
-      await api.post('/tickets', formData);
+      await api.post('/tickets', { ...formData, asset_id: activo?.id || null });
       navigate('/tickets');
     } catch (err) {
       setError(err.response?.data?.error || 'No se pudo crear el ticket');
@@ -41,6 +56,21 @@ function CreateTicket() {
           {error && (
             <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
               {error}
+            </div>
+          )}
+
+          {activo && (
+            <div className="flex items-center gap-3 rounded-lg border border-brand-100 bg-brand-50 px-4 py-3">
+              <Monitor className="h-5 w-5 shrink-0 text-brand-600" strokeWidth={1.8} />
+              <div className="min-w-0 flex-1 text-sm">
+                <p className="text-gray-500">Equipo afectado</p>
+                <Link to={'/assets/' + activo.id} className="block truncate font-medium text-gray-900 hover:text-brand-700">
+                  {activo.name}{activo.location ? ' · ' + activo.location : ''}
+                </Link>
+              </div>
+              <button type="button" onClick={() => setParams({})} className="rounded p-1 text-gray-400 hover:bg-white hover:text-gray-600" aria-label="Quitar equipo">
+                <X className="h-4 w-4" />
+              </button>
             </div>
           )}
 

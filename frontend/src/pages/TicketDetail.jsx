@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { categoria } from '../components/ui';
 
@@ -145,6 +145,17 @@ function TicketDetail() {
                     {new Date(ticket.created_at).toLocaleString('es-CO')}
                   </p>
                 </div>
+                {ticket.asset_id && (
+                  <div className="col-span-2">
+                    <label className="text-sm font-medium text-gray-500">Equipo afectado</label>
+                    <p className="mt-1">
+                      <Link to={`/assets/${ticket.asset_id}`} className="font-medium text-brand-600 hover:text-brand-700">
+                        {ticket.asset_name || `Activo #${ticket.asset_id}`}
+                      </Link>
+                      {ticket.asset_serial && <span className="ml-2 text-sm text-gray-500">S/N {ticket.asset_serial}</span>}
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           </div>

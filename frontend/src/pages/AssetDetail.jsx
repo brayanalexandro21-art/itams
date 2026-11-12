@@ -3,6 +3,8 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import api from '../services/api';
 import InlineDropdown from '../components/InlineDropdown';
 import { Icono } from '../components/Icono';
+import { Download, Printer, QrCode, Wrench } from 'lucide-react';
+import { CodigoQr, descargarQr, urlActivo } from '../components/QrActivo';
 
 function AssetDetail() {
   const { id } = useParams();
@@ -269,7 +271,27 @@ function AssetDetail() {
         </div>
 
         {/* Panel de fotos - 1 columna */}
-        <div className="lg:col-span-1">
+        <div className="lg:col-span-1 space-y-6">
+          <div className="bg-white rounded-lg shadow p-4">
+            <h3 className="font-semibold text-gray-800 mb-3 flex items-center gap-2"><QrCode className="h-5 w-5 text-brand-600" strokeWidth={1.8} />Código QR</h3>
+            <div className="flex flex-col items-center text-center">
+              <CodigoQr texto={urlActivo(asset.id)} className="h-40 w-40" />
+              <p className="mt-2 text-sm font-medium text-gray-900">{asset.name}</p>
+              <p className="text-xs text-gray-500">{asset.inventory_number || asset.serial_number || `ID ${asset.id}`}</p>
+              <p className="mt-2 text-xs text-gray-500">Pégalo en el equipo: al escanearlo con el celular se abre esta ficha.</p>
+            </div>
+            <div className="mt-3 grid gap-2">
+              <button type="button" onClick={() => descargarQr(asset)} className="inline-flex items-center justify-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
+                <Download className="h-4 w-4" /> Descargar imagen
+              </button>
+              <Link to={`/assets/labels?ids=${asset.id}`} className="inline-flex items-center justify-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
+                <Printer className="h-4 w-4" /> Imprimir etiqueta
+              </Link>
+              <Link to={`/tickets/new?activo=${asset.id}`} className="inline-flex items-center justify-center gap-2 rounded-lg bg-brand-600 px-3 py-2 text-sm font-medium text-white hover:bg-brand-700">
+                <Wrench className="h-4 w-4" /> Reportar un problema
+              </Link>
+            </div>
+          </div>
           <div className="bg-white rounded-lg shadow p-4">
             <h3 className="font-semibold text-gray-800 mb-4 flex items-center gap-2"><Icono e="📸" />Fotos</h3>
             {modelPhotos?.photo_front ? (

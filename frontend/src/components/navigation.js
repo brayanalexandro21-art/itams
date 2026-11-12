@@ -10,7 +10,7 @@ import {
   Video, Mic, Trophy, Palette, LayoutGrid, Puzzle, SlidersHorizontal, Brush, Languages,
   ShieldCheck, Users, UserCog, ShieldAlert, Fingerprint, LockKeyhole, ScrollText, History,
   FileDown, BadgeCheck, Archive, Settings, AtSign, DatabaseBackup, HardDrive, Server, Cpu,
-  Upload, CheckCheck, Search, ListChecks, Rocket, BellDot,
+  Upload, CheckCheck, Search, ListChecks, Rocket, BellDot, QrCode,
 } from 'lucide-react';
 
 export const NAV_GROUPS = [
@@ -35,6 +35,7 @@ export const NAV_GROUPS = [
       { path: '/assets/lifecycle', label: 'Ciclo de vida', icon: Recycle },
       { path: '/asset-health', label: 'Salud de activos', icon: HeartPulse },
       { path: '/depreciation', label: 'Depreciación', icon: TrendingDown },
+      { path: '/assets/labels', label: 'Etiquetas QR', icon: QrCode },
       { path: '/barcode-generator-v2', label: 'Códigos de barras', icon: Barcode },
       { path: '/assets/bulk', label: 'Operaciones masivas', icon: Layers },
       { path: '/documents', label: 'Documentos', icon: FileText },

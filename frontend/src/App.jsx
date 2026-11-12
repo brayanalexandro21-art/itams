@@ -1,4 +1,21 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+
+// Recuerda la página pedida (p. ej. la ficha abierta desde un QR) para volver a ella tras iniciar sesión.
+function IrALogin() {
+  const { pathname, search } = useLocation();
+  try { sessionStorage.setItem('despues_login', pathname + search); } catch { /* sin almacenamiento */ }
+  return <Navigate to="/login" replace />;
+}
+
+function TrasLogin() {
+  let destino = '/dashboard';
+  try {
+    const guardado = sessionStorage.getItem('despues_login');
+    sessionStorage.removeItem('despues_login');
+    if (guardado && guardado.startsWith('/') && !guardado.startsWith('//') && guardado !== '/') destino = guardado;
+  } catch { /* sin almacenamiento */ }
+  return <Navigate to={destino} replace />;
+}
 import { useState, useEffect } from 'react';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -8,6 +25,7 @@ import TicketDetail from './pages/TicketDetail';
 import CreateTicket from './pages/CreateTicket';
 import AssetList from './pages/AssetList';
 import AssetDetail from './pages/AssetDetail';
+import EtiquetasQr from './pages/EtiquetasQr';
 import CreateAsset from './pages/CreateAsset';
 import KnowledgeBase from './pages/KnowledgeBase';
 import ArticleDetail from './pages/ArticleDetail';
@@ -141,9 +159,9 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={!user ? <Login onLogin={login} /> : <Navigate to="/dashboard" />} />
-        <Route path="/register" element={!user ? <Register onLogin={login} /> : <Navigate to="/dashboard" />} />
-        <Route path="/" element={user ? <Layout user={user} onLogout={logout} /> : <Navigate to="/login" />}>
+        <Route path="/login" element={!user ? <Login onLogin={login} /> : <TrasLogin />} />
+        <Route path="/register" element={!user ? <Register onLogin={login} /> : <TrasLogin />} />
+        <Route path="/" element={user ? <Layout user={user} onLogout={logout} /> : <IrALogin />}>
           <Route index element={<Navigate to="/dashboard" replace />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="dashboard/custom" element={<CustomDashboard />} />
@@ -154,6 +172,7 @@ function App() {
           <Route path="tickets/:id" element={<TicketDetail />} />
           <Route path="assets" element={<AssetList />} />
           <Route path="assets/new" element={<CreateAsset />} />
+          <Route path="assets/labels" element={<EtiquetasQr />} />
           <Route path="assets/:id" element={<AssetDetail />} />
           <Route path="assets/lifecycle" element={<AssetLifecycle />} />
           <Route path="assets/barcode" element={<Navigate to="/barcode-generator-v2" replace />} />
