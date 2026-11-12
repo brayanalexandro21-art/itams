@@ -95,11 +95,18 @@ y mostrar tus activos.
    (sin README ni .gitignore).
 2. En la carpeta del proyecto:
 
+El repositorio local ya está creado y con el primer commit. Antes de subirlo, pon tu nombre
+y correo de GitHub (quedan en el historial público):
+
 ```bash
-git init
-git add .
-git commit -m "ITAMS listo para despliegue"
-git branch -M main
+git config user.name "Tu Nombre"
+git config user.email "tu-correo@ejemplo.com"
+git commit --amend --reset-author --no-edit
+```
+
+Luego conéctalo a GitHub y súbelo:
+
+```bash
 git remote add origin https://github.com/TU_USUARIO/itams.git
 git push -u origin main
 ```
