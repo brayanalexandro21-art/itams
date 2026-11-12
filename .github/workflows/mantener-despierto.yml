@@ -1,0 +1,35 @@
+# Mantiene despierto el servidor de Render (plan gratuito).
+# Render apaga el servicio tras 15 minutos sin visitas y la siguiente visita
+# tarda 30-50 s en cargar. Esta tarea visita /api/health cada 10 minutos.
+#
+# - Se puede ejecutar a mano desde GitHub: pestaña Actions > "Mantener despierto" > Run workflow.
+# - GitHub puede retrasar unos minutos las tareas programadas.
+# - GitHub pausa las tareas programadas si el repositorio pasa 60 días sin cambios;
+#   se reactivan desde la pestaña Actions o con cualquier commit.
+
+name: Mantener despierto
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Visitar ITAMS
+        env:
+          URL: https://itams-16wg.onrender.com/api/health
+        run: |
+          for intento in 1 2 3; do
+            codigo=$(curl -s -o /dev/null -w '%{http_code}' --max-time 90 "$URL" || echo 000)
+            echo "Intento $intento: HTTP $codigo"
+            if [ "$codigo" = "200" ]; then exit 0; fi
+            sleep 20
+          done
+          echo "ITAMS no respondió con 200 después de 3 intentos"
+          exit 1
