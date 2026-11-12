@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import { Icono, IconoTitulo } from '../components/Icono';
 
 const GamificationDashboard = () => {
   const [data, setData] = useState(null);
@@ -24,7 +25,7 @@ const GamificationDashboard = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">🏆 Gamificación</h1>
+      <h1 className="text-2xl font-bold mb-6 flex items-center gap-3"><IconoTitulo e="🏆" />Gamificación</h1>
 
       {/* Stats del usuario */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
@@ -49,12 +50,12 @@ const GamificationDashboard = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         {/* Insignias del usuario */}
         <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold mb-4">🏅 Mis Insignias</h2>
+          <h2 className="text-lg font-semibold mb-4 flex items-center gap-2"><Icono e="🏅" />Mis Insignias</h2>
           {data?.badges?.length > 0 ? (
             <div className="grid grid-cols-3 gap-3">
               {data.badges.map((badge, i) => (
                 <div key={i} className="text-center p-3 bg-yellow-50 rounded-lg">
-                  <div className="text-3xl mb-1">{badge.icon}</div>
+                  <div className="text-3xl mb-1"><Icono e={badge.icon} className="h-8 w-8" /></div>
                   <div className="text-sm font-medium">{badge.name}</div>
                   <div className="text-xs text-gray-400">{new Date(badge.earned_at).toLocaleDateString('es-CO')}</div>
                 </div>
@@ -67,13 +68,13 @@ const GamificationDashboard = () => {
 
         {/* Todas las insignias */}
         <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold mb-4">📋 Todas las Insignias</h2>
+          <h2 className="text-lg font-semibold mb-4 flex items-center gap-2"><Icono e="📋" />Todas las Insignias</h2>
           <div className="space-y-2 max-h-64 overflow-y-auto">
             {data?.allBadges?.map((badge, i) => {
               const earned = data.badges?.some(b => b.name === badge.name);
               return (
                 <div key={i} className={`flex items-center gap-3 p-2 rounded ${earned ? 'bg-yellow-50' : 'bg-gray-50 opacity-50'}`}>
-                  <span className="text-2xl">{badge.icon}</span>
+                  <span className="text-2xl"><Icono e={badge.icon} className="h-7 w-7" /></span>
                   <div className="flex-1">
                     <div className="text-sm font-medium">{badge.name}</div>
                     <div className="text-xs text-gray-400">{badge.description}</div>
@@ -89,7 +90,7 @@ const GamificationDashboard = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Leaderboard */}
         <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold mb-4">📊 Leaderboard</h2>
+          <h2 className="text-lg font-semibold mb-4 flex items-center gap-2"><Icono e="📊" />Leaderboard</h2>
           <div className="space-y-2">
             {data?.leaderboard?.map((user, i) => (
               <div key={i} className={`flex items-center gap-3 p-2 rounded ${i < 3 ? 'bg-yellow-50' : 'bg-gray-50'}`}>
@@ -106,7 +107,7 @@ const GamificationDashboard = () => {
 
         {/* Actividad reciente */}
         <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold mb-4">📜 Actividad Reciente</h2>
+          <h2 className="text-lg font-semibold mb-4 flex items-center gap-2"><Icono e="📜" />Actividad Reciente</h2>
           <div className="space-y-2 max-h-64 overflow-y-auto">
             {data?.recentHistory?.map((h, i) => (
               <div key={i} className="flex justify-between items-center p-2 bg-gray-50 rounded text-sm">

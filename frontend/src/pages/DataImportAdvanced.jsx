@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import api from '../services/api';
+import { IconoTitulo } from '../components/Icono';
 
 const DataImportAdvanced = () => {
   const [entity, setEntity] = useState('tickets');
@@ -54,7 +55,7 @@ const DataImportAdvanced = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">📥 Importación de Datos CSV</h1>
+      <h1 className="text-2xl font-bold mb-6 flex items-center gap-3"><IconoTitulo e="📤" />Importación de Datos CSV</h1>
 
       <div className="bg-white rounded-lg shadow p-6 mb-6">
         <div className="mb-4">

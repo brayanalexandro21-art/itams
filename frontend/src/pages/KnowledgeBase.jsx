@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import api from '../services/api';
+import { Icono } from '../components/Icono';
 
 function KnowledgeBase() {
   const [articles, setArticles] = useState([]);
@@ -124,8 +125,8 @@ function KnowledgeBase() {
                 {article.content.substring(0, 200)}...
               </p>
               <div className="mt-4 flex items-center space-x-4 text-sm text-gray-500">
-                <span>👁️ {article.views} vistas</span>
-                <span>👍 {article.helpful} útil</span>
+                <span><Icono e="👁️" className="h-4 w-4" /> {article.views} vistas</span>
+                <span><Icono e="👍" className="h-4 w-4" /> {article.helpful} útil</span>
               </div>
             </Link>
           ))

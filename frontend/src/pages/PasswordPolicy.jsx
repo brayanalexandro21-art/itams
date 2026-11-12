@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import { IconoTitulo } from '../components/Icono';
 
 const PasswordPolicy = () => {
   const [policy, setPolicy] = useState({ min_length: 8, require_uppercase: true, require_lowercase: true, require_numbers: true, require_special: false, max_age_days: 90, prevent_reuse: 5 });
@@ -42,7 +43,7 @@ const PasswordPolicy = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">🔑 Política de Contraseñas</h1>
+      <h1 className="text-2xl font-bold mb-6 flex items-center gap-3"><IconoTitulo e="🔑" />Política de Contraseñas</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white rounded-lg shadow p-6">

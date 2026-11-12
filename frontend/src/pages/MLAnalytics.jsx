@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import { Icono, IconoTitulo } from '../components/Icono';
 
 const MLAnalytics = () => {
   const [predictions, setPredictions] = useState(null);
@@ -32,7 +33,7 @@ const MLAnalytics = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">🤖 Analíticas ML / IA</h1>
+      <h1 className="text-2xl font-bold mb-6 flex items-center gap-3"><IconoTitulo e="🤖" />Analíticas ML / IA</h1>
 
       {/* Predicciones */}
       <div className="bg-white rounded-lg shadow p-6 mb-6">
@@ -53,7 +54,7 @@ const MLAnalytics = () => {
 
       {/* Anomalías */}
       <div className="bg-white rounded-lg shadow p-6 mb-6">
-        <h2 className="text-lg font-semibold mb-4">⚠️ Detección de Anomalías</h2>
+        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2"><Icono e="⚠️" />Detección de Anomalías</h2>
         {anomalies?.anomalies?.length > 0 ? (
           <div className="space-y-2">
             {anomalies.anomalies.map((anomaly, i) => (
@@ -72,7 +73,7 @@ const MLAnalytics = () => {
 
       {/* Recomendaciones */}
       <div className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-lg font-semibold mb-4">💡 Recomendaciones</h2>
+        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2"><Icono e="💡" />Recomendaciones</h2>
         {recommendations.length > 0 ? (
           <div className="space-y-2">
             {recommendations.map((rec, i) => (

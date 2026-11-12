@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import { Icono, IconoTitulo } from '../components/Icono';
 
 const AssetHealthMonitor = () => {
   const [data, setData] = useState(null);
@@ -36,7 +37,7 @@ const AssetHealthMonitor = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">🏥 Monitor de Salud de Activos</h1>
+      <h1 className="text-2xl font-bold mb-6 flex items-center gap-3"><IconoTitulo e="🏥" />Monitor de Salud de Activos</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         {/* Health Score */}
@@ -113,7 +114,7 @@ const AssetHealthMonitor = () => {
 
         {/* Needs Maintenance */}
         <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold mb-4">⚠️ Necesitan Mantenimiento</h2>
+          <h2 className="text-lg font-semibold mb-4 flex items-center gap-2"><Icono e="⚠️" />Necesitan Mantenimiento</h2>
           <div className="space-y-2 max-h-48 overflow-y-auto">
             {data?.needsMaintenance?.length > 0 ? data.needsMaintenance.map((a, i) => (
               <div key={i} className="p-2 bg-yellow-50 rounded text-sm">
@@ -130,7 +131,7 @@ const AssetHealthMonitor = () => {
       {/* Expiring Warranty */}
       {data?.expiringWarranty?.length > 0 && (
         <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold mb-4">🛡️ Garantías por Vencer (90 días)</h2>
+          <h2 className="text-lg font-semibold mb-4 flex items-center gap-2"><Icono e="🛡️" />Garantías por Vencer (90 días)</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             {data.expiringWarranty.map((a, i) => (
               <div key={i} className="p-3 bg-orange-50 rounded">

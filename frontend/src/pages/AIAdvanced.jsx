@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import { Icono, IconoTitulo } from '../components/Icono';
 
 const AIAdvanced = () => {
   const [predictions, setPredictions] = useState(null);
@@ -32,7 +33,7 @@ const AIAdvanced = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">🤖 Analíticas AI Avanzadas</h1>
+      <h1 className="text-2xl font-bold mb-6 flex items-center gap-3"><IconoTitulo e="🤖" />Analíticas AI Avanzadas</h1>
 
       {/* Predicciones */}
       <div className="bg-white rounded-lg shadow p-6 mb-6">
@@ -50,7 +51,7 @@ const AIAdvanced = () => {
 
       {/* Anomalías */}
       <div className="bg-white rounded-lg shadow p-6 mb-6">
-        <h2 className="text-lg font-semibold mb-4">⚠️ Anomalías Detectadas</h2>
+        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2"><Icono e="⚠️" />Anomalías Detectadas</h2>
         {anomalies?.anomalies?.length > 0 ? (
           anomalies.anomalies.map((a, i) => (
             <div key={i} className={`p-3 rounded-lg mb-2 ${a.severity === 'high' ? 'bg-red-50' : 'bg-yellow-50'}`}>
@@ -64,7 +65,7 @@ const AIAdvanced = () => {
 
       {/* Recomendaciones */}
       <div className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-lg font-semibold mb-4">💡 Recomendaciones</h2>
+        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2"><Icono e="💡" />Recomendaciones</h2>
         {recommendations.length > 0 ? (
           recommendations.map((rec, i) => (
             <div key={i} className={`p-3 rounded-lg mb-2 ${

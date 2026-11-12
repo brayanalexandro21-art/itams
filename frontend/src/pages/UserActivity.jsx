@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import { Icono } from '../components/Icono';
 
 const UserActivity = () => {
   const [activities, setActivities] = useState([]);
@@ -42,7 +43,7 @@ const UserActivity = () => {
           <div className="divide-y">
             {activities.map((activity, index) => (
               <div key={index} className="p-4 flex items-center gap-3">
-                <span className="text-xl">{getActionIcon(activity.action)}</span>
+                <span className="text-xl"><Icono e={getActionIcon(activity.action)} className="h-6 w-6" /></span>
                 <div className="flex-1">
                   <p className="font-medium">{activity.action}</p>
                   <p className="text-sm text-gray-500">{activity.entity_type} - {activity.entity_id}</p>

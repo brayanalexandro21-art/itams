@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import { Icono, IconoTitulo } from '../components/Icono';
 
 const NotificationRules = () => {
   const [rules, setRules] = useState([]);
@@ -60,7 +61,7 @@ const NotificationRules = () => {
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">🔔 Reglas de Notificación</h1>
+        <h1 className="text-2xl font-bold flex items-center gap-3"><IconoTitulo e="🔔" />Reglas de Notificación</h1>
         <button onClick={() => setShowCreate(!showCreate)} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
           + Nueva Regla
         </button>
@@ -72,7 +73,7 @@ const NotificationRules = () => {
           <div className="grid grid-cols-2 gap-4 mb-4">
             <input type="text" value={newRule.name} onChange={(e) => setNewRule({...newRule, name: e.target.value})} placeholder="Nombre" className="border rounded px-3 py-2" />
             <select value={newRule.channel_type} onChange={(e) => setNewRule({...newRule, channel_type: e.target.value})} className="border rounded px-3 py-2">
-              {types.map(t => <option key={t.type} value={t.type}>{t.icon} {t.name}</option>)}
+              {types.map(t => <option key={t.type} value={t.type}>{t.name}</option>)}
             </select>
           </div>
           <div className="mb-4">
@@ -102,7 +103,7 @@ const NotificationRules = () => {
             <div className="flex justify-between items-start mb-3">
               <div>
                 <h3 className="font-semibold flex items-center gap-2">
-                  <span>{getTypeIcon(rule.channel_type)}</span> {rule.name}
+                  <span><Icono e={getTypeIcon(rule.channel_type)} className="h-5 w-5" /></span> {rule.name}
                 </h3>
                 <p className="text-xs text-gray-400 capitalize">{rule.channel_type}</p>
               </div>

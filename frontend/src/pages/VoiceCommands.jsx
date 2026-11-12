@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import { Icono, IconoTitulo } from '../components/Icono';
 
 const VoiceCommands = () => {
   const [commands, setCommands] = useState([]);
@@ -56,7 +57,7 @@ const VoiceCommands = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">🎤 Comandos de Voz</h1>
+      <h1 className="text-2xl font-bold mb-6 flex items-center gap-3"><IconoTitulo e="🎤" />Comandos de Voz</h1>
 
       <div className="bg-white rounded-lg shadow p-6 mb-6">
         <h2 className="text-lg font-semibold mb-4">Reconocimiento de Voz</h2>
@@ -71,7 +72,7 @@ const VoiceCommands = () => {
                 : 'bg-blue-500 hover:bg-blue-600'
             } text-white`}
           >
-            🎤
+            <Icono e="🎤" className="h-5 w-5" />
           </button>
           <p className="mt-4 text-gray-600">
             {isListening ? 'Escuchando...' : 'Haz clic para hablar'}
@@ -105,7 +106,7 @@ const VoiceCommands = () => {
                 <span className="font-medium">"{cmd.command}"</span>
                 <p className="text-sm text-gray-500">{cmd.description}</p>
               </div>
-              <span className="text-xl">{cmd.icon}</span>
+              <span className="text-xl"><Icono e={cmd.icon} className="h-6 w-6" /></span>
             </div>
           ))}
         </div>

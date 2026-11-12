@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import { Icono, IconoTitulo } from '../components/Icono';
 
 const DataRetention = () => {
   const [config, setConfig] = useState({ audit_logs_days: 365, notifications_days: 90, activity_logs_days: 180, email_logs_days: 90, api_logs_days: 30 });
@@ -53,12 +54,12 @@ const DataRetention = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">🗄️ Retención de Datos</h1>
+      <h1 className="text-2xl font-bold mb-6 flex items-center gap-3"><IconoTitulo e="🗄️" />Retención de Datos</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
         {stats && configs.map(c => (
           <div key={c.key} className="bg-white rounded-lg shadow p-4 text-center">
-            <div className="text-2xl mb-1">{c.icon}</div>
+            <div className="text-2xl mb-1"><Icono e={c.icon} className="h-7 w-7" /></div>
             <p className="text-2xl font-bold">{(stats[c.key.replace('_days', '').replace('audit_logs', 'audit_logs').replace('activity_logs', 'activity_logs')] || stats[c.key.replace('_days', '')] || 0).toLocaleString('es-CO')}</p>
             <p className="text-xs text-gray-500">{c.label}</p>
           </div>
@@ -71,7 +72,7 @@ const DataRetention = () => {
           {configs.map(c => (
             <div key={c.key} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
               <div className="flex items-center gap-3">
-                <span className="text-xl">{c.icon}</span>
+                <span className="text-xl"><Icono e={c.icon} className="h-6 w-6" /></span>
                 <div>
                   <div className="font-medium text-sm">{c.label}</div>
                   <div className="text-xs text-gray-400">{c.desc}</div>

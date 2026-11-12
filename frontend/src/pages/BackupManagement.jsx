@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import { IconoTitulo } from '../components/Icono';
 
 const BackupManagement = () => {
   const [backups, setBackups] = useState([]);
@@ -50,7 +51,7 @@ const BackupManagement = () => {
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">💾 Gestión de Backups</h1>
+        <h1 className="text-2xl font-bold flex items-center gap-3"><IconoTitulo e="🗃" />Gestión de Backups</h1>
         <button
           onClick={createBackup}
           disabled={creating}

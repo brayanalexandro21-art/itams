@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import { Icono } from '../components/Icono';
 
 const CustomDashboard = () => {
   const [widgets, setWidgets] = useState([]);
@@ -63,7 +64,7 @@ const CustomDashboard = () => {
               onClick={() => addWidget(widget.type)}
               className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 text-sm"
             >
-              {widget.icon} {widget.name}
+              <Icono e={widget.icon} className="h-5 w-5" /> {widget.name}
             </button>
           ))}
         </div>

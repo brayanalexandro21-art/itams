@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import api from '../services/api';
 import InlineDropdown from '../components/InlineDropdown';
+import { Icono } from '../components/Icono';
 
 function AssetDetail() {
   const { id } = useParams();
@@ -124,19 +125,19 @@ function AssetDetail() {
     <div className="p-6 max-w-6xl mx-auto">
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
-        <Link to="/assets" className="hover:text-gray-700">💻 Activos</Link>
+        <Link to="/assets" className="hover:text-gray-700"><Icono e="💻" className="h-4 w-4" /> Activos</Link>
         <span>/</span>
         <span className="font-medium text-gray-700">Computadora - {asset.name} - ID {asset.id}</span>
       </div>
 
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-bold text-gray-800">💻 Computadora - {asset.name} - ID {asset.id}</h2>
+        <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2"><Icono e="💻" />Computadora - {asset.name} - ID {asset.id}</h2>
         <div className="flex gap-2">
           <button onClick={handleDelete} className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 text-sm flex items-center gap-1">
-            🗑️ Enviar a la papelera
+            <Icono e="🗑️" className="h-4 w-4" /> Enviar a la papelera
           </button>
           <button onClick={handleSave} disabled={saving} className="px-6 py-2 bg-green-500 text-white rounded hover:bg-green-600 disabled:opacity-50 text-sm flex items-center gap-1">
-            💾 {saving ? 'Guardando...' : 'Guardar'}
+            <Icono e="💾" className="h-4 w-4" /> {saving ? 'Guardando...' : 'Guardar'}
           </button>
         </div>
       </div>
@@ -270,7 +271,7 @@ function AssetDetail() {
         {/* Panel de fotos - 1 columna */}
         <div className="lg:col-span-1">
           <div className="bg-white rounded-lg shadow p-4">
-            <h3 className="font-semibold text-gray-800 mb-4">📸 Fotos</h3>
+            <h3 className="font-semibold text-gray-800 mb-4 flex items-center gap-2"><Icono e="📸" />Fotos</h3>
             {modelPhotos?.photo_front ? (
               <div className="space-y-4">
                 <div>
@@ -291,7 +292,7 @@ function AssetDetail() {
               </div>
             ) : (
               <div className="text-center py-8 text-gray-400">
-                <p className="text-4xl mb-2">📷</p>
+                <p className="text-4xl mb-2"><Icono e="📷" className="h-10 w-10" /></p>
                 <p className="text-sm">Sin fotos</p>
                 <p className="text-xs">Asigna un modelo con fotos</p>
               </div>

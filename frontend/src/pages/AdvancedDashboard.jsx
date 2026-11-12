@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import { IconoTitulo } from '../components/Icono';
 
 const AdvancedDashboard = () => {
   const [data, setData] = useState(null);
@@ -24,7 +25,7 @@ const AdvancedDashboard = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">📊 Dashboard Avanzado V3</h1>
+      <h1 className="text-2xl font-bold mb-6 flex items-center gap-3"><IconoTitulo e="📊" />Dashboard Avanzado V3</h1>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
@@ -98,9 +99,9 @@ const AdvancedDashboard = () => {
           {data?.recentActivity?.slice(0, 5).map((activity, i) => (
             <div key={i} className="flex items-center gap-3 p-2 bg-gray-50 rounded">
               <span className="text-lg">
-                {activity.action === 'create' ? '➕' : 
+                <Icono e={activity.action === 'create' ? '➕' : 
                  activity.action === 'update' ? '✏️' : 
-                 activity.action === 'delete' ? '🗑️' : '📌'}
+                 activity.action === 'delete' ? '🗑️' : '📌'} className="h-5 w-5" />
               </span>
               <div className="flex-1">
                 <span className="font-medium">{activity.action}</span>

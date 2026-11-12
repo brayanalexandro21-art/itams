@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import { Icono, IconoTitulo } from '../components/Icono';
 
 const ContractManagement = () => {
   const [contracts, setContracts] = useState([]);
@@ -65,7 +66,7 @@ const ContractManagement = () => {
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">📄 Gestión de Contratos</h1>
+        <h1 className="text-2xl font-bold flex items-center gap-3"><IconoTitulo e="📄" />Gestión de Contratos</h1>
         <button onClick={() => setShowCreate(!showCreate)} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
           + Nuevo Contrato
         </button>
@@ -73,7 +74,7 @@ const ContractManagement = () => {
 
       {expiring.length > 0 && (
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
-          <h2 className="font-semibold text-yellow-800 mb-2">⚠️ Contratos Próximos a Vencer (30 días)</h2>
+          <h2 className="font-semibold text-yellow-800 mb-2 flex items-center gap-2"><Icono e="⚠️" />Contratos Próximos a Vencer (30 días)</h2>
           <div className="space-y-1">
             {expiring.map(c => (
               <div key={c.id} className="flex justify-between text-sm">

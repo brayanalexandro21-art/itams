@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import { Icono, IconoTitulo } from '../components/Icono';
 
 const VideoConferencing = () => {
   const [integrations, setIntegrations] = useState([]);
@@ -42,7 +43,7 @@ const VideoConferencing = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">📹 Video Conferencia</h1>
+      <h1 className="text-2xl font-bold mb-6 flex items-center gap-3"><IconoTitulo e="📹" />Video Conferencia</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         {/* Integraciones disponibles */}
@@ -51,21 +52,21 @@ const VideoConferencing = () => {
           <div className="space-y-3">
             <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
               <div className="flex items-center gap-3">
-                <span className="text-2xl">📹</span>
+                <span className="text-2xl"><Icono e="📹" className="h-7 w-7" /></span>
                 <span>Zoom</span>
               </div>
               <span className="text-green-600 text-sm">Disponible</span>
             </div>
             <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
               <div className="flex items-center gap-3">
-                <span className="text-2xl">🎥</span>
+                <span className="text-2xl"><Icono e="🎥" className="h-7 w-7" /></span>
                 <span>Google Meet</span>
               </div>
               <span className="text-green-600 text-sm">Disponible</span>
             </div>
             <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
               <div className="flex items-center gap-3">
-                <span className="text-2xl">💼</span>
+                <span className="text-2xl"><Icono e="💼" className="h-7 w-7" /></span>
                 <span>Microsoft Teams</span>
               </div>
               <span className="text-gray-400 text-sm">Próximamente</span>

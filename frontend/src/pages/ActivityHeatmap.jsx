@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import { IconoTitulo } from '../components/Icono';
 
 const ActivityHeatmap = () => {
   const [data, setData] = useState(null);
@@ -32,7 +33,7 @@ const ActivityHeatmap = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">🔥 Mapa de Actividad</h1>
+      <h1 className="text-2xl font-bold mb-6 flex items-center gap-3"><IconoTitulo e="🔥" />Mapa de Actividad</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
         <div className="bg-white rounded-lg shadow p-4 text-center">

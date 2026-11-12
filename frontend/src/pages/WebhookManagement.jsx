@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import { IconoTitulo } from '../components/Icono';
 
 const WebhookManagement = () => {
   const [webhooks, setWebhooks] = useState([]);
@@ -95,7 +96,7 @@ const WebhookManagement = () => {
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">🔗 Gestión de Webhooks</h1>
+        <h1 className="text-2xl font-bold flex items-center gap-3"><IconoTitulo e="🔗" />Gestión de Webhooks</h1>
         <button onClick={() => setShowCreate(!showCreate)} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
           + Nuevo Webhook
         </button>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import { Icono, IconoTitulo } from '../components/Icono';
 
 const SystemHealth = () => {
   const [health, setHealth] = useState(null);
@@ -44,9 +45,9 @@ const SystemHealth = () => {
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">🏥 Salud del Sistema</h1>
+        <h1 className="text-2xl font-bold flex items-center gap-3"><IconoTitulo e="🏥" />Salud del Sistema</h1>
         <button onClick={fetchHealth} disabled={refreshing} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:opacity-50">
-          {refreshing ? 'Verificando...' : '🔄 Actualizar'}
+          {refreshing ? 'Verificando...' : 'Actualizar'}
         </button>
       </div>
 
@@ -58,7 +59,7 @@ const SystemHealth = () => {
       }`}>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <span className="text-4xl">{getStatusIcon(health?.status)}</span>
+            <span className="text-4xl"><Icono e={getStatusIcon(health?.status)} className="h-10 w-10" /></span>
             <div>
               <h2 className="text-xl font-bold capitalize">
                 {health?.status === 'healthy' ? 'Todo Operativo' : health?.status === 'warning' ? 'Advertencias Detectadas' : 'Problemas Críticos'}
@@ -81,7 +82,7 @@ const SystemHealth = () => {
           <div key={i} className={`rounded-lg border p-4 ${getStatusColor(check.status)}`}>
             <div className="flex items-center justify-between mb-2">
               <span className="font-medium">{check.name}</span>
-              <span className="text-lg">{getStatusIcon(check.status)}</span>
+              <span className="text-lg"><Icono e={getStatusIcon(check.status)} className="h-5 w-5" /></span>
             </div>
             <p className="text-sm text-gray-600">{check.detail}</p>
             {check.latency && <p className="text-xs text-gray-400 mt-1">Latencia: {check.latency}</p>}

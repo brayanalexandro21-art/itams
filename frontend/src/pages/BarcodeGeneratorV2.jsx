@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import { Icono, IconoTitulo } from '../components/Icono';
 
 const BarcodeGeneratorV2 = () => {
   const [assetId, setAssetId] = useState('');
@@ -51,7 +52,7 @@ const BarcodeGeneratorV2 = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">📱 Generador de Código de Barras V2</h1>
+      <h1 className="text-2xl font-bold mb-6 flex items-center gap-3"><IconoTitulo e="🧾" />Generador de Código de Barras V2</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         {/* Generar código */}
@@ -118,7 +119,7 @@ const BarcodeGeneratorV2 = () => {
       </div>
 
       <div className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-lg font-semibold mb-4">📜 Historial de Escaneos</h2>
+        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2"><Icono e="📜" />Historial de Escaneos</h2>
         <div className="overflow-x-auto">
           <table className="min-w-full">
             <thead className="bg-gray-50">

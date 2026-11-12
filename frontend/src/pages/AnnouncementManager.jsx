@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import { IconoTitulo } from '../components/Icono';
 
 const AnnouncementManager = () => {
   const [announcements, setAnnouncements] = useState([]);
@@ -65,7 +66,7 @@ const AnnouncementManager = () => {
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">📢 Gestor de Anuncios</h1>
+        <h1 className="text-2xl font-bold flex items-center gap-3"><IconoTitulo e="📢" />Gestor de Anuncios</h1>
         <button onClick={() => setShowCreate(!showCreate)} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
           + Nuevo Anuncio
         </button>
@@ -78,10 +79,10 @@ const AnnouncementManager = () => {
             <input type="text" value={newAnnouncement.title} onChange={(e) => setNewAnnouncement({...newAnnouncement, title: e.target.value})} placeholder="Título" className="border rounded px-3 py-2 col-span-2" />
             <textarea value={newAnnouncement.message} onChange={(e) => setNewAnnouncement({...newAnnouncement, message: e.target.value})} placeholder="Mensaje" className="border rounded px-3 py-2 col-span-2 h-24" />
             <select value={newAnnouncement.type} onChange={(e) => setNewAnnouncement({...newAnnouncement, type: e.target.value})} className="border rounded px-3 py-2">
-              <option value="info">ℹ️ Info</option>
-              <option value="warning">⚠️ Advertencia</option>
-              <option value="error">❌ Error</option>
-              <option value="success">✅ Éxito</option>
+              <option value="info">Info</option>
+              <option value="warning">Advertencia</option>
+              <option value="error">Error</option>
+              <option value="success">Éxito</option>
             </select>
             <select value={newAnnouncement.priority} onChange={(e) => setNewAnnouncement({...newAnnouncement, priority: e.target.value})} className="border rounded px-3 py-2">
               <option value="low">Baja</option>

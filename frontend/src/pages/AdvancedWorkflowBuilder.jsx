@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import { Icono, IconoTitulo } from '../components/Icono';
 
 const AdvancedWorkflowBuilder = () => {
   const [nodes, setNodes] = useState({ triggers: [], conditions: [], actions: [] });
@@ -53,7 +54,7 @@ const AdvancedWorkflowBuilder = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">⚡ Constructor de Workflows</h1>
+      <h1 className="text-2xl font-bold mb-6 flex items-center gap-3"><IconoTitulo e="⚡" />Constructor de Workflows</h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Panel de nodos */}
@@ -70,7 +71,7 @@ const AdvancedWorkflowBuilder = () => {
                   onClick={() => addNode(trigger, 'trigger')}
                   className="w-full text-left p-2 bg-green-50 rounded-lg hover:bg-green-100"
                 >
-                  <span className="mr-2">{trigger.icon}</span>
+                  <span className="mr-2"><Icono e={trigger.icon} className="h-5 w-5" /></span>
                   {trigger.name}
                 </button>
               ))}
@@ -87,7 +88,7 @@ const AdvancedWorkflowBuilder = () => {
                   onClick={() => addNode(condition, 'condition')}
                   className="w-full text-left p-2 bg-yellow-50 rounded-lg hover:bg-yellow-100"
                 >
-                  <span className="mr-2">{condition.icon}</span>
+                  <span className="mr-2"><Icono e={condition.icon} className="h-5 w-5" /></span>
                   {condition.name}
                 </button>
               ))}
@@ -104,7 +105,7 @@ const AdvancedWorkflowBuilder = () => {
                   onClick={() => addNode(action, 'action')}
                   className="w-full text-left p-2 bg-blue-50 rounded-lg hover:bg-blue-100"
                 >
-                  <span className="mr-2">{action.icon}</span>
+                  <span className="mr-2"><Icono e={action.icon} className="h-5 w-5" /></span>
                   {action.name}
                 </button>
               ))}
@@ -137,7 +138,7 @@ const AdvancedWorkflowBuilder = () => {
                   } border`}>
                     <div className="flex justify-between items-center">
                       <span>
-                        <span className="mr-2">{node.icon}</span>
+                        <span className="mr-2"><Icono e={node.icon} className="h-5 w-5" /></span>
                         {node.name}
                       </span>
                       <button

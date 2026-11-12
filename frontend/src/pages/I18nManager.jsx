@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import { IconoTitulo } from '../components/Icono';
 
 const I18nManager = () => {
   const [languages, setLanguages] = useState([]);
@@ -21,7 +22,7 @@ const I18nManager = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">🌍 Gestor de Idiomas (i18n)</h1>
+      <h1 className="text-2xl font-bold mb-6 flex items-center gap-3"><IconoTitulo e="🌍" />Gestor de Idiomas (i18n)</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
         {languages.map(lang => (

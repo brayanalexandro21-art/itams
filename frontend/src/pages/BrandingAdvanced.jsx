@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import { IconoTitulo } from '../components/Icono';
 
 const BrandingAdvanced = () => {
   const [config, setConfig] = useState({
@@ -40,7 +41,7 @@ const BrandingAdvanced = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">🎨 Branding Personalizado</h1>
+      <h1 className="text-2xl font-bold mb-6 flex items-center gap-3"><IconoTitulo e="🎨" />Branding Personalizado</h1>
 
       <div className="bg-white rounded-lg shadow p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

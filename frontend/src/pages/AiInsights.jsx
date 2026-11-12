@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import api from '../services/api';
+import { Icono } from '../components/Icono';
 
 function AiInsights() {
   const [insights, setInsights] = useState(null);
@@ -81,7 +82,7 @@ function AiInsights() {
                   className={`p-4 rounded-lg border ${getInsightColor(insight.type)}`}
                 >
                   <div className="flex items-center">
-                    <span className="text-xl mr-3">{getInsightIcon(insight.type)}</span>
+                    <span className="text-xl mr-3"><Icono e={getInsightIcon(insight.type)} className="h-6 w-6" /></span>
                     <span className="font-medium">{insight.message}</span>
                   </div>
                 </div>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import { Icono, IconoTitulo } from '../components/Icono';
 
 const SatisfactionReport = () => {
   const [data, setData] = useState(null);
@@ -24,7 +25,7 @@ const SatisfactionReport = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">⭐ Reporte de Satisfacción</h1>
+      <h1 className="text-2xl font-bold mb-6 flex items-center gap-3"><IconoTitulo e="⭐" />Reporte de Satisfacción</h1>
 
       <div className="bg-white rounded-lg shadow p-6 mb-6">
         <h2 className="text-lg font-semibold mb-4">Calificación Promedio</h2>
@@ -41,7 +42,7 @@ const SatisfactionReport = () => {
         <div className="space-y-3">
           {data?.ratings?.map((rating, i) => (
             <div key={i} className="flex items-center gap-4">
-              <div className="w-12 text-center font-medium">{rating.rating}⭐</div>
+              <div className="w-12 text-center font-medium">{rating.rating}<Icono e="⭐" className="h-4 w-4" /></div>
               <div className="flex-1 bg-gray-200 rounded-full h-6">
                 <div
                   className="bg-yellow-500 h-6 rounded-full flex items-center justify-end pr-2"

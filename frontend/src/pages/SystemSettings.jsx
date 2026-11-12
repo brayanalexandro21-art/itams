@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import { Icono, IconoTitulo } from '../components/Icono';
 
 const SystemSettings = () => {
   const [userPrefs, setUserPrefs] = useState({ theme: 'light', language: 'es', timezone: 'America/Mexico_City', notifications_enabled: true, compact_mode: false });
@@ -38,12 +39,12 @@ const SystemSettings = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">⚙️ Configuración del Sistema</h1>
+      <h1 className="text-2xl font-bold mb-6 flex items-center gap-3"><IconoTitulo e="⚙️" />Configuración del Sistema</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Tema */}
         <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold mb-4">🎨 Tema</h2>
+          <h2 className="text-lg font-semibold mb-4 flex items-center gap-2"><Icono e="🎨" />Tema</h2>
           <div className="grid grid-cols-2 gap-3">
             {themes.map(theme => (
               <div
@@ -64,7 +65,7 @@ const SystemSettings = () => {
 
         {/* Idioma y Zona */}
         <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold mb-4">🌍 Idioma y Zona</h2>
+          <h2 className="text-lg font-semibold mb-4 flex items-center gap-2"><Icono e="🌍" />Idioma y Zona</h2>
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Idioma</label>
@@ -90,7 +91,7 @@ const SystemSettings = () => {
 
         {/* Notificaciones */}
         <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold mb-4">🔔 Notificaciones</h2>
+          <h2 className="text-lg font-semibold mb-4 flex items-center gap-2"><Icono e="🔔" />Notificaciones</h2>
           <div className="space-y-4">
             <label className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
               <span>Notificaciones por email</span>
@@ -106,7 +107,7 @@ const SystemSettings = () => {
 
         {/* Modo compacto */}
         <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold mb-4">📐 Interfaz</h2>
+          <h2 className="text-lg font-semibold mb-4 flex items-center gap-2"><Icono e="📐" />Interfaz</h2>
           <label className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
             <span>Modo compacto</span>
             <div

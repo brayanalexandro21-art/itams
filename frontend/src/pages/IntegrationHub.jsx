@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import { Icono, IconoTitulo } from '../components/Icono';
 
 const IntegrationHub = () => {
   const [data, setData] = useState(null);
@@ -41,7 +42,7 @@ const IntegrationHub = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">🔌 Centro de Integraciones</h1>
+      <h1 className="text-2xl font-bold mb-6 flex items-center gap-3"><IconoTitulo e="🔌" />Centro de Integraciones</h1>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         <div className="bg-white rounded-lg shadow p-4 text-center">
@@ -83,7 +84,7 @@ const IntegrationHub = () => {
       </div>
 
       <div className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-lg font-semibold mb-4">📜 Registros recientes</h2>
+        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2"><Icono e="📜" />Registros recientes</h2>
         <div className="space-y-2 max-h-64 overflow-y-auto">
           {data?.logs?.map((log, i) => (
             <div key={i} className="flex justify-between items-center p-2 bg-gray-50 rounded text-sm">

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import { Icono, IconoTitulo } from '../components/Icono';
 
 const DocumentManager = () => {
   const [documents, setDocuments] = useState([]);
@@ -33,7 +34,7 @@ const DocumentManager = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">📁 Gestión de Documentos</h1>
+      <h1 className="text-2xl font-bold mb-6 flex items-center gap-3"><IconoTitulo e="📁" />Gestión de Documentos</h1>
 
       <div className="bg-white rounded-lg shadow p-6">
         <div className="flex justify-between items-center mb-4">
@@ -57,7 +58,7 @@ const DocumentManager = () => {
             {documents.map(doc => (
               <div key={doc.id} className="border rounded-lg p-4 hover:shadow-md">
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="text-2xl">{getCategoryIcon(doc.category)}</span>
+                  <span className="text-2xl"><Icono e={getCategoryIcon(doc.category)} className="h-7 w-7" /></span>
                   <span className="font-medium">{doc.name}</span>
                 </div>
                 <p className="text-sm text-gray-500 mb-2">{doc.description}</p>

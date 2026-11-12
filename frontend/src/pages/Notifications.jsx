@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../services/api';
+import { Icono } from '../components/Icono';
 
 function Notifications() {
   const [notifications, setNotifications] = useState([]);
@@ -115,7 +116,7 @@ function Notifications() {
                 }`}
               >
                 <div className="flex items-start space-x-4">
-                  <span className="text-2xl">{getTypeIcon(notification.type)}</span>
+                  <span className="text-2xl"><Icono e={getTypeIcon(notification.type)} className="h-7 w-7" /></span>
                   <div className="flex-1">
                     <div className="flex items-center justify-between">
                       <h4 className={`font-medium ${!notification.read ? 'text-indigo-800' : 'text-gray-800'}`}>

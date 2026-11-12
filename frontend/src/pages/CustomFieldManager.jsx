@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import { Icono, IconoTitulo } from '../components/Icono';
 
 const CustomFieldManager = () => {
   const [fields, setFields] = useState([]);
@@ -56,7 +57,7 @@ const CustomFieldManager = () => {
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">🏷️ Gestor de Campos Personalizados</h1>
+        <h1 className="text-2xl font-bold flex items-center gap-3"><IconoTitulo e="🏷️" />Gestor de Campos Personalizados</h1>
         <button onClick={() => setShowCreate(!showCreate)} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
           + Nuevo Campo
         </button>
@@ -73,7 +74,7 @@ const CustomFieldManager = () => {
               <option value="users">Usuarios</option>
             </select>
             <select value={newField.field_type} onChange={(e) => setNewField({...newField, field_type: e.target.value})} className="border rounded px-3 py-2">
-              {fieldTypes.map(t => <option key={t.type} value={t.type}>{t.icon} {t.name}</option>)}
+              {fieldTypes.map(t => <option key={t.type} value={t.type}>{t.name}</option>)}
             </select>
             <input type="text" value={newField.options} onChange={(e) => setNewField({...newField, options: e.target.value})} placeholder="Opciones (separadas por coma)" className="border rounded px-3 py-2" disabled={!['select', 'multiselect'].includes(newField.field_type)} />
             <label className="flex items-center gap-2">
@@ -112,7 +113,7 @@ const CustomFieldManager = () => {
             {fields.map(f => (
               <tr key={f.id} className="hover:bg-gray-50">
                 <td className="px-6 py-4 font-medium">{f.name}</td>
-                <td className="px-6 py-4 text-sm">{getTypeIcon(f.field_type)} {f.field_type}</td>
+                <td className="px-6 py-4 text-sm"><Icono e={getTypeIcon(f.field_type)} className="h-5 w-5" /> {f.field_type}</td>
                 <td className="px-6 py-4 text-sm capitalize">{f.entity_type}</td>
                 <td className="px-6 py-4">
                   <span className={`text-xs px-2 py-0.5 rounded ${f.required ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-600'}`}>

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import InlineDropdown from '../components/InlineDropdown';
 import ComputerModelForm from '../components/ComputerModelForm';
+import { Icono } from '../components/Icono';
 
 const CreateAsset = () => {
   const navigate = useNavigate();
@@ -92,7 +93,7 @@ const CreateAsset = () => {
     <div className="p-6 max-w-5xl mx-auto">
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
         <h1 className="text-lg font-semibold text-blue-800 flex items-center gap-2">
-          🖥️ Nuevo elemento - Computadora
+          <Icono e="🖥️" className="h-4 w-4" /> Nuevo elemento - Computadora
         </h1>
       </div>
 

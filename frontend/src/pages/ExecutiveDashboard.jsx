@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import { Icono, IconoTitulo } from '../components/Icono';
 
 const ExecutiveDashboard = () => {
   const [data, setData] = useState(null);
@@ -24,7 +25,7 @@ const ExecutiveDashboard = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">📊 Dashboard Ejecutivo</h1>
+      <h1 className="text-2xl font-bold mb-6 flex items-center gap-3"><IconoTitulo e="📊" />Dashboard Ejecutivo</h1>
 
       {/* Resumen */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
@@ -52,7 +53,7 @@ const ExecutiveDashboard = () => {
 
       {/* Tendencias */}
       <div className="bg-white rounded-lg shadow p-6 mb-6">
-        <h2 className="text-lg font-semibold mb-4">📈 Tendencias</h2>
+        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2"><Icono e="📈" />Tendencias</h2>
         <div className="grid grid-cols-3 gap-4">
           <div className="text-center">
             <p className="text-3xl font-bold">{data?.trends?.tickets_this_week || 0}</p>
@@ -74,7 +75,7 @@ const ExecutiveDashboard = () => {
       {/* Alertas */}
       {data?.alerts?.length > 0 && (
         <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold mb-4">🚨 Alertas</h2>
+          <h2 className="text-lg font-semibold mb-4 flex items-center gap-2"><Icono e="🚨" />Alertas</h2>
           <div className="space-y-2">
             {data.alerts.map((alert, i) => (
               <div key={i} className={`p-3 rounded-lg ${

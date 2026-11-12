@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import { Icono, IconoTitulo } from '../components/Icono';
 
 const SystemPerformance = () => {
   const [data, setData] = useState(null);
@@ -47,7 +48,7 @@ const SystemPerformance = () => {
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">⚙️ Rendimiento del Sistema</h1>
+        <h1 className="text-2xl font-bold flex items-center gap-3"><IconoTitulo e="⚙️" />Rendimiento del Sistema</h1>
         <button onClick={optimize} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
           Optimizar DB
         </button>
@@ -76,7 +77,7 @@ const SystemPerformance = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         {/* Records per table */}
         <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold mb-4">📊 Registros por Tabla</h2>
+          <h2 className="text-lg font-semibold mb-4 flex items-center gap-2"><Icono e="📊" />Registros por Tabla</h2>
           <div className="space-y-2 max-h-80 overflow-y-auto">
             {tables.sort((a, b) => b.records - a.records).map((t, i) => (
               <div key={i} className="flex justify-between items-center p-2 bg-gray-50 rounded">
@@ -89,7 +90,7 @@ const SystemPerformance = () => {
 
         {/* API stats */}
         <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold mb-4">🌐 API Stats (24h)</h2>
+          <h2 className="text-lg font-semibold mb-4 flex items-center gap-2"><Icono e="🌐" />API Stats (24h)</h2>
           {data?.apiStats?.length > 0 ? (
             <div className="space-y-2">
               {data.apiStats.map((stat, i) => (
@@ -111,7 +112,7 @@ const SystemPerformance = () => {
       {/* Recent errors */}
       {data?.recentErrors?.length > 0 && (
         <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold mb-4">⚠️ Errores Recientes</h2>
+          <h2 className="text-lg font-semibold mb-4 flex items-center gap-2"><Icono e="⚠️" />Errores Recientes</h2>
           <div className="space-y-2">
             {data.recentErrors.map((err, i) => (
               <div key={i} className="p-2 bg-red-50 rounded text-sm">

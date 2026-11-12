@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import { Icono, IconoTitulo } from '../components/Icono';
 
 const SLATracker = () => {
   const [ticketId, setTicketId] = useState('');
@@ -42,7 +43,7 @@ const SLATracker = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">⏱️ Rastreador de SLA</h1>
+      <h1 className="text-2xl font-bold mb-6 flex items-center gap-3"><IconoTitulo e="⏱️" />Rastreador de SLA</h1>
 
       <div className="bg-white rounded-lg shadow p-6 mb-6">
         <h2 className="text-lg font-semibold mb-4">Buscar SLA de Ticket</h2>
@@ -108,7 +109,7 @@ const SLATracker = () => {
       )}
 
       <div className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-lg font-semibold mb-4">⚠️ Tickets en Riesgo de SLA ({atRisk.length})</h2>
+        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2"><Icono e="⚠️" />Tickets en Riesgo de SLA ({atRisk.length})</h2>
         <div className="overflow-x-auto">
           <table className="min-w-full">
             <thead className="bg-gray-50">

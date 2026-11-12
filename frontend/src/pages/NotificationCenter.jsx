@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import { Icono, IconoTitulo } from '../components/Icono';
 
 const NotificationCenter = () => {
   const [notifications, setNotifications] = useState([]);
@@ -73,7 +74,7 @@ const NotificationCenter = () => {
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">🔔 Centro de Notificaciones</h1>
+        <h1 className="text-2xl font-bold flex items-center gap-3"><IconoTitulo e="🔔" />Centro de Notificaciones</h1>
         {stats?.unread > 0 && (
           <button onClick={markAllRead} className="text-blue-600 hover:underline text-sm">
             Marcar todas como leídas ({stats.unread})
@@ -120,7 +121,7 @@ const NotificationCenter = () => {
         <div className="divide-y">
           {notifications.length > 0 ? notifications.map(n => (
             <div key={n.id} className={`p-4 flex items-start gap-3 ${n.is_read ? 'bg-white' : 'bg-blue-50'}`}>
-              <span className="text-xl mt-1">{getTypeIcon(n.type)}</span>
+              <span className="text-xl mt-1"><Icono e={getTypeIcon(n.type)} className="h-6 w-6" /></span>
               <div className="flex-1">
                 <div className="flex items-center gap-2">
                   <h3 className="font-medium text-sm">{n.title}</h3>

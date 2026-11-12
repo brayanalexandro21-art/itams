@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import { IconoTitulo } from '../components/Icono';
 
 const ApiUsageAnalytics = () => {
   const [data, setData] = useState(null);
@@ -24,7 +25,7 @@ const ApiUsageAnalytics = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">📊 Uso de API</h1>
+      <h1 className="text-2xl font-bold mb-6 flex items-center gap-3"><IconoTitulo e="📊" />Uso de API</h1>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         <div className="bg-white rounded-lg shadow p-4 text-center">

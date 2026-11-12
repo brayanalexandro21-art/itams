@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import api from '../services/api';
+import { Icono } from '../components/Icono';
 
 function ArticleDetail() {
   const { id } = useParams();
@@ -184,7 +185,7 @@ function ArticleDetail() {
                 onClick={handleMarkHelpful}
                 className="w-full px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
               >
-                👍 Me fue útil
+                <Icono e="👍" className="h-4 w-4" /> Me fue útil
               </button>
               <Link
                 to={`/tickets/new?kb=${article.id}`}

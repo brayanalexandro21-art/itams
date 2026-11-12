@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import { Icono, IconoTitulo } from '../components/Icono';
 
 const OnboardingGuide = () => {
   const [data, setData] = useState(null);
@@ -47,7 +48,7 @@ const OnboardingGuide = () => {
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">🚀 Guía de Bienvenida</h1>
+        <h1 className="text-2xl font-bold flex items-center gap-3"><IconoTitulo e="🚀" />Guía de Bienvenida</h1>
         <button onClick={resetOnboarding} className="text-gray-500 text-sm hover:text-red-500">Reiniciar onboarding</button>
       </div>
 
@@ -77,7 +78,7 @@ const OnboardingGuide = () => {
           >
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-3">
-                <span className="text-3xl">{step.icon}</span>
+                <span className="text-3xl"><Icono e={step.icon} className="h-8 w-8" /></span>
                 <div>
                   <h3 className="font-semibold">{step.name}</h3>
                   <p className="text-sm text-gray-500">{step.description}</p>

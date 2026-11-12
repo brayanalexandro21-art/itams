@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import api from '../services/api';
+import { Icono } from './Icono';
 
 const ImageUploadZone = ({ label, image, onUpload, onRemove }) => {
   const inputRef = useRef(null);
@@ -62,7 +63,7 @@ const ImageUploadZone = ({ label, image, onUpload, onRemove }) => {
           </div>
         ) : (
           <div>
-            <p className="text-sm text-gray-500">📷 Arrastra una imagen aquí</p>
+            <p className="text-sm text-gray-500"><Icono e="📷" className="h-4 w-4" /> Arrastra una imagen aquí</p>
             <p className="text-xs text-gray-400">o haz click para examinar</p>
             <p className="text-xs text-gray-400">Máx. 2 MB</p>
           </div>
@@ -193,7 +194,7 @@ const ComputerModelForm = ({ onClose, onCreated }) => {
           {/* Fotos del Rack */}
           <div className="border-t pt-4">
             <div className="p-3 bg-blue-50 rounded mb-3">
-              <h4 className="font-medium text-blue-800 flex items-center gap-2">📸 Fotos del Rack</h4>
+              <h4 className="font-medium text-blue-800 flex items-center gap-2"><Icono e="📸" />Fotos del Rack</h4>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <ImageUploadZone
@@ -214,7 +215,7 @@ const ComputerModelForm = ({ onClose, onCreated }) => {
           {/* Otras fotos */}
           <div>
             <div className="p-3 bg-blue-50 rounded mb-3">
-              <h4 className="font-medium text-blue-800 flex items-center gap-2">🖼️ Otras fotos</h4>
+              <h4 className="font-medium text-blue-800 flex items-center gap-2"><Icono e="🖼️" />Otras fotos</h4>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
               {otherPhotosList.map((photo, i) => (

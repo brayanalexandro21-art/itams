@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import { IconoTitulo } from '../components/Icono';
 
 const TechnicianPerformance = () => {
   const [performance, setPerformance] = useState([]);
@@ -24,7 +25,7 @@ const TechnicianPerformance = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">👨‍💼 Rendimiento de Técnicos</h1>
+      <h1 className="text-2xl font-bold mb-6 flex items-center gap-3"><IconoTitulo e="👨‍💼" />Rendimiento de Técnicos</h1>
 
       <div className="bg-white rounded-lg shadow overflow-hidden">
         <table className="min-w-full">

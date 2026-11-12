@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import api from '../services/api';
+import { Icono } from '../components/Icono';
 
 function Integrations() {
   const [integrations, setIntegrations] = useState([]);
@@ -197,7 +198,7 @@ function Integrations() {
             <div key={type.type} className="bg-white rounded-lg shadow p-6">
               <div className="flex items-start justify-between">
                 <div className="flex items-center">
-                  <span className="text-3xl mr-3">{type.icon}</span>
+                  <span className="text-3xl mr-3"><Icono e={type.icon} className="h-8 w-8" /></span>
                   <div>
                     <h3 className="font-semibold text-gray-800">{type.name}</h3>
                     <p className="text-sm text-gray-500">{type.description}</p>
