@@ -74,6 +74,17 @@ if (TURSO_URL) {
     }
     return stmt;
   };
+  // Cambios hechos fuera de este servidor (otro servidor, el panel de Turso, scripts
+  // como cambiar-contrasena) solo llegan a la réplica al sincronizar: se hace cada pocos segundos.
+  const SEGUNDOS = Number(process.env.TURSO_SYNC_SECONDS) || 5;
+  setInterval(() => {
+    try {
+      if (!db.inTransaction) db.sync();
+    } catch (err) {
+      console.warn('Sincronización periódica con Turso falló (se reintenta):', err.message);
+    }
+  }, SEGUNDOS * 1000).unref();
+
   const execOriginal = db.exec.bind(db);
   db.exec = (sql) => {
     execOriginal(sql);
