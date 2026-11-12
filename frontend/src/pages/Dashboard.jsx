@@ -1,6 +1,54 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import {
+  Ticket, Inbox, Clock, UserX, Monitor, CheckCircle2, Wrench, ArrowRight, Plus, BookOpen,
+  FileBarChart, Laptop,
+} from 'lucide-react';
 import api from '../services/api';
+import { Card, EmptyState, PageHeader, Spinner, StatusBadge, botonPrimario, botonSecundario, fecha } from '../components/ui';
+
+function saludo() {
+  const h = new Date().getHours();
+  return h < 12 ? 'Buenos días' : h < 19 ? 'Buenas tardes' : 'Buenas noches';
+}
+
+function Kpi({ label, value, icon: Icon, tono, to }) {
+  const tonos = {
+    brand: 'bg-brand-50 text-brand-600',
+    amber: 'bg-amber-50 text-amber-600',
+    sky: 'bg-sky-50 text-sky-600',
+    red: 'bg-red-50 text-red-600',
+    emerald: 'bg-emerald-50 text-emerald-600',
+    slate: 'bg-gray-100 text-gray-600',
+  };
+  return (
+    <Link to={to} className="group rounded-xl bg-white p-5 shadow-sm transition-shadow hover:shadow-md">
+      <div className="flex items-start justify-between">
+        <p className="text-sm font-medium text-gray-500">{label}</p>
+        <span className={`flex h-9 w-9 items-center justify-center rounded-lg ${tonos[tono]}`}>
+          <Icon className="h-4.5 w-4.5" strokeWidth={1.8} />
+        </span>
+      </div>
+      <p className="mt-3 text-3xl font-semibold tracking-tight text-gray-900 tabular-nums">{value}</p>
+    </Link>
+  );
+}
+
+function Seccion({ title, to, children }) {
+  return (
+    <Card className="overflow-hidden">
+      <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4">
+        <h2 className="text-sm font-semibold text-gray-900">{title}</h2>
+        {to && (
+          <Link to={to} className="inline-flex items-center gap-1 text-[13px] font-medium text-brand-600 hover:text-brand-700">
+            Ver todo <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
+        )}
+      </div>
+      {children}
+    </Card>
+  );
+}
 
 function Dashboard() {
   const [ticketStats, setTicketStats] = useState(null);
@@ -8,241 +56,185 @@ function Dashboard() {
   const [recentTickets, setRecentTickets] = useState([]);
   const [recentAssets, setRecentAssets] = useState([]);
   const [loading, setLoading] = useState(true);
+  const usuario = (() => {
+    try {
+      return JSON.parse(localStorage.getItem('user') || '{}');
+    } catch {
+      return {};
+    }
+  })();
 
   useEffect(() => {
-    fetchDashboardData();
+    (async () => {
+      try {
+        const [ticketStatsRes, assetStatsRes, ticketsRes, assetsRes] = await Promise.all([
+          api.get('/tickets/stats/summary'),
+          api.get('/assets/stats/summary'),
+          api.get('/tickets'),
+          api.get('/assets'),
+        ]);
+        setTicketStats(ticketStatsRes.data);
+        setAssetStats(assetStatsRes.data);
+        setRecentTickets(ticketsRes.data.slice(0, 5));
+        setRecentAssets(assetsRes.data.slice(0, 5));
+      } catch (error) {
+        console.error('Error al cargar el panel:', error);
+      } finally {
+        setLoading(false);
+      }
+    })();
   }, []);
 
-  const fetchDashboardData = async () => {
-    try {
-      const [ticketStatsRes, assetStatsRes, ticketsRes, assetsRes] = await Promise.all([
-        api.get('/tickets/stats/summary'),
-        api.get('/assets/stats/summary'),
-        api.get('/tickets'),
-        api.get('/assets'),
-      ]);
-      setTicketStats(ticketStatsRes.data);
-      setAssetStats(assetStatsRes.data);
-      setRecentTickets(ticketsRes.data.slice(0, 5));
-      setRecentAssets(assetsRes.data.slice(0, 5));
-    } catch (error) {
-      console.error('Error fetching dashboard data:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  if (loading) return <Spinner label="Cargando panel…" />;
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-gray-500">Loading dashboard...</div>
-      </div>
-    );
-  }
-
-  const ticketStatCards = [
-    { label: 'Total Tickets', value: ticketStats?.total || 0, color: 'bg-blue-500', icon: '🎫' },
-    { label: 'Open', value: ticketStats?.open || 0, color: 'bg-yellow-500', icon: '📬' },
-    { label: 'In Progress', value: ticketStats?.inProgress || 0, color: 'bg-orange-500', icon: '⏳' },
-    { label: 'Unassigned', value: ticketStats?.unassigned || 0, color: 'bg-red-500', icon: '❓' },
+  const totalActivos = assetStats?.total || 0;
+  const distribucion = [
+    { label: 'Disponibles', value: assetStats?.available || 0, color: 'bg-emerald-500' },
+    { label: 'En uso', value: assetStats?.in_use || 0, color: 'bg-brand-500' },
+    { label: 'Mantenimiento', value: assetStats?.maintenance || 0, color: 'bg-amber-400' },
   ];
-
-  const assetStatCards = [
-    { label: 'Total Assets', value: assetStats?.total || 0, color: 'bg-purple-500', icon: '💻' },
-    { label: 'Available', value: assetStats?.available || 0, color: 'bg-green-500', icon: '✅' },
-    { label: 'In Use', value: assetStats?.in_use || 0, color: 'bg-blue-500', icon: '🔧' },
-    { label: 'Maintenance', value: assetStats?.maintenance || 0, color: 'bg-yellow-500', icon: '🛠️' },
-  ];
-
-  const getStatusColor = (status) => {
-    const colors = {
-      open: 'bg-yellow-100 text-yellow-800',
-      in_progress: 'bg-blue-100 text-blue-800',
-      resolved: 'bg-green-100 text-green-800',
-      closed: 'bg-gray-100 text-gray-800',
-      available: 'bg-green-100 text-green-800',
-      in_use: 'bg-blue-100 text-blue-800',
-      maintenance: 'bg-yellow-100 text-yellow-800',
-      retired: 'bg-gray-100 text-gray-800',
-    };
-    return colors[status] || 'bg-gray-100 text-gray-800';
-  };
+  const otros = Math.max(0, totalActivos - distribucion.reduce((s, d) => s + d.value, 0));
+  if (otros) distribucion.push({ label: 'Otros', value: otros, color: 'bg-gray-300' });
 
   return (
-    <div className="space-y-6">
-      {/* Ticket Stats */}
-      <div>
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">Ticket Statistics</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {ticketStatCards.map((stat) => (
-            <div key={stat.label} className="bg-white rounded-lg shadow p-6">
-              <div className="flex items-center">
-                <div className={`${stat.color} rounded-lg p-3 text-white text-2xl`}>
-                  {stat.icon}
-                </div>
-                <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-500">{stat.label}</p>
-                  <p className="text-2xl font-bold text-gray-800">{stat.value}</p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+    <div className="space-y-8">
+      <PageHeader
+        title={`${saludo()}${usuario.name ? `, ${usuario.name.split(' ')[0]}` : ''}`}
+        description="Este es el resumen de tus activos y solicitudes de soporte."
+        actions={
+          <Link to="/assets/new" className={botonSecundario}>
+            <Plus className="h-4 w-4" /> Registrar activo
+          </Link>
+        }
+      />
 
-      {/* Asset Stats */}
-      <div>
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">Asset Statistics</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {assetStatCards.map((stat) => (
-            <div key={stat.label} className="bg-white rounded-lg shadow p-6">
-              <div className="flex items-center">
-                <div className={`${stat.color} rounded-lg p-3 text-white text-2xl`}>
-                  {stat.icon}
-                </div>
-                <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-500">{stat.label}</p>
-                  <p className="text-2xl font-bold text-gray-800">{stat.value}</p>
-                </div>
-              </div>
-            </div>
-          ))}
+      <section>
+        <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-gray-500">Mesa de ayuda</h2>
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+          <Kpi label="Tickets totales" value={ticketStats?.total || 0} icon={Ticket} tono="brand" to="/tickets" />
+          <Kpi label="Abiertos" value={ticketStats?.open || 0} icon={Inbox} tono="amber" to="/tickets?status=open" />
+          <Kpi label="En progreso" value={ticketStats?.inProgress || 0} icon={Clock} tono="sky" to="/tickets?status=in_progress" />
+          <Kpi label="Sin asignar" value={ticketStats?.unassigned || 0} icon={UserX} tono="red" to="/tickets" />
         </div>
-      </div>
+      </section>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Recent Tickets */}
-        <div className="bg-white rounded-lg shadow">
-          <div className="px-6 py-4 border-b border-gray-200">
+      <section>
+        <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-gray-500">Inventario</h2>
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+          <Kpi label="Activos totales" value={totalActivos} icon={Monitor} tono="slate" to="/assets" />
+          <Kpi label="Disponibles" value={assetStats?.available || 0} icon={CheckCircle2} tono="emerald" to="/assets?status=available" />
+          <Kpi label="En uso" value={assetStats?.in_use || 0} icon={Laptop} tono="brand" to="/assets?status=in_use" />
+          <Kpi label="En mantenimiento" value={assetStats?.maintenance || 0} icon={Wrench} tono="amber" to="/assets?status=maintenance" />
+        </div>
+
+        {totalActivos > 0 && (
+          <Card className="mt-4 p-5">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold text-gray-800">Recent Tickets</h3>
-              <Link
-                to="/tickets"
-                className="text-indigo-600 hover:text-indigo-800 text-sm font-medium"
-              >
-                View All
-              </Link>
+              <p className="text-sm font-medium text-gray-900">Estado del inventario</p>
+              <p className="text-xs text-gray-500">{totalActivos} activos</p>
             </div>
-          </div>
-          <div className="divide-y divide-gray-200">
-            {recentTickets.length === 0 ? (
-              <div className="px-6 py-8 text-center text-gray-500">
-                No tickets yet.{' '}
-                <Link to="/tickets/new" className="text-indigo-600 hover:text-indigo-800">
-                  Create your first ticket
-                </Link>
-              </div>
-            ) : (
-              recentTickets.map((ticket) => (
-                <Link
-                  key={ticket.id}
-                  to={`/tickets/${ticket.id}`}
-                  className="block px-6 py-4 hover:bg-gray-50 transition-colors"
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center space-x-3">
-                        <span className="text-sm font-medium text-gray-800">
-                          #{ticket.id}
-                        </span>
-                        <span className="text-gray-800">{ticket.title}</span>
-                      </div>
-                      <p className="text-sm text-gray-500 mt-1">
-                        {ticket.created_by_name} • {new Date(ticket.created_at).toLocaleDateString()}
+            <div className="mt-3 flex h-2.5 overflow-hidden rounded-full bg-gray-100">
+              {distribucion.map((d) =>
+                d.value ? (
+                  <div key={d.label} className={d.color} style={{ width: `${(d.value / totalActivos) * 100}%` }} title={`${d.label}: ${d.value}`} />
+                ) : null
+              )}
+            </div>
+            <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2">
+              {distribucion.map((d) => (
+                <span key={d.label} className="inline-flex items-center gap-2 text-[13px] text-gray-600">
+                  <span className={`h-2 w-2 rounded-full ${d.color}`} />
+                  {d.label}
+                  <span className="font-medium text-gray-900 tabular-nums">{d.value}</span>
+                  <span className="text-gray-400 tabular-nums">({Math.round((d.value / totalActivos) * 100)}%)</span>
+                </span>
+              ))}
+            </div>
+          </Card>
+        )}
+      </section>
+
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        <Seccion title="Tickets recientes" to="/tickets">
+          {recentTickets.length === 0 ? (
+            <EmptyState
+              icon={Ticket}
+              title="Aún no hay tickets"
+              description="Cuando alguien reporte una solicitud aparecerá aquí."
+              action={<Link to="/tickets/new" className={botonPrimario}><Plus className="h-4 w-4" /> Crear ticket</Link>}
+            />
+          ) : (
+            <ul className="divide-y divide-gray-100">
+              {recentTickets.map((t) => (
+                <li key={t.id}>
+                  <Link to={`/tickets/${t.id}`} className="flex items-center gap-4 px-5 py-3.5 hover:bg-gray-50 transition-colors">
+                    <span className="w-10 shrink-0 text-[13px] font-medium text-gray-400 tabular-nums">#{t.id}</span>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-medium text-gray-900">{t.title}</p>
+                      <p className="mt-0.5 truncate text-xs text-gray-500">
+                        {t.created_by_name || 'Sin autor'} · {fecha(t.created_at)}
                       </p>
                     </div>
-                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(ticket.status)}`}>
-                      {ticket.status.replace('_', ' ')}
-                    </span>
-                  </div>
-                </Link>
-              ))
-            )}
-          </div>
-        </div>
+                    <StatusBadge status={t.status} />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
+        </Seccion>
 
-        {/* Recent Assets */}
-        <div className="bg-white rounded-lg shadow">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold text-gray-800">Recent Assets</h3>
-              <Link
-                to="/assets"
-                className="text-indigo-600 hover:text-indigo-800 text-sm font-medium"
-              >
-                View All
-              </Link>
-            </div>
-          </div>
-          <div className="divide-y divide-gray-200">
-            {recentAssets.length === 0 ? (
-              <div className="px-6 py-8 text-center text-gray-500">
-                No assets yet.{' '}
-                <Link to="/assets/new" className="text-indigo-600 hover:text-indigo-800">
-                  Add your first asset
-                </Link>
-              </div>
-            ) : (
-              recentAssets.map((asset) => (
-                <Link
-                  key={asset.id}
-                  to={`/assets/${asset.id}`}
-                  className="block px-6 py-4 hover:bg-gray-50 transition-colors"
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center space-x-3">
-                        <span className="text-gray-800">{asset.name}</span>
-                      </div>
-                      <p className="text-sm text-gray-500 mt-1">
-                        {asset.type} • {asset.manufacturer || 'Unknown'}
+        <Seccion title="Activos recientes" to="/assets">
+          {recentAssets.length === 0 ? (
+            <EmptyState
+              icon={Monitor}
+              title="Aún no hay activos"
+              description="Registra tus equipos para llevar su inventario."
+              action={<Link to="/assets/new" className={botonPrimario}><Plus className="h-4 w-4" /> Registrar activo</Link>}
+            />
+          ) : (
+            <ul className="divide-y divide-gray-100">
+              {recentAssets.map((a) => (
+                <li key={a.id}>
+                  <Link to={`/assets/${a.id}`} className="flex items-center gap-4 px-5 py-3.5 hover:bg-gray-50 transition-colors">
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gray-100">
+                      <Monitor className="h-4 w-4 text-gray-500" strokeWidth={1.8} />
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-medium text-gray-900">{a.name}</p>
+                      <p className="mt-0.5 truncate text-xs text-gray-500">
+                        {[a.model, a.manufacturer, a.serial_number && `S/N ${a.serial_number}`].filter(Boolean).join(' · ') || a.type}
                       </p>
                     </div>
-                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(asset.status)}`}>
-                      {asset.status.replace('_', ' ')}
-                    </span>
-                  </div>
-                </Link>
-              ))
-            )}
-          </div>
-        </div>
+                    <StatusBadge status={a.status} />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
+        </Seccion>
       </div>
 
-      {/* Quick Actions */}
-      <div className="bg-white rounded-lg shadow p-6">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <Link
-            to="/tickets/new"
-            className="flex items-center justify-center px-4 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
-          >
-            <span className="mr-2">➕</span>
-            New Ticket
-          </Link>
-          <Link
-            to="/assets/new"
-            className="flex items-center justify-center px-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
-          >
-            <span className="mr-2">💻</span>
-            New Asset
-          </Link>
-          <Link
-            to="/knowledgebase/new"
-            className="flex items-center justify-center px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-          >
-            <span className="mr-2">📚</span>
-            New Article
-          </Link>
-          <Link
-            to="/notifications"
-            className="flex items-center justify-center px-4 py-3 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors"
-          >
-            <span className="mr-2">🔔</span>
-            Notifications
-          </Link>
+      <section>
+        <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-gray-500">Accesos rápidos</h2>
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+          {[
+            { to: '/tickets/new', icon: Ticket, titulo: 'Reportar incidente', texto: 'Abre un ticket de soporte' },
+            { to: '/assets/new', icon: Monitor, titulo: 'Registrar activo', texto: 'Agrega un equipo al inventario' },
+            { to: '/knowledgebase/new', icon: BookOpen, titulo: 'Nuevo artículo', texto: 'Documenta una solución' },
+            { to: '/reports', icon: FileBarChart, titulo: 'Ver reportes', texto: 'Indicadores y estadísticas' },
+          ].map(({ to, icon: Icon, titulo, texto }) => (
+            <Link key={to} to={to} className="group flex items-center gap-3 rounded-xl bg-white p-4 shadow-sm transition-shadow hover:shadow-md">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-600 transition-colors group-hover:bg-brand-600 group-hover:text-white">
+                <Icon className="h-5 w-5" strokeWidth={1.8} />
+              </span>
+              <div className="min-w-0">
+                <p className="truncate text-sm font-medium text-gray-900">{titulo}</p>
+                <p className="truncate text-xs text-gray-500">{texto}</p>
+              </div>
+            </Link>
+          ))}
         </div>
-      </div>
+      </section>
     </div>
   );
 }

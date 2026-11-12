@@ -1,10 +1,39 @@
-import { useState, useEffect } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useState, useEffect, useMemo } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { Plus, Search, Monitor, Laptop, Printer, Smartphone, Server, Network, Disc3, Package, FilterX } from 'lucide-react';
 import api from '../services/api';
+import { Card, EmptyState, PageHeader, Spinner, StatusBadge, botonPrimario, botonSecundario, campo } from '../components/ui';
+
+const TIPOS = {
+  computer: ['Computador', Monitor],
+  laptop: ['Portátil', Laptop],
+  printer: ['Impresora', Printer],
+  phone: ['Teléfono', Smartphone],
+  server: ['Servidor', Server],
+  network: ['Red', Network],
+  software: ['Software', Disc3],
+  other: ['Otro', Package],
+};
+
+const ESTADOS = [
+  ['available', 'Disponible'],
+  ['in_use', 'En uso'],
+  ['maintenance', 'Mantenimiento'],
+  ['retired', 'Retirado'],
+];
+
+const CATEGORIAS = [
+  ['hardware', 'Hardware'],
+  ['software', 'Software'],
+  ['peripheral', 'Periféricos'],
+  ['license', 'Licencias'],
+];
 
 function AssetList() {
+  const navigate = useNavigate();
   const [assets, setAssets] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [busqueda, setBusqueda] = useState('');
   const [searchParams, setSearchParams] = useSearchParams();
   const [filters, setFilters] = useState({
     type: searchParams.get('type') || '',
@@ -13,171 +42,153 @@ function AssetList() {
   });
 
   useEffect(() => {
-    fetchAssets();
+    (async () => {
+      setLoading(true);
+      try {
+        const params = new URLSearchParams();
+        Object.entries(filters).forEach(([k, v]) => v && params.append(k, v));
+        const response = await api.get(`/assets?${params.toString()}`);
+        setAssets(response.data);
+      } catch (error) {
+        console.error('Error al cargar activos:', error);
+      } finally {
+        setLoading(false);
+      }
+    })();
   }, [filters]);
-
-  const fetchAssets = async () => {
-    setLoading(true);
-    try {
-      const params = new URLSearchParams();
-      if (filters.type) params.append('type', filters.type);
-      if (filters.status) params.append('status', filters.status);
-      if (filters.category) params.append('category', filters.category);
-
-      const response = await api.get(`/assets?${params.toString()}`);
-      setAssets(response.data);
-    } catch (error) {
-      console.error('Error fetching assets:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleFilterChange = (key, value) => {
     const newFilters = { ...filters, [key]: value };
     setFilters(newFilters);
-    setSearchParams(newFilters);
+    setSearchParams(Object.fromEntries(Object.entries(newFilters).filter(([, v]) => v)));
   };
 
-  const getStatusColor = (status) => {
-    const colors = {
-      available: 'bg-green-100 text-green-800',
-      in_use: 'bg-blue-100 text-blue-800',
-      maintenance: 'bg-yellow-100 text-yellow-800',
-      retired: 'bg-gray-100 text-gray-800',
-    };
-    return colors[status] || 'bg-gray-100 text-gray-800';
+  const limpiar = () => {
+    setFilters({ type: '', status: '', category: '' });
+    setSearchParams({});
+    setBusqueda('');
   };
 
-  const getTypeIcon = (type) => {
-    const icons = {
-      computer: '🖥️',
-      laptop: '💻',
-      printer: '🖨️',
-      phone: '📱',
-      server: '🖧',
-      network: '🌐',
-      software: '💿',
-      other: '📦',
-    };
-    return icons[type] || '📦';
-  };
+  const visibles = useMemo(() => {
+    const q = busqueda.trim().toLowerCase();
+    if (!q) return assets;
+    return assets.filter((a) =>
+      [a.name, a.serial_number, a.model, a.manufacturer, a.location, a.assigned_to_name, a.inventory_number]
+        .filter(Boolean)
+        .some((v) => String(v).toLowerCase().includes(q))
+    );
+  }, [assets, busqueda]);
+
+  const hayFiltros = busqueda || filters.type || filters.status || filters.category;
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-gray-800">IT Assets</h2>
-        <Link
-          to="/assets/new"
-          className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
-        >
-          + New Asset
-        </Link>
-      </div>
+      <PageHeader
+        title="Activos de TI"
+        description="Inventario de equipos, su estado, ubicación y responsable."
+        actions={
+          <Link to="/assets/new" className={botonPrimario}>
+            <Plus className="h-4 w-4" /> Registrar activo
+          </Link>
+        }
+      />
 
-      {/* Filters */}
-      <div className="bg-white rounded-lg shadow p-4">
-        <div className="flex flex-wrap gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
-            <select
-              value={filters.type}
-              onChange={(e) => handleFilterChange('type', e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
-            >
-              <option value="">All Types</option>
-              <option value="computer">Computer</option>
-              <option value="laptop">Laptop</option>
-              <option value="printer">Printer</option>
-              <option value="phone">Phone</option>
-              <option value="server">Server</option>
-              <option value="network">Network</option>
-              <option value="software">Software</option>
+      <Card className="overflow-hidden">
+        {/* Barra de búsqueda y filtros */}
+        <div className="flex flex-col gap-3 border-b border-gray-100 p-4 lg:flex-row lg:items-center">
+          <label className="relative block flex-1">
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+            <input
+              value={busqueda}
+              onChange={(e) => setBusqueda(e.target.value)}
+              placeholder="Buscar por nombre, serie, modelo, ubicación o responsable…"
+              className={`${campo} pl-9`}
+            />
+          </label>
+          <div className="grid grid-cols-3 gap-2 lg:flex">
+            <select value={filters.type} onChange={(e) => handleFilterChange('type', e.target.value)} className={`${campo} lg:w-40`} aria-label="Tipo">
+              <option value="">Todos los tipos</option>
+              {Object.entries(TIPOS).filter(([k]) => k !== 'other').map(([k, [t]]) => <option key={k} value={k}>{t}</option>)}
             </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
-            <select
-              value={filters.status}
-              onChange={(e) => handleFilterChange('status', e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
-            >
-              <option value="">All Status</option>
-              <option value="available">Available</option>
-              <option value="in_use">In Use</option>
-              <option value="maintenance">Maintenance</option>
-              <option value="retired">Retired</option>
+            <select value={filters.status} onChange={(e) => handleFilterChange('status', e.target.value)} className={`${campo} lg:w-40`} aria-label="Estado">
+              <option value="">Todos los estados</option>
+              {ESTADOS.map(([k, t]) => <option key={k} value={k}>{t}</option>)}
             </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
-            <select
-              value={filters.category}
-              onChange={(e) => handleFilterChange('category', e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
-            >
-              <option value="">All Categories</option>
-              <option value="hardware">Hardware</option>
-              <option value="software">Software</option>
-              <option value="peripheral">Peripheral</option>
-              <option value="license">License</option>
+            <select value={filters.category} onChange={(e) => handleFilterChange('category', e.target.value)} className={`${campo} lg:w-44`} aria-label="Categoría">
+              <option value="">Todas las categorías</option>
+              {CATEGORIAS.map(([k, t]) => <option key={k} value={k}>{t}</option>)}
             </select>
           </div>
         </div>
-      </div>
 
-      {/* Assets Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {loading ? (
-          <div className="col-span-3 text-center py-8 text-gray-500">Loading assets...</div>
-        ) : assets.length === 0 ? (
-          <div className="col-span-3 text-center py-8 text-gray-500">
-            No assets found.{' '}
-            <Link to="/assets/new" className="text-indigo-600 hover:text-indigo-800">
-              Add one
-            </Link>
-          </div>
+          <Spinner label="Cargando activos…" />
+        ) : visibles.length === 0 ? (
+          <EmptyState
+            icon={hayFiltros ? FilterX : Monitor}
+            title={hayFiltros ? 'Ningún activo coincide con la búsqueda' : 'Aún no hay activos registrados'}
+            description={hayFiltros ? 'Prueba con otros términos o quita los filtros.' : 'Registra tu primer equipo para empezar el inventario.'}
+            action={
+              hayFiltros ? (
+                <button onClick={limpiar} className={botonSecundario}>Quitar filtros</button>
+              ) : (
+                <Link to="/assets/new" className={botonPrimario}><Plus className="h-4 w-4" /> Registrar activo</Link>
+              )
+            }
+          />
         ) : (
-          assets.map((asset) => (
-            <Link
-              key={asset.id}
-              to={`/assets/${asset.id}`}
-              className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow"
-            >
-              <div className="flex items-start justify-between">
-                <div className="flex items-center">
-                  <span className="text-3xl mr-3">{getTypeIcon(asset.type)}</span>
-                  <div>
-                    <h3 className="font-semibold text-gray-800">{asset.name}</h3>
-                    <p className="text-sm text-gray-500">{asset.model || asset.type}</p>
-                  </div>
-                </div>
-                <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(asset.status)}`}>
-                  {asset.status.replace('_', ' ')}
-                </span>
-              </div>
-              <div className="mt-4 space-y-2">
-                {asset.serial_number && (
-                  <p className="text-sm text-gray-600">
-                    <span className="font-medium">S/N:</span> {asset.serial_number}
-                  </p>
-                )}
-                {asset.location && (
-                  <p className="text-sm text-gray-600">
-                    <span className="font-medium">Location:</span> {asset.location}
-                  </p>
-                )}
-                {asset.assigned_to_name && (
-                  <p className="text-sm text-gray-600">
-                    <span className="font-medium">Assigned to:</span> {asset.assigned_to_name}
-                  </p>
-                )}
-              </div>
-            </Link>
-          ))
+          <>
+            <div className="overflow-x-auto">
+              <table className="min-w-full text-sm">
+                <thead className="bg-gray-50 text-left text-gray-500">
+                  <tr>
+                    <th className="px-5 py-3 font-medium uppercase">Activo</th>
+                    <th className="px-5 py-3 font-medium uppercase">Serie</th>
+                    <th className="px-5 py-3 font-medium uppercase">Ubicación</th>
+                    <th className="px-5 py-3 font-medium uppercase">Responsable</th>
+                    <th className="px-5 py-3 font-medium uppercase">Estado</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {visibles.map((a) => {
+                    const [tipo, Icon] = TIPOS[a.type] || [a.type || 'Otro', Package];
+                    return (
+                      <tr key={a.id} onClick={() => navigate(`/assets/${a.id}`)} className="cursor-pointer hover:bg-gray-50 transition-colors">
+                        <td className="px-5 py-3.5">
+                          <div className="flex items-center gap-3">
+                            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gray-100">
+                              <Icon className="h-4 w-4 text-gray-500" strokeWidth={1.8} />
+                            </span>
+                            <div className="min-w-0">
+                              <Link to={`/assets/${a.id}`} onClick={(e) => e.stopPropagation()} className="block truncate font-medium text-gray-900 hover:text-brand-600">
+                                {a.name}
+                              </Link>
+                              <p className="truncate text-xs text-gray-500">{[tipo, a.model].filter(Boolean).join(' · ')}</p>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="whitespace-nowrap px-5 py-3.5 font-mono text-xs text-gray-600">{a.serial_number || '—'}</td>
+                        <td className="whitespace-nowrap px-5 py-3.5 text-gray-600">{a.location || '—'}</td>
+                        <td className="whitespace-nowrap px-5 py-3.5 text-gray-600">{a.assigned_to_name || <span className="text-gray-400">Sin asignar</span>}</td>
+                        <td className="whitespace-nowrap px-5 py-3.5"><StatusBadge status={a.status} /></td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+            <div className="flex items-center justify-between border-t border-gray-100 px-5 py-3 text-xs text-gray-500">
+              <span>
+                {visibles.length} {visibles.length === 1 ? 'activo' : 'activos'}
+                {visibles.length !== assets.length && ` de ${assets.length}`}
+              </span>
+              {hayFiltros && (
+                <button onClick={limpiar} className="font-medium text-brand-600 hover:text-brand-700">Quitar filtros</button>
+              )}
+            </div>
+          </>
         )}
-      </div>
+      </Card>
     </div>
   );
 }

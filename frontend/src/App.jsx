@@ -149,8 +149,8 @@ function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <div className="text-xl text-gray-600">Loading...</div>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-sm text-gray-500">Cargando…</div>
       </div>
     );
   }
@@ -161,6 +161,7 @@ function App() {
         <Route path="/login" element={!user ? <Login onLogin={login} /> : <Navigate to="/dashboard" />} />
         <Route path="/register" element={!user ? <Register onLogin={login} /> : <Navigate to="/dashboard" />} />
         <Route path="/" element={user ? <Layout user={user} onLogout={logout} /> : <Navigate to="/login" />}>
+          <Route index element={<Navigate to="/dashboard" replace />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="dashboard/custom" element={<CustomDashboard />} />
           <Route path="dashboard/executive" element={<ExecutiveDashboard />} />
@@ -257,7 +258,9 @@ function App() {
           <Route path="integration-hub" element={<IntegrationHub />} />
           <Route path="notification-rules" element={<NotificationRules />} />
           <Route path="announcements" element={<AnnouncementManager />} />
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Route>
+        <Route path="*" element={<Navigate to={user ? '/dashboard' : '/login'} replace />} />
       </Routes>
     </Router>
   );

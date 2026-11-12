@@ -530,7 +530,8 @@ app.get('/api/health', (req, res) => {
 // Frontend (React compilado en frontend/dist): una sola URL para la app y la API
 const FRONTEND_DIST = path.join(__dirname, '..', 'frontend', 'dist');
 if (fs.existsSync(FRONTEND_DIST)) {
-  app.use(express.static(FRONTEND_DIST));
+  // redirect: false → /assets (página de activos) no se redirige a /assets/ (carpeta de archivos de Vite)
+  app.use(express.static(FRONTEND_DIST, { redirect: false }));
   // Cualquier ruta que no sea de la API devuelve index.html (React Router se encarga)
   app.get('/{*splat}', (req, res, next) => {
     // /^\/(api|uploads)(\/|$)/ y no startsWith('/api'): páginas como /apikeys o /api-analytics son del frontend

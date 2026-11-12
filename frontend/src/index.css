@@ -1,5 +1,128 @@
 @import "tailwindcss";
 
-body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+/*
+ * Sistema de diseño de ITAMS
+ * Las ~97 páginas usan clases de Tailwind con colores sueltos (indigo, blue, purple).
+ * Aquí se unifican en una sola escala de marca y se suavizan grises, sombras y tipografía,
+ * para que toda la aplicación se vea consistente sin reescribir cada página.
+ */
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Marca: azul profundo */
+  --color-brand-50: #eff5ff;
+  --color-brand-100: #dbe8fe;
+  --color-brand-200: #bfd6fe;
+  --color-brand-300: #93bbfd;
+  --color-brand-400: #6096fa;
+  --color-brand-500: #3b74f6;
+  --color-brand-600: #2557eb;
+  --color-brand-700: #1d44d8;
+  --color-brand-800: #1e39af;
+  --color-brand-900: #1e358a;
+  --color-brand-950: #172254;
+
+  /* indigo, blue y purple → misma escala de marca */
+  --color-indigo-50: var(--color-brand-50);
+  --color-indigo-100: var(--color-brand-100);
+  --color-indigo-200: var(--color-brand-200);
+  --color-indigo-300: var(--color-brand-300);
+  --color-indigo-400: var(--color-brand-400);
+  --color-indigo-500: var(--color-brand-500);
+  --color-indigo-600: var(--color-brand-600);
+  --color-indigo-700: var(--color-brand-700);
+  --color-indigo-800: var(--color-brand-800);
+  --color-indigo-900: var(--color-brand-900);
+  --color-blue-50: var(--color-brand-50);
+  --color-blue-100: var(--color-brand-100);
+  --color-blue-200: var(--color-brand-200);
+  --color-blue-300: var(--color-brand-300);
+  --color-blue-400: var(--color-brand-400);
+  --color-blue-500: var(--color-brand-500);
+  --color-blue-600: var(--color-brand-600);
+  --color-blue-700: var(--color-brand-700);
+  --color-blue-800: var(--color-brand-800);
+  --color-blue-900: var(--color-brand-900);
+  --color-purple-50: var(--color-brand-50);
+  --color-purple-100: var(--color-brand-100);
+  --color-purple-200: var(--color-brand-200);
+  --color-purple-300: var(--color-brand-300);
+  --color-purple-400: var(--color-brand-400);
+  --color-purple-500: var(--color-brand-500);
+  --color-purple-600: var(--color-brand-600);
+  --color-purple-700: var(--color-brand-700);
+  --color-purple-800: var(--color-brand-800);
+  --color-purple-900: var(--color-brand-900);
+
+  /* gray → slate (gris azulado, más sobrio) */
+  --color-gray-50: #f8fafc;
+  --color-gray-100: #f1f5f9;
+  --color-gray-200: #e2e8f0;
+  --color-gray-300: #cbd5e1;
+  --color-gray-400: #94a3b8;
+  --color-gray-500: #64748b;
+  --color-gray-600: #475569;
+  --color-gray-700: #334155;
+  --color-gray-800: #1e293b;
+  --color-gray-900: #0f172a;
+
+  /* Sombras suaves con borde fino incluido: las tarjetas "shadow" se ven delimitadas */
+  --shadow-sm: 0 1px 2px 0 rgb(15 23 42 / 0.05), 0 0 0 1px rgb(15 23 42 / 0.06);
+  --shadow: 0 1px 3px 0 rgb(15 23 42 / 0.06), 0 0 0 1px rgb(15 23 42 / 0.06);
+  --shadow-md: 0 4px 12px -2px rgb(15 23 42 / 0.08), 0 0 0 1px rgb(15 23 42 / 0.06);
+  --shadow-lg: 0 12px 24px -6px rgb(15 23 42 / 0.12), 0 0 0 1px rgb(15 23 42 / 0.06);
+  --shadow-xl: 0 20px 40px -8px rgb(15 23 42 / 0.18), 0 0 0 1px rgb(15 23 42 / 0.05);
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-gray-50 text-gray-800 font-sans;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  /* Botones y enlaces con cursor y transición coherentes */
+  button:not(:disabled),
+  [role="button"] {
+    cursor: pointer;
+  }
+
+  /* Campos de formulario: misma altura de línea, bordes y foco de marca en toda la app */
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]),
+  select,
+  textarea {
+    @apply bg-white text-sm transition-shadow;
+  }
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    @apply outline-none ring-2 ring-brand-500/40 border-brand-500;
+  }
+
+  ::selection {
+    @apply bg-brand-100 text-brand-900;
+  }
+
+  /* Títulos de página (h2 grandes) con el mismo peso y espaciado */
+  main h2.text-2xl,
+  main h1.text-2xl,
+  main h1.text-3xl {
+    @apply tracking-tight text-gray-900;
+  }
+
+  /* Tablas: encabezados discretos */
+  main table thead th {
+    @apply text-[11px] tracking-wider;
+  }
+}
+
+/* Barra de desplazamiento discreta */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(148 163 184 / 0.5) transparent;
 }
