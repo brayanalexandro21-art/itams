@@ -5,6 +5,7 @@
 //
 // En la nube (Render) el disco se borra en cada reinicio, por eso allí CLOUDINARY_URL es obligatorio.
 
+require('./env'); // carga .env y limpia/valida CLOUDINARY_URL antes de usarla
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');

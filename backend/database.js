@@ -2,7 +2,7 @@
 // (prepare/get/all/run/exec), pero que además puede conectarse a Turso.
 const Database = require('libsql');
 const path = require('path');
-require('dotenv').config({ path: path.join(__dirname, '.env'), quiet: true });
+require('./env'); // carga .env y limpia/valida las claves de la nube
 
 const TURSO_URL = process.env.TURSO_DATABASE_URL;
 const TURSO_TOKEN = process.env.TURSO_AUTH_TOKEN;
