@@ -81,7 +81,7 @@ const SystemPerformance = () => {
             {tables.sort((a, b) => b.records - a.records).map((t, i) => (
               <div key={i} className="flex justify-between items-center p-2 bg-gray-50 rounded">
                 <span className="text-sm font-mono">{t.name}</span>
-                <span className="text-sm font-bold">{t.records.toLocaleString()}</span>
+                <span className="text-sm font-bold">{t.records.toLocaleString('es-CO')}</span>
               </div>
             ))}
           </div>
@@ -116,7 +116,7 @@ const SystemPerformance = () => {
             {data.recentErrors.map((err, i) => (
               <div key={i} className="p-2 bg-red-50 rounded text-sm">
                 <span className="font-medium">{err.action}</span>
-                <span className="text-gray-500 ml-2">{new Date(err.created_at).toLocaleString()}</span>
+                <span className="text-gray-500 ml-2">{new Date(err.created_at).toLocaleString('es-CO')}</span>
               </div>
             ))}
           </div>

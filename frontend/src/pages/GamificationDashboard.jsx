@@ -56,7 +56,7 @@ const GamificationDashboard = () => {
                 <div key={i} className="text-center p-3 bg-yellow-50 rounded-lg">
                   <div className="text-3xl mb-1">{badge.icon}</div>
                   <div className="text-sm font-medium">{badge.name}</div>
-                  <div className="text-xs text-gray-400">{new Date(badge.earned_at).toLocaleDateString()}</div>
+                  <div className="text-xs text-gray-400">{new Date(badge.earned_at).toLocaleDateString('es-CO')}</div>
                 </div>
               ))}
             </div>

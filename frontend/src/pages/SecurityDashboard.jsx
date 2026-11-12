@@ -100,7 +100,7 @@ const SecurityDashboard = () => {
             <tbody>
               {auditLogs.slice(0, 10).map((log, i) => (
                 <tr key={i} className="border-b">
-                  <td className="py-2 text-sm">{new Date(log.created_at).toLocaleString()}</td>
+                  <td className="py-2 text-sm">{new Date(log.created_at).toLocaleString('es-CO')}</td>
                   <td className="py-2 text-sm">{log.user_name}</td>
                   <td className="py-2 text-sm">{log.action}</td>
                   <td className="py-2 text-sm text-gray-500">{log.entity_type}{log.entity_id ? ` #${log.entity_id}` : ''}</td>

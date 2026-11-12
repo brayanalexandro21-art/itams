@@ -57,7 +57,7 @@ const IntegrationHub = () => {
           <p className={`text-2xl font-bold ${(data?.stats?.failed_today || 0) > 0 ? 'text-red-600' : 'text-green-600'}`}>{data?.stats?.failed_today || 0}</p>
         </div>
         <div className="bg-white rounded-lg shadow p-4 text-center">
-          <h3 className="text-sm text-gray-500">Total Logs</h3>
+          <h3 className="text-sm text-gray-500">Registros totales</h3>
           <p className="text-2xl font-bold">{data?.stats?.total_logs || 0}</p>
         </div>
       </div>
@@ -76,14 +76,14 @@ const IntegrationHub = () => {
               <button onClick={() => toggleIntegration(int.id)} className={`flex-1 px-3 py-1 rounded text-sm ${int.active ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'}`}>
                 {int.active ? 'Desactivar' : 'Activar'}
               </button>
-              <button onClick={() => testIntegration(int.id)} className="flex-1 px-3 py-1 rounded text-sm bg-blue-100 text-blue-800">Test</button>
+              <button onClick={() => testIntegration(int.id)} className="flex-1 px-3 py-1 rounded text-sm bg-blue-100 text-blue-800">Probar</button>
             </div>
           </div>
         ))}
       </div>
 
       <div className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-lg font-semibold mb-4">📜 Logs Recientes</h2>
+        <h2 className="text-lg font-semibold mb-4">📜 Registros recientes</h2>
         <div className="space-y-2 max-h-64 overflow-y-auto">
           {data?.logs?.map((log, i) => (
             <div key={i} className="flex justify-between items-center p-2 bg-gray-50 rounded text-sm">
@@ -93,7 +93,7 @@ const IntegrationHub = () => {
               </div>
               <div className="flex items-center gap-2">
                 <span className={`px-2 py-0.5 rounded text-xs ${log.status === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>{log.status}</span>
-                <span className="text-xs text-gray-400">{new Date(log.executed_at).toLocaleString()}</span>
+                <span className="text-xs text-gray-400">{new Date(log.executed_at).toLocaleString('es-CO')}</span>
               </div>
             </div>
           ))}

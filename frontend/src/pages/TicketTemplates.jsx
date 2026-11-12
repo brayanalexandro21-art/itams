@@ -63,7 +63,7 @@ function TicketTemplates() {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this template?')) {
+    if (window.confirm('¿Seguro que deseas eliminar esta plantilla?')) {
       try {
         await api.delete(`/templates/${id}`);
         fetchTemplates();
@@ -86,22 +86,22 @@ function TicketTemplates() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-gray-800">Ticket Templates</h2>
+        <h2 className="text-2xl font-bold text-gray-800">Plantillas de tickets</h2>
         <button
           onClick={() => setShowCreate(true)}
           className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"
         >
-          + Create Template
+          + Crear plantilla
         </button>
       </div>
 
       {/* Templates List */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {loading ? (
-          <div className="col-span-3 text-center py-8 text-gray-500">Loading...</div>
+          <div className="col-span-3 text-center py-8 text-gray-500">Cargando…</div>
         ) : templates.length === 0 ? (
           <div className="col-span-3 text-center py-8 text-gray-500">
-            No templates yet. Create one to speed up ticket creation.
+            Aún no hay plantillas. Crea una para agilizar la creación de tickets.
           </div>
         ) : (
           templates.map((template) => (
@@ -112,24 +112,24 @@ function TicketTemplates() {
                   <p className="text-sm text-gray-500 mt-1">{template.description}</p>
                 </div>
                 <span className={`px-2 py-1 text-xs font-medium rounded-full ${getPriorityColor(template.template_priority)}`}>
-                  {template.template_priority}
+                  {({ low: 'Baja', medium: 'Media', high: 'Alta', urgent: 'Urgente' })[template.template_priority] || template.template_priority}
                 </span>
               </div>
 
               <div className="mt-4 space-y-2">
                 <div className="text-sm">
-                  <span className="font-medium text-gray-700">Title:</span>
+                  <span className="font-medium text-gray-700">Título:</span>
                   <span className="text-gray-600 ml-2">{template.template_title}</span>
                 </div>
                 {template.template_category && (
                   <div className="text-sm">
-                    <span className="font-medium text-gray-700">Category:</span>
+                    <span className="font-medium text-gray-700">Categoría:</span>
                     <span className="text-gray-600 ml-2">{template.template_category}</span>
                   </div>
                 )}
                 {template.template_description && (
                   <div className="text-sm">
-                    <span className="font-medium text-gray-700">Description:</span>
+                    <span className="font-medium text-gray-700">Descripción:</span>
                     <p className="text-gray-600 mt-1 line-clamp-2">{template.template_description}</p>
                   </div>
                 )}
@@ -140,13 +140,13 @@ function TicketTemplates() {
                   onClick={() => handleUseTemplate(template.id)}
                   className="flex-1 px-3 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700"
                 >
-                  Use Template
+                  Usar plantilla
                 </button>
                 <button
                   onClick={() => handleDelete(template.id)}
                   className="px-3 py-2 text-red-600 hover:text-red-800 text-sm"
                 >
-                  Delete
+                  Eliminar
                 </button>
               </div>
             </div>
@@ -158,21 +158,21 @@ function TicketTemplates() {
       {showCreate && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Create Template</h3>
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">Crear plantilla</h3>
             <form onSubmit={handleCreate} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Template Name *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Nombre de la plantilla *</label>
                 <input
                   type="text"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
-                  placeholder="e.g., Password Reset"
+                  placeholder="Ej.: Restablecer contraseña"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
                 <input
                   type="text"
                   value={formData.description}
@@ -181,7 +181,7 @@ function TicketTemplates() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Default Title *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Título predeterminado *</label>
                 <input
                   type="text"
                   value={formData.title}
@@ -191,7 +191,7 @@ function TicketTemplates() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Default Description</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Descripción predeterminada</label>
                 <textarea
                   value={formData.description_template}
                   onChange={(e) => setFormData({ ...formData, description_template: e.target.value })}
@@ -201,20 +201,20 @@ function TicketTemplates() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Priority</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Prioridad</label>
                   <select
                     value={formData.priority}
                     onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
                   >
-                    <option value="low">Low</option>
-                    <option value="medium">Medium</option>
-                    <option value="high">High</option>
-                    <option value="urgent">Urgent</option>
+                    <option value="low">Baja</option>
+                    <option value="medium">Media</option>
+                    <option value="high">Alta</option>
+                    <option value="urgent">Urgente</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Categoría</label>
                   <input
                     type="text"
                     value={formData.category}
@@ -225,10 +225,10 @@ function TicketTemplates() {
               </div>
               <div className="flex justify-end space-x-2 mt-4">
                 <button type="button" onClick={() => setShowCreate(false)} className="px-4 py-2 text-gray-700">
-                  Cancel
+                  Cancelar
                 </button>
                 <button type="submit" className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
-                  Create
+                  Crear
                 </button>
               </div>
             </form>

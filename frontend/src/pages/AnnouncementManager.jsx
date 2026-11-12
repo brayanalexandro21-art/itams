@@ -110,8 +110,8 @@ const AnnouncementManager = () => {
                 </div>
                 <p className="text-gray-600 text-sm mb-2">{a.message}</p>
                 <div className="text-xs text-gray-400">
-                  Creado: {new Date(a.created_at).toLocaleString()}
-                  {a.expires_at && ` | Expira: ${new Date(a.expires_at).toLocaleString()}`}
+                  Creado: {new Date(a.created_at).toLocaleString('es-CO')}
+                  {a.expires_at && ` | Expira: ${new Date(a.expires_at).toLocaleString('es-CO')}`}
                 </div>
               </div>
               <button onClick={() => deleteAnnouncement(a.id)} className="text-red-600 text-sm hover:underline ml-4">Eliminar</button>

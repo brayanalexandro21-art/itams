@@ -47,7 +47,7 @@ const WorkflowTemplates = () => {
             
             <div className="space-y-2 mb-4">
               <div className="text-sm">
-                <span className="font-medium">Trigger:</span> {template.trigger}
+                <span className="font-medium">Disparador:</span> {template.trigger}
               </div>
               {template.conditions?.length > 0 && (
                 <div className="text-sm">

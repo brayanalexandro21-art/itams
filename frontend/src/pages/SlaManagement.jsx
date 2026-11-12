@@ -53,7 +53,7 @@ function SlaManagement() {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this SLA?')) {
+    if (window.confirm('¿Seguro que deseas eliminar este SLA?')) {
       try {
         await api.delete(`/sla/${id}`);
         fetchSlas();
@@ -74,19 +74,19 @@ function SlaManagement() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-gray-800">SLA Management</h2>
+        <h2 className="text-2xl font-bold text-gray-800">Acuerdos de nivel de servicio (SLA)</h2>
         <button
           onClick={() => setShowCreate(true)}
           className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"
         >
-          + Create SLA
+          + Crear SLA
         </button>
       </div>
 
       {/* Compliance Overview */}
       {compliance.length > 0 && (
         <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">SLA Compliance</h3>
+          <h3 className="text-lg font-semibold text-gray-800 mb-4">Cumplimiento de SLA</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {compliance.map((sla) => (
               <div key={sla.id} className="border rounded-lg p-4">
@@ -94,7 +94,7 @@ function SlaManagement() {
                 <div className="mt-3 space-y-2">
                   <div>
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">Response Time</span>
+                      <span className="text-gray-600">Tiempo de respuesta</span>
                       <span className={`font-medium ${sla.response_compliance >= 90 ? 'text-green-600' : sla.response_compliance >= 70 ? 'text-yellow-600' : 'text-red-600'}`}>
                         {sla.response_compliance}%
                       </span>
@@ -108,7 +108,7 @@ function SlaManagement() {
                   </div>
                   <div>
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">Resolution Time</span>
+                      <span className="text-gray-600">Tiempo de resolución</span>
                       <span className={`font-medium ${sla.resolution_compliance >= 90 ? 'text-green-600' : sla.resolution_compliance >= 70 ? 'text-yellow-600' : 'text-red-600'}`}>
                         {sla.resolution_compliance}%
                       </span>
@@ -131,19 +131,19 @@ function SlaManagement() {
       {/* SLA List */}
       <div className="bg-white rounded-lg shadow overflow-hidden">
         {loading ? (
-          <div className="p-8 text-center text-gray-500">Loading...</div>
+          <div className="p-8 text-center text-gray-500">Cargando…</div>
         ) : slas.length === 0 ? (
-          <div className="p-8 text-center text-gray-500">No SLAs configured</div>
+          <div className="p-8 text-center text-gray-500">No hay SLA configurados</div>
         ) : (
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Response Time</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Resolution Time</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Priority</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nombre</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tiempo de respuesta</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tiempo de resolución</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Prioridad</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Estado</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Acciones</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
@@ -160,11 +160,11 @@ function SlaManagement() {
                     {formatMinutes(sla.resolution_time)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 capitalize">
-                    {sla.priority}
+                    {({ low: 'Baja', medium: 'Media', high: 'Alta', urgent: 'Urgente' })[sla.priority] || sla.priority}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`px-2 py-1 text-xs font-medium rounded-full ${sla.active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
-                      {sla.active ? 'Active' : 'Inactive'}
+                      {sla.active ? 'Activo' : 'Inactivo'}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
@@ -172,7 +172,7 @@ function SlaManagement() {
                       onClick={() => handleDelete(sla.id)}
                       className="text-red-600 hover:text-red-800"
                     >
-                      Delete
+                      Eliminar
                     </button>
                   </td>
                 </tr>
@@ -186,10 +186,10 @@ function SlaManagement() {
       {showCreate && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Create SLA</h3>
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">Crear SLA</h3>
             <form onSubmit={handleCreate} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Name *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Nombre *</label>
                 <input
                   type="text"
                   value={formData.name}
@@ -199,7 +199,7 @@ function SlaManagement() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
                 <input
                   type="text"
                   value={formData.description}
@@ -209,7 +209,7 @@ function SlaManagement() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Response Time (min)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Tiempo de respuesta (min)</label>
                   <input
                     type="number"
                     value={formData.response_time}
@@ -218,7 +218,7 @@ function SlaManagement() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Resolution Time (min)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Tiempo de resolución (min)</label>
                   <input
                     type="number"
                     value={formData.resolution_time}
@@ -228,24 +228,24 @@ function SlaManagement() {
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Priority</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Prioridad</label>
                 <select
                   value={formData.priority}
                   onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
                 >
-                  <option value="low">Low</option>
-                  <option value="medium">Medium</option>
-                  <option value="high">High</option>
-                  <option value="urgent">Urgent</option>
+                  <option value="low">Baja</option>
+                  <option value="medium">Media</option>
+                  <option value="high">Alta</option>
+                  <option value="urgent">Urgente</option>
                 </select>
               </div>
               <div className="flex justify-end space-x-2 mt-4">
                 <button type="button" onClick={() => setShowCreate(false)} className="px-4 py-2 text-gray-700">
-                  Cancel
+                  Cancelar
                 </button>
                 <button type="submit" className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
-                  Create
+                  Crear
                 </button>
               </div>
             </form>

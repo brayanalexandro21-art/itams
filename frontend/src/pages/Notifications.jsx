@@ -72,9 +72,9 @@ function Notifications() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-800">Notifications</h2>
+          <h2 className="text-2xl font-bold text-gray-800">Notificaciones</h2>
           <p className="text-sm text-gray-500">
-            {unreadCount > 0 ? `${unreadCount} unread notification(s)` : 'All caught up!'}
+            {unreadCount > 0 ? `${unreadCount} sin leer` : '¡Estás al día!'}
           </p>
         </div>
         <div className="flex space-x-2">
@@ -83,15 +83,15 @@ function Notifications() {
             onChange={(e) => setFilter(e.target.value)}
             className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
           >
-            <option value="all">All Notifications</option>
-            <option value="unread">Unread Only</option>
+            <option value="all">Todas</option>
+            <option value="unread">Solo sin leer</option>
           </select>
           {unreadCount > 0 && (
             <button
               onClick={handleMarkAllAsRead}
               className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
             >
-              Mark All as Read
+              Marcar todas como leídas
             </button>
           )}
         </div>
@@ -100,10 +100,10 @@ function Notifications() {
       {/* Notifications List */}
       <div className="bg-white rounded-lg shadow overflow-hidden">
         {loading ? (
-          <div className="p-8 text-center text-gray-500">Loading notifications...</div>
+          <div className="p-8 text-center text-gray-500">Cargando notificaciones…</div>
         ) : notifications.length === 0 ? (
           <div className="p-8 text-center text-gray-500">
-            {filter === 'unread' ? 'No unread notifications' : 'No notifications yet'}
+            {filter === 'unread' ? 'No tienes notificaciones sin leer' : 'Aún no hay notificaciones'}
           </div>
         ) : (
           <div className="divide-y divide-gray-200">
@@ -122,7 +122,7 @@ function Notifications() {
                         {notification.title}
                       </h4>
                       <span className="text-sm text-gray-500">
-                        {new Date(notification.created_at).toLocaleString()}
+                        {new Date(notification.created_at).toLocaleString('es-CO')}
                       </span>
                     </div>
                     <p className="text-gray-600 mt-1">{notification.message}</p>
@@ -132,7 +132,7 @@ function Notifications() {
                           to={notification.link}
                           className="text-sm text-indigo-600 hover:text-indigo-800"
                         >
-                          View Details →
+                          Ver detalles →
                         </Link>
                       )}
                       {!notification.read && (
@@ -140,14 +140,14 @@ function Notifications() {
                           onClick={() => handleMarkAsRead(notification.id)}
                           className="text-sm text-gray-500 hover:text-gray-700"
                         >
-                          Mark as read
+                          Marcar como leída
                         </button>
                       )}
                       <button
                         onClick={() => handleDelete(notification.id)}
                         className="text-sm text-red-500 hover:text-red-700"
                       >
-                        Delete
+                        Eliminar
                       </button>
                     </div>
                   </div>

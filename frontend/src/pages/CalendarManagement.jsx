@@ -119,7 +119,7 @@ const CalendarManagement = () => {
                 className={`p-3 rounded-lg cursor-pointer ${selectedEvent?.id === event.id ? 'bg-blue-100' : 'bg-gray-50 hover:bg-gray-100'}`}
               >
                 <div className="font-medium text-sm">{event.title}</div>
-                <div className="text-xs text-gray-500">{new Date(event.start_date).toLocaleDateString()}</div>
+                <div className="text-xs text-gray-500">{new Date(event.start_date).toLocaleDateString('es-CO')}</div>
                 <span className={`text-xs px-2 py-0.5 rounded mt-1 inline-block ${getTypeColor(event.type)}`}>{event.type}</span>
               </div>
             ))}
@@ -138,8 +138,8 @@ const CalendarManagement = () => {
               </div>
 
               <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
-                <div><span className="text-gray-500">Inicio:</span> {new Date(selectedEvent.start_date).toLocaleString()}</div>
-                <div><span className="text-gray-500">Fin:</span> {new Date(selectedEvent.end_date).toLocaleString()}</div>
+                <div><span className="text-gray-500">Inicio:</span> {new Date(selectedEvent.start_date).toLocaleString('es-CO')}</div>
+                <div><span className="text-gray-500">Fin:</span> {new Date(selectedEvent.end_date).toLocaleString('es-CO')}</div>
                 <div><span className="text-gray-500">Recordatorio:</span> {selectedEvent.reminder} minutos antes</div>
                 <div><span className="text-gray-500">Creado por:</span> {selectedEvent.created_by_name}</div>
               </div>

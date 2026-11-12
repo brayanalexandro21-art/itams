@@ -41,9 +41,9 @@ function BackupSettings() {
   const handleSaveSettings = async () => {
     try {
       await api.put('/backup/settings', settings);
-      setMessage({ type: 'success', text: 'Settings saved successfully' });
+      setMessage({ type: 'success', text: 'Configuración guardada correctamente' });
     } catch (error) {
-      setMessage({ type: 'error', text: 'Failed to save settings' });
+      setMessage({ type: 'error', text: 'No se pudo guardar la configuración' });
     }
   };
 
@@ -52,11 +52,11 @@ function BackupSettings() {
     setMessage({ type: '', text: '' });
     try {
       const response = await api.post('/backup/create');
-      setMessage({ type: 'success', text: `Backup created: ${response.data.file}` });
+      setMessage({ type: 'success', text: `Copia de seguridad creada: ${response.data.file}` });
       fetchBackups();
       fetchSettings();
     } catch (error) {
-      setMessage({ type: 'error', text: 'Failed to create backup' });
+      setMessage({ type: 'error', text: 'No se pudo crear la copia de seguridad' });
     } finally {
       setCreating(false);
     }
@@ -80,7 +80,7 @@ function BackupSettings() {
   };
 
   const handleDelete = async (filename) => {
-    if (window.confirm(`Are you sure you want to delete ${filename}?`)) {
+    if (window.confirm(`¿Seguro que deseas eliminar ${filename}?`)) {
       try {
         await api.delete(`/backup/${filename}`);
         fetchBackups();
@@ -99,14 +99,14 @@ function BackupSettings() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="text-gray-500">Loading...</div>
+        <div className="text-gray-500">Cargando…</div>
       </div>
     );
   }
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-bold text-gray-800">Backup Settings</h2>
+      <h2 className="text-2xl font-bold text-gray-800">Copias de seguridad</h2>
 
       {message.text && (
         <div
@@ -122,12 +122,12 @@ function BackupSettings() {
 
       {/* Backup Settings */}
       <div className="bg-white rounded-lg shadow p-6">
-        <h3 className="font-medium text-gray-800 mb-4">Configuration</h3>
+        <h3 className="font-medium text-gray-800 mb-4">Configuración</h3>
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="font-medium text-gray-700">Enable Automatic Backups</p>
-              <p className="text-sm text-gray-500">Create backups automatically based on schedule</p>
+              <p className="font-medium text-gray-700">Copias automáticas</p>
+              <p className="text-sm text-gray-500">Crea copias de seguridad según la frecuencia programada</p>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
               <input
@@ -142,20 +142,20 @@ function BackupSettings() {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Frequency</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Frecuencia</label>
               <select
                 value={settings.frequency}
                 onChange={(e) => setSettings({ ...settings, frequency: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
               >
-                <option value="hourly">Hourly</option>
-                <option value="daily">Daily</option>
-                <option value="weekly">Weekly</option>
-                <option value="monthly">Monthly</option>
+                <option value="hourly">Cada hora</option>
+                <option value="daily">Diaria</option>
+                <option value="weekly">Semanal</option>
+                <option value="monthly">Mensual</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Retention (days)</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Retención (días)</label>
               <input
                 type="number"
                 value={settings.retention_days}
@@ -169,7 +169,7 @@ function BackupSettings() {
 
           {settings.last_backup && (
             <p className="text-sm text-gray-500">
-              Last backup: {new Date(settings.last_backup).toLocaleString()}
+              Última copia: {new Date(settings.last_backup).toLocaleString('es-CO')}
             </p>
           )}
 
@@ -177,7 +177,7 @@ function BackupSettings() {
             onClick={handleSaveSettings}
             className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
           >
-            Save Settings
+            Guardar configuración
           </button>
         </div>
       </div>
@@ -185,36 +185,36 @@ function BackupSettings() {
       {/* Manual Backup */}
       <div className="bg-white rounded-lg shadow p-6">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="font-medium text-gray-800">Manual Backup</h3>
+          <h3 className="font-medium text-gray-800">Copia manual</h3>
           <button
             onClick={handleCreateBackup}
             disabled={creating}
             className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
           >
-            {creating ? 'Creating...' : 'Create Backup Now'}
+            {creating ? 'Creando…' : 'Crear copia ahora'}
           </button>
         </div>
         <p className="text-sm text-gray-600">
-          Create an immediate backup of all your data. Backups include tickets, assets, users,
-          knowledge base articles, and settings. Sensitive data (passwords, API keys) are redacted.
+          Crea al instante una copia de todos tus datos: tickets, activos, usuarios,
+          artículos de la base de conocimiento y configuración. Los datos sensibles (contraseñas, claves API) se ocultan.
         </p>
       </div>
 
       {/* Backup List */}
       <div className="bg-white rounded-lg shadow overflow-hidden">
         <div className="px-6 py-4 border-b border-gray-200">
-          <h3 className="font-medium text-gray-800">Available Backups</h3>
+          <h3 className="font-medium text-gray-800">Copias disponibles</h3>
         </div>
         {backups.length === 0 ? (
-          <div className="p-8 text-center text-gray-500">No backups yet</div>
+          <div className="p-8 text-center text-gray-500">Aún no hay copias de seguridad</div>
         ) : (
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Filename</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Size</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Created</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Archivo</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tamaño</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Creada</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Acciones</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
@@ -227,20 +227,20 @@ function BackupSettings() {
                     {formatSize(backup.size)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                    {new Date(backup.created).toLocaleString()}
+                    {new Date(backup.created).toLocaleString('es-CO')}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm space-x-2">
                     <button
                       onClick={() => handleDownload(backup.name)}
                       className="text-indigo-600 hover:text-indigo-800"
                     >
-                      Download
+                      Descargar
                     </button>
                     <button
                       onClick={() => handleDelete(backup.name)}
                       className="text-red-600 hover:text-red-800"
                     >
-                      Delete
+                      Eliminar
                     </button>
                   </td>
                 </tr>
@@ -252,12 +252,12 @@ function BackupSettings() {
 
       {/* Help */}
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <h4 className="font-medium text-blue-800 mb-2">About Backups</h4>
+        <h4 className="font-medium text-blue-800 mb-2">Sobre las copias de seguridad</h4>
         <ul className="text-sm text-blue-700 space-y-1">
-          <li>• Backups include all your data: tickets, assets, users, and settings</li>
-          <li>• Passwords and API keys are automatically redacted for security</li>
-          <li>• Old backups are automatically deleted based on retention settings</li>
-          <li>• You can download backups for safekeeping or migration</li>
+          <li>• Incluyen todos tus datos: tickets, activos, usuarios y configuración</li>
+          <li>• Las contraseñas y claves API se ocultan automáticamente por seguridad</li>
+          <li>• Las copias antiguas se eliminan según el periodo de retención</li>
+          <li>• Puedes descargarlas para guardarlas o migrar a otro servidor</li>
         </ul>
       </div>
     </div>

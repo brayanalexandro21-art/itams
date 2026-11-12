@@ -63,7 +63,7 @@ const DocumentManager = () => {
                 <p className="text-sm text-gray-500 mb-2">{doc.description}</p>
                 <div className="flex justify-between text-xs text-gray-400">
                   <span>{doc.category}</span>
-                  <span>{new Date(doc.created_at).toLocaleDateString()}</span>
+                  <span>{new Date(doc.created_at).toLocaleDateString('es-CO')}</span>
                 </div>
               </div>
             ))}

@@ -46,7 +46,7 @@ function Reports() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="text-gray-500">Loading reports...</div>
+        <div className="text-gray-500">Cargando reportes…</div>
       </div>
     );
   }
@@ -55,19 +55,19 @@ function Reports() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-gray-800">Reports & Analytics</h2>
+        <h2 className="text-2xl font-bold text-gray-800">Reportes y analítica</h2>
         <div className="flex space-x-2">
           <button
             onClick={() => handleExport('tickets')}
             className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
           >
-            Export Tickets CSV
+            Exportar tickets (CSV)
           </button>
           <button
             onClick={() => handleExport('assets')}
             className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
           >
-            Export Assets CSV
+            Exportar activos (CSV)
           </button>
         </div>
       </div>
@@ -76,7 +76,7 @@ function Reports() {
       <div className="bg-white rounded-lg shadow p-4">
         <div className="flex items-center space-x-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Fecha inicial</label>
             <input
               type="date"
               value={dateRange.start}
@@ -85,7 +85,7 @@ function Reports() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">End Date</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Fecha final</label>
             <input
               type="date"
               value={dateRange.end}
@@ -97,7 +97,7 @@ function Reports() {
             onClick={() => setDateRange({ start: '', end: '' })}
             className="mt-5 px-4 py-2 text-gray-600 hover:text-gray-800"
           >
-            Clear
+            Limpiar
           </button>
         </div>
       </div>
@@ -107,21 +107,21 @@ function Reports() {
           {/* Ticket Overview */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             <div className="bg-white rounded-lg shadow p-6">
-              <h4 className="text-sm font-medium text-gray-500">Total Tickets</h4>
+              <h4 className="text-sm font-medium text-gray-500">Tickets totales</h4>
               <p className="text-3xl font-bold text-gray-800">{stats.tickets.total}</p>
             </div>
             <div className="bg-white rounded-lg shadow p-6">
-              <h4 className="text-sm font-medium text-gray-500">Avg Resolution Time</h4>
+              <h4 className="text-sm font-medium text-gray-500">Tiempo promedio de resolución</h4>
               <p className="text-3xl font-bold text-gray-800">
                 {Math.round(stats.avgResolutionTime)}h
               </p>
             </div>
             <div className="bg-white rounded-lg shadow p-6">
-              <h4 className="text-sm font-medium text-gray-500">Total Assets</h4>
+              <h4 className="text-sm font-medium text-gray-500">Activos totales</h4>
               <p className="text-3xl font-bold text-gray-800">{stats.assets.total}</p>
             </div>
             <div className="bg-white rounded-lg shadow p-6">
-              <h4 className="text-sm font-medium text-gray-500">KB Articles</h4>
+              <h4 className="text-sm font-medium text-gray-500">Artículos de conocimiento</h4>
               <p className="text-3xl font-bold text-gray-800">{stats.knowledgeBase.total_articles}</p>
             </div>
           </div>
@@ -129,13 +129,13 @@ function Reports() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Ticket Status Distribution */}
             <div className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">Ticket Status</h3>
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">Estado de los tickets</h3>
               <div className="space-y-3">
                 {[
-                  { label: 'Open', value: stats.tickets.open, color: 'bg-yellow-500' },
-                  { label: 'In Progress', value: stats.tickets.in_progress, color: 'bg-blue-500' },
-                  { label: 'Resolved', value: stats.tickets.resolved, color: 'bg-green-500' },
-                  { label: 'Closed', value: stats.tickets.closed, color: 'bg-gray-500' },
+                  { label: 'Abiertos', value: stats.tickets.open, color: 'bg-yellow-500' },
+                  { label: 'En progreso', value: stats.tickets.in_progress, color: 'bg-blue-500' },
+                  { label: 'Resueltos', value: stats.tickets.resolved, color: 'bg-green-500' },
+                  { label: 'Cerrados', value: stats.tickets.closed, color: 'bg-gray-500' },
                 ].map((item) => (
                   <div key={item.label} className="flex items-center">
                     <div className="w-32 text-sm text-gray-600">{item.label}</div>
@@ -157,13 +157,13 @@ function Reports() {
 
             {/* Priority Distribution */}
             <div className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">Priority Distribution</h3>
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">Distribución por prioridad</h3>
               <div className="space-y-3">
                 {[
-                  { label: 'Urgent', value: stats.tickets.urgent, color: 'bg-red-500' },
-                  { label: 'High', value: stats.tickets.high, color: 'bg-orange-500' },
-                  { label: 'Medium', value: stats.tickets.medium, color: 'bg-yellow-500' },
-                  { label: 'Low', value: stats.tickets.low, color: 'bg-green-500' },
+                  { label: 'Urgente', value: stats.tickets.urgent, color: 'bg-red-500' },
+                  { label: 'Alta', value: stats.tickets.high, color: 'bg-orange-500' },
+                  { label: 'Media', value: stats.tickets.medium, color: 'bg-yellow-500' },
+                  { label: 'Baja', value: stats.tickets.low, color: 'bg-green-500' },
                 ].map((item) => (
                   <div key={item.label} className="flex items-center">
                     <div className="w-32 text-sm text-gray-600">{item.label}</div>
@@ -185,10 +185,10 @@ function Reports() {
 
             {/* Tickets by Category */}
             <div className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">Tickets by Category</h3>
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">Tickets por categoría</h3>
               <div className="space-y-2">
                 {stats.ticketsByCategory.length === 0 ? (
-                  <p className="text-gray-500 text-center py-4">No data</p>
+                  <p className="text-gray-500 text-center py-4">Sin datos</p>
                 ) : (
                   stats.ticketsByCategory.map((item) => (
                     <div key={item.category} className="flex items-center justify-between py-2 border-b">
@@ -202,10 +202,10 @@ function Reports() {
 
             {/* Top Technicians */}
             <div className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">Top Technicians</h3>
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">Técnicos destacados</h3>
               <div className="space-y-2">
                 {stats.topTechnicians.length === 0 ? (
-                  <p className="text-gray-500 text-center py-4">No data</p>
+                  <p className="text-gray-500 text-center py-4">Sin datos</p>
                 ) : (
                   stats.topTechnicians.map((tech, index) => (
                     <div key={tech.name} className="flex items-center justify-between py-2 border-b">
@@ -216,7 +216,7 @@ function Reports() {
                         <span className="text-gray-700">{tech.name}</span>
                       </div>
                       <div className="text-sm text-gray-500">
-                        {tech.resolved_count}/{tech.ticket_count} resolved
+                        {tech.resolved_count}/{tech.ticket_count} resueltos
                       </div>
                     </div>
                   ))
@@ -226,13 +226,13 @@ function Reports() {
 
             {/* Asset Status */}
             <div className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">Asset Status</h3>
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">Estado de los activos</h3>
               <div className="space-y-3">
                 {[
-                  { label: 'Available', value: stats.assets.available, color: 'bg-green-500' },
-                  { label: 'In Use', value: stats.assets.in_use, color: 'bg-blue-500' },
-                  { label: 'Maintenance', value: stats.assets.maintenance, color: 'bg-yellow-500' },
-                  { label: 'Retired', value: stats.assets.retired, color: 'bg-gray-500' },
+                  { label: 'Disponibles', value: stats.assets.available, color: 'bg-green-500' },
+                  { label: 'En uso', value: stats.assets.in_use, color: 'bg-blue-500' },
+                  { label: 'Mantenimiento', value: stats.assets.maintenance, color: 'bg-yellow-500' },
+                  { label: 'Retirados', value: stats.assets.retired, color: 'bg-gray-500' },
                 ].map((item) => (
                   <div key={item.label} className="flex items-center">
                     <div className="w-32 text-sm text-gray-600">{item.label}</div>
@@ -254,14 +254,14 @@ function Reports() {
 
             {/* Assets by Type */}
             <div className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">Assets by Type</h3>
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">Activos por tipo</h3>
               <div className="space-y-2">
                 {stats.assetsByType.length === 0 ? (
-                  <p className="text-gray-500 text-center py-4">No data</p>
+                  <p className="text-gray-500 text-center py-4">Sin datos</p>
                 ) : (
                   stats.assetsByType.map((item) => (
                     <div key={item.type} className="flex items-center justify-between py-2 border-b">
-                      <span className="text-gray-700 capitalize">{item.type}</span>
+                      <span className="text-gray-700 capitalize">{({ computer: 'Computadores', laptop: 'Portátiles', monitor: 'Monitores', printer: 'Impresoras', phone: 'Teléfonos', server: 'Servidores', network: 'Red', other: 'Otros' })[item.type] || item.type}</span>
                       <span className="font-medium text-gray-800">{item.count}</span>
                     </div>
                   ))
@@ -272,10 +272,10 @@ function Reports() {
 
           {/* Tickets by Day Chart (Simple) */}
           <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Tickets by Day (Last 30 Days)</h3>
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">Tickets por día (últimos 30 días)</h3>
             <div className="h-64 flex items-end space-x-1">
               {stats.ticketsByDay.length === 0 ? (
-                <div className="w-full text-center text-gray-500">No data</div>
+                <div className="w-full text-center text-gray-500">Sin datos</div>
               ) : (
                 stats.ticketsByDay.map((day) => {
                   const maxCount = Math.max(...stats.ticketsByDay.map(d => d.count));

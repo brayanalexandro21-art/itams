@@ -36,15 +36,15 @@ const DepreciationCalculator = () => {
         </div>
         <div className="bg-white rounded-lg shadow p-4 text-center">
           <h3 className="text-sm text-gray-500">Costo Total</h3>
-          <p className="text-2xl font-bold">${(summary?.total_cost || 0).toLocaleString()}</p>
+          <p className="text-2xl font-bold">${(summary?.total_cost || 0).toLocaleString('es-CO')}</p>
         </div>
         <div className="bg-white rounded-lg shadow p-4 text-center">
           <h3 className="text-sm text-gray-500">Valor en Libros</h3>
-          <p className="text-2xl font-bold text-blue-600">${(summary?.total_book_value || 0).toLocaleString()}</p>
+          <p className="text-2xl font-bold text-blue-600">${(summary?.total_book_value || 0).toLocaleString('es-CO')}</p>
         </div>
         <div className="bg-white rounded-lg shadow p-4 text-center">
           <h3 className="text-sm text-gray-500">Depreciación Acum.</h3>
-          <p className="text-2xl font-bold text-red-600">${(summary?.total_depreciation || 0).toLocaleString()}</p>
+          <p className="text-2xl font-bold text-red-600">${(summary?.total_depreciation || 0).toLocaleString('es-CO')}</p>
         </div>
       </div>
 
@@ -68,9 +68,9 @@ const DepreciationCalculator = () => {
                   <tr key={i} className="hover:bg-gray-50">
                     <td className="px-4 py-3 text-sm capitalize font-medium">{type}</td>
                     <td className="px-4 py-3 text-sm">{data.count}</td>
-                    <td className="px-4 py-3 text-sm">${data.cost.toLocaleString()}</td>
-                    <td className="px-4 py-3 text-sm text-blue-600">${data.book_value.toLocaleString()}</td>
-                    <td className="px-4 py-3 text-sm text-red-600">${(data.cost - data.book_value).toLocaleString()}</td>
+                    <td className="px-4 py-3 text-sm">${data.cost.toLocaleString('es-CO')}</td>
+                    <td className="px-4 py-3 text-sm text-blue-600">${data.book_value.toLocaleString('es-CO')}</td>
+                    <td className="px-4 py-3 text-sm text-red-600">${(data.cost - data.book_value).toLocaleString('es-CO')}</td>
                   </tr>
                 ))}
               </tbody>
@@ -93,10 +93,10 @@ const DepreciationCalculator = () => {
               <h3 className="font-medium mb-3">Información del Activo</h3>
               <div className="space-y-2 text-sm">
                 <div><span className="text-gray-500">Nombre:</span> {assetDepreciation.asset_name}</div>
-                <div><span className="text-gray-500">Costo:</span> ${assetDepreciation.purchase_cost.toLocaleString()}</div>
+                <div><span className="text-gray-500">Costo:</span> ${assetDepreciation.purchase_cost.toLocaleString('es-CO')}</div>
                 <div><span className="text-gray-500">Fecha compra:</span> {assetDepreciation.purchase_date}</div>
                 <div><span className="text-gray-500">Vida útil:</span> {assetDepreciation.useful_life_years} años</div>
-                <div><span className="text-gray-500">Valor residual:</span> ${assetDepreciation.residual_value.toLocaleString()}</div>
+                <div><span className="text-gray-500">Valor residual:</span> ${assetDepreciation.residual_value.toLocaleString('es-CO')}</div>
                 <div><span className="text-gray-500">Edad:</span> {assetDepreciation.age_years} años</div>
               </div>
             </div>
@@ -105,13 +105,13 @@ const DepreciationCalculator = () => {
               <div className="space-y-3">
                 <div className="p-3 bg-blue-50 rounded">
                   <div className="text-sm font-medium text-blue-800">Línea Recta</div>
-                  <div className="text-xs text-gray-600 mt-1">Anual: ${assetDepreciation.methods.straight_line.annual.toLocaleString()}</div>
-                  <div className="text-xs text-gray-600">Acumulada: ${assetDepreciation.methods.straight_line.accumulated.toLocaleString()}</div>
-                  <div className="text-xs text-blue-600 font-bold">Valor libros: ${assetDepreciation.methods.straight_line.book_value.toLocaleString()}</div>
+                  <div className="text-xs text-gray-600 mt-1">Anual: ${assetDepreciation.methods.straight_line.annual.toLocaleString('es-CO')}</div>
+                  <div className="text-xs text-gray-600">Acumulada: ${assetDepreciation.methods.straight_line.accumulated.toLocaleString('es-CO')}</div>
+                  <div className="text-xs text-blue-600 font-bold">Valor libros: ${assetDepreciation.methods.straight_line.book_value.toLocaleString('es-CO')}</div>
                 </div>
                 <div className="p-3 bg-purple-50 rounded">
                   <div className="text-sm font-medium text-purple-800">Saldo Decreciente</div>
-                  <div className="text-xs text-purple-600 font-bold">Valor libros: ${assetDepreciation.methods.declining_balance.book_value.toLocaleString()}</div>
+                  <div className="text-xs text-purple-600 font-bold">Valor libros: ${assetDepreciation.methods.declining_balance.book_value.toLocaleString('es-CO')}</div>
                 </div>
                 <div className="text-center p-3 bg-gray-50 rounded">
                   <div className="text-sm text-gray-500">Depreciación total</div>

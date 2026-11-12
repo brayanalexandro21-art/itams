@@ -28,19 +28,19 @@ const ApiUsageAnalytics = () => {
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         <div className="bg-white rounded-lg shadow p-4 text-center">
-          <h3 className="text-sm text-gray-500">Total Requests</h3>
-          <p className="text-2xl font-bold">{data?.summary?.total?.toLocaleString() || 0}</p>
+          <h3 className="text-sm text-gray-500">Solicitudes totales</h3>
+          <p className="text-2xl font-bold">{data?.summary?.total?.toLocaleString('es-CO') || 0}</p>
         </div>
         <div className="bg-white rounded-lg shadow p-4 text-center">
           <h3 className="text-sm text-gray-500">Hoy</h3>
-          <p className="text-2xl font-bold text-blue-600">{data?.summary?.today?.toLocaleString() || 0}</p>
+          <p className="text-2xl font-bold text-blue-600">{data?.summary?.today?.toLocaleString('es-CO') || 0}</p>
         </div>
         <div className="bg-white rounded-lg shadow p-4 text-center">
           <h3 className="text-sm text-gray-500">Tiempo Prom.</h3>
           <p className="text-2xl font-bold">{data?.summary?.avg_response_ms || 0}ms</p>
         </div>
         <div className="bg-white rounded-lg shadow p-4 text-center">
-          <h3 className="text-sm text-gray-500">Tasa Error</h3>
+          <h3 className="text-sm text-gray-500">Tasa de error</h3>
           <p className={`text-2xl font-bold ${data?.summary?.error_rate > 5 ? 'text-red-600' : 'text-green-600'}`}>
             {data?.summary?.error_rate || 0}%
           </p>

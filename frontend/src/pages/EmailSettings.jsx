@@ -36,9 +36,9 @@ function EmailSettings() {
     setMessage({ type: '', text: '' });
     try {
       await api.put('/email/settings', settings);
-      setMessage({ type: 'success', text: 'Settings saved successfully' });
+      setMessage({ type: 'success', text: 'Configuración guardada correctamente' });
     } catch (error) {
-      setMessage({ type: 'error', text: 'Failed to save settings' });
+      setMessage({ type: 'error', text: 'No se pudo guardar la configuración' });
     } finally {
       setSaving(false);
     }
@@ -46,28 +46,28 @@ function EmailSettings() {
 
   const handleTestEmail = async () => {
     if (!testEmail) {
-      setMessage({ type: 'error', text: 'Please enter an email address' });
+      setMessage({ type: 'error', text: 'Escribe un correo electrónico' });
       return;
     }
     try {
       await api.post('/email/test', { to: testEmail });
-      setMessage({ type: 'success', text: 'Test email sent (check logs)' });
+      setMessage({ type: 'success', text: 'Correo de prueba enviado (revisa los registros)' });
     } catch (error) {
-      setMessage({ type: 'error', text: 'Failed to send test email' });
+      setMessage({ type: 'error', text: 'No se pudo enviar el correo de prueba' });
     }
   };
 
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="text-gray-500">Loading...</div>
+        <div className="text-gray-500">Cargando…</div>
       </div>
     );
   }
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
-      <h2 className="text-2xl font-bold text-gray-800">Email Settings</h2>
+      <h2 className="text-2xl font-bold text-gray-800">Configuración de correo</h2>
 
       {message.text && (
         <div
@@ -86,9 +86,9 @@ function EmailSettings() {
           {/* Enable/Disable */}
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="font-medium text-gray-800">Enable Email Notifications</h3>
+              <h3 className="font-medium text-gray-800">Notificaciones por correo</h3>
               <p className="text-sm text-gray-500">
-                Send email notifications for ticket updates
+                Envía un correo cuando cambian los tickets
               </p>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
@@ -106,11 +106,11 @@ function EmailSettings() {
 
           {/* SMTP Settings */}
           <div>
-            <h3 className="font-medium text-gray-800 mb-4">SMTP Configuration</h3>
+            <h3 className="font-medium text-gray-800 mb-4">Servidor SMTP</h3>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  SMTP Host
+                  Servidor SMTP
                 </label>
                 <input
                   type="text"
@@ -122,7 +122,7 @@ function EmailSettings() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  SMTP Port
+                  Puerto SMTP
                 </label>
                 <input
                   type="number"
@@ -134,19 +134,19 @@ function EmailSettings() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Username
+                  Usuario
                 </label>
                 <input
                   type="text"
                   value={settings.smtp_user}
                   onChange={(e) => setSettings({ ...settings, smtp_user: e.target.value })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
-                  placeholder="your-email@gmail.com"
+                  placeholder="tu-correo@gmail.com"
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Password
+                  Contraseña
                 </label>
                 <input
                   type="password"
@@ -163,11 +163,11 @@ function EmailSettings() {
 
           {/* Sender Settings */}
           <div>
-            <h3 className="font-medium text-gray-800 mb-4">Sender Information</h3>
+            <h3 className="font-medium text-gray-800 mb-4">Remitente</h3>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  From Name
+                  Nombre del remitente
                 </label>
                 <input
                   type="text"
@@ -179,7 +179,7 @@ function EmailSettings() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  From Email
+                  Correo del remitente
                 </label>
                 <input
                   type="email"
@@ -196,20 +196,20 @@ function EmailSettings() {
 
           {/* Test Email */}
           <div>
-            <h3 className="font-medium text-gray-800 mb-4">Test Email</h3>
+            <h3 className="font-medium text-gray-800 mb-4">Correo de prueba</h3>
             <div className="flex space-x-2">
               <input
                 type="email"
                 value={testEmail}
                 onChange={(e) => setTestEmail(e.target.value)}
                 className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
-                placeholder="Enter email to test"
+                placeholder="Correo para la prueba"
               />
               <button
                 onClick={handleTestEmail}
                 className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
               >
-                Send Test
+                Enviar prueba
               </button>
             </div>
           </div>
@@ -221,7 +221,7 @@ function EmailSettings() {
               disabled={saving}
               className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50"
             >
-              {saving ? 'Saving...' : 'Save Settings'}
+              {saving ? 'Guardando…' : 'Guardar configuración'}
             </button>
           </div>
         </div>
@@ -229,12 +229,12 @@ function EmailSettings() {
 
       {/* Help */}
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <h4 className="font-medium text-blue-800 mb-2">Email Configuration Help</h4>
+        <h4 className="font-medium text-blue-800 mb-2">Ayuda para configurar el correo</h4>
         <ul className="text-sm text-blue-700 space-y-1">
-          <li>• <strong>Gmail:</strong> SMTP host: smtp.gmail.com, Port: 587</li>
-          <li>• <strong>Outlook:</strong> SMTP host: smtp.office365.com, Port: 587</li>
-          <li>• <strong>Yahoo:</strong> SMTP host: smtp.mail.yahoo.com, Port: 587</li>
-          <li>• For Gmail, use App Password instead of regular password</li>
+          <li>• <strong>Gmail:</strong> servidor smtp.gmail.com, puerto 587</li>
+          <li>• <strong>Outlook:</strong> servidor smtp.office365.com, puerto 587</li>
+          <li>• <strong>Yahoo:</strong> servidor smtp.mail.yahoo.com, puerto 587</li>
+          <li>• En Gmail usa una contraseña de aplicación en lugar de tu contraseña normal</li>
         </ul>
       </div>
     </div>

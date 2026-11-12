@@ -127,7 +127,7 @@ const NotificationCenter = () => {
                   {!n.is_read && <span className="w-2 h-2 bg-blue-500 rounded-full"></span>}
                 </div>
                 <p className="text-sm text-gray-600">{n.message}</p>
-                <span className="text-xs text-gray-400">{new Date(n.created_at).toLocaleString()}</span>
+                <span className="text-xs text-gray-400">{new Date(n.created_at).toLocaleString('es-CO')}</span>
               </div>
               <div className="flex gap-2">
                 {!n.is_read && (

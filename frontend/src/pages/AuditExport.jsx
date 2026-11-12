@@ -31,15 +31,15 @@ const AuditExport = () => {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
         <div className="bg-white rounded-lg shadow p-4 text-center">
           <h3 className="text-sm text-gray-500">Total Registros</h3>
-          <p className="text-2xl font-bold">{stats?.total?.toLocaleString() || 0}</p>
+          <p className="text-2xl font-bold">{stats?.total?.toLocaleString('es-CO') || 0}</p>
         </div>
         <div className="bg-white rounded-lg shadow p-4 text-center">
           <h3 className="text-sm text-gray-500">Más antiguo</h3>
-          <p className="text-sm font-medium">{stats?.oldest ? new Date(stats.oldest).toLocaleDateString() : 'N/A'}</p>
+          <p className="text-sm font-medium">{stats?.oldest ? new Date(stats.oldest).toLocaleDateString('es-CO') : 'N/A'}</p>
         </div>
         <div className="bg-white rounded-lg shadow p-4 text-center">
           <h3 className="text-sm text-gray-500">Más reciente</h3>
-          <p className="text-sm font-medium">{stats?.newest ? new Date(stats.newest).toLocaleDateString() : 'N/A'}</p>
+          <p className="text-sm font-medium">{stats?.newest ? new Date(stats.newest).toLocaleDateString('es-CO') : 'N/A'}</p>
         </div>
         <div className="bg-white rounded-lg shadow p-4 text-center">
           <h3 className="text-sm text-gray-500">Tipos de Acción</h3>

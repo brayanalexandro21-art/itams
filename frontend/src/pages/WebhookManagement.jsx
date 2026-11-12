@@ -163,7 +163,7 @@ const WebhookManagement = () => {
                   <button onClick={() => toggleWebhook(selectedWebhook.id)} className={`px-3 py-1 rounded text-sm ${selectedWebhook.active ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'}`}>
                     {selectedWebhook.active ? 'Desactivar' : 'Activar'}
                   </button>
-                  <button onClick={() => testWebhook(selectedWebhook.id)} className="bg-blue-100 text-blue-800 px-3 py-1 rounded text-sm">Test</button>
+                  <button onClick={() => testWebhook(selectedWebhook.id)} className="bg-blue-100 text-blue-800 px-3 py-1 rounded text-sm">Probar</button>
                   <button onClick={() => deleteWebhook(selectedWebhook.id)} className="bg-red-100 text-red-800 px-3 py-1 rounded text-sm">Eliminar</button>
                 </div>
               </div>
@@ -181,7 +181,7 @@ const WebhookManagement = () => {
                       <span className={`px-2 py-0.5 rounded text-xs ${log.status === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
                         {log.status} ({log.response_code})
                       </span>
-                      <span className="text-gray-400 text-xs">{new Date(log.executed_at).toLocaleString()}</span>
+                      <span className="text-gray-400 text-xs">{new Date(log.executed_at).toLocaleString('es-CO')}</span>
                     </div>
                   )) : (
                     <div className="text-gray-400 text-sm">No hay ejecuciones</div>

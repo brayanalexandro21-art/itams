@@ -61,7 +61,7 @@ const PerformanceMonitor = () => {
         <div className="bg-white rounded-lg shadow p-4">
           <h3 className="text-sm font-medium text-gray-500">Total Registros</h3>
           <p className="text-2xl font-bold">
-            {dbStats ? dbStats.total_records.toLocaleString() : '-'}
+            {dbStats ? dbStats.total_records.toLocaleString('es-CO') : '-'}
           </p>
         </div>
       </div>
@@ -80,7 +80,7 @@ const PerformanceMonitor = () => {
               {dbStats?.tables.map((table, index) => (
                 <tr key={index} className="border-b">
                   <td className="py-2">{table.table}</td>
-                  <td className="text-right">{table.count.toLocaleString()}</td>
+                  <td className="text-right">{table.count.toLocaleString('es-CO')}</td>
                 </tr>
               ))}
             </tbody>

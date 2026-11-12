@@ -145,7 +145,7 @@ const ReportScheduler = () => {
                 <div className="border-t pt-4 mt-4">
                   <h3 className="font-medium mb-2">Resultado de Ejecución</h3>
                   <div className="bg-gray-50 rounded p-4">
-                    <div className="text-sm text-gray-500 mb-2">Generado: {new Date(runResult.generated_at).toLocaleString()}</div>
+                    <div className="text-sm text-gray-500 mb-2">Generado: {new Date(runResult.generated_at).toLocaleString('es-CO')}</div>
                     <pre className="text-sm bg-white p-3 rounded border overflow-auto max-h-60">
                       {JSON.stringify(runResult.data, null, 2)}
                     </pre>

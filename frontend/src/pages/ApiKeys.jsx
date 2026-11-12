@@ -41,7 +41,7 @@ function ApiKeys() {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this API key?')) {
+    if (window.confirm('¿Seguro que deseas eliminar esta clave API?')) {
       try {
         await api.delete(`/apikeys/${id}`);
         fetchKeys();
@@ -65,14 +65,14 @@ function ApiKeys() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-800">API Keys</h2>
-          <p className="text-sm text-gray-500">Manage API keys for external integrations</p>
+          <h2 className="text-2xl font-bold text-gray-800">Claves API</h2>
+          <p className="text-sm text-gray-500">Administra las claves de acceso para integraciones externas</p>
         </div>
         <button
           onClick={() => setShowCreate(true)}
           className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"
         >
-          + Create API Key
+          + Crear clave API
         </button>
       </div>
 
@@ -82,9 +82,9 @@ function ApiKeys() {
           <div className="flex items-start">
             <span className="text-green-500 text-xl mr-3">✓</span>
             <div className="flex-1">
-              <h4 className="font-medium text-green-800">API Key Created</h4>
+              <h4 className="font-medium text-green-800">Clave API creada</h4>
               <p className="text-sm text-green-700 mt-1">
-                Copy this key now. It will not be shown again.
+                Copia esta clave ahora. No se volverá a mostrar.
               </p>
               <div className="mt-2 p-2 bg-white rounded border font-mono text-sm break-all">
                 {newKey.key}
@@ -93,7 +93,7 @@ function ApiKeys() {
                 onClick={() => navigator.clipboard.writeText(newKey.key)}
                 className="mt-2 text-sm text-green-700 hover:text-green-900"
               >
-                Copy to clipboard
+                Copiar al portapapeles
               </button>
             </div>
             <button
@@ -110,24 +110,24 @@ function ApiKeys() {
       {showCreate && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Create API Key</h3>
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">Crear clave API</h3>
             <form onSubmit={handleCreate} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Name *
+                  Nombre *
                 </label>
                 <input
                   type="text"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
-                  placeholder="e.g., Integration with Zapier"
+                  placeholder="Ej.: Integración con Zapier"
                   required
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Permissions
+                  Permisos
                 </label>
                 <div className="flex space-x-4">
                   {['read', 'write'].map((perm) => (
@@ -138,14 +138,14 @@ function ApiKeys() {
                         onChange={() => togglePermission(perm)}
                         className="mr-2"
                       />
-                      <span className="text-sm text-gray-700 capitalize">{perm}</span>
+                      <span className="text-sm text-gray-700 capitalize">{perm === 'read' ? 'Lectura' : perm === 'write' ? 'Escritura' : perm}</span>
                     </label>
                   ))}
                 </div>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Expires At (optional)
+                  Vence el (opcional)
                 </label>
                 <input
                   type="datetime-local"
@@ -160,13 +160,13 @@ function ApiKeys() {
                   onClick={() => setShowCreate(false)}
                   className="px-4 py-2 text-gray-700 hover:text-gray-900"
                 >
-                  Cancel
+                  Cancelar
                 </button>
                 <button
                   type="submit"
                   className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
                 >
-                  Create
+                  Crear
                 </button>
               </div>
             </form>
@@ -177,32 +177,32 @@ function ApiKeys() {
       {/* API Keys List */}
       <div className="bg-white rounded-lg shadow overflow-hidden">
         {loading ? (
-          <div className="p-8 text-center text-gray-500">Loading...</div>
+          <div className="p-8 text-center text-gray-500">Cargando…</div>
         ) : keys.length === 0 ? (
           <div className="p-8 text-center text-gray-500">
-            No API keys yet. Create one to get started.
+            Aún no hay claves API. Crea una para empezar.
           </div>
         ) : (
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                  Name
+                  Nombre
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                  Key Prefix
+                  Prefijo
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                  Permissions
+                  Permisos
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                  Last Used
+                  Último uso
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                  Expires
+                  Vence
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                  Actions
+                  Acciones
                 </th>
               </tr>
             </thead>
@@ -228,17 +228,17 @@ function ApiKeys() {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                    {key.last_used ? new Date(key.last_used).toLocaleDateString() : 'Never'}
+                    {key.last_used ? new Date(key.last_used).toLocaleDateString('es-CO') : 'Nunca'}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                    {key.expires_at ? new Date(key.expires_at).toLocaleDateString() : 'Never'}
+                    {key.expires_at ? new Date(key.expires_at).toLocaleDateString('es-CO') : 'Nunca'}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <button
                       onClick={() => handleDelete(key.id)}
                       className="text-red-600 hover:text-red-800 text-sm"
                     >
-                      Delete
+                      Eliminar
                     </button>
                   </td>
                 </tr>
@@ -250,20 +250,20 @@ function ApiKeys() {
 
       {/* API Documentation */}
       <div className="bg-white rounded-lg shadow p-6">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">API Documentation</h3>
+        <h3 className="text-lg font-semibold text-gray-800 mb-4">Documentación de la API</h3>
         <div className="prose text-sm">
           <p className="text-gray-600 mb-4">
-            Use API keys to access ITAMS programmatically. Include the key in the <code>X-API-Key</code> header.
+            Usa las claves API para acceder a ITAMS desde otros sistemas. Envía la clave en el encabezado <code>X-API-Key</code>.
           </p>
-          <h4 className="font-medium text-gray-800">Available Endpoints</h4>
+          <h4 className="font-medium text-gray-800">Endpoints disponibles</h4>
           <ul className="list-disc list-inside text-gray-600 space-y-1">
-            <li><code>GET /api/v1/tickets</code> - List tickets (read permission)</li>
-            <li><code>GET /api/v1/assets</code> - List assets (read permission)</li>
-            <li><code>POST /api/v1/tickets</code> - Create ticket (write permission)</li>
+            <li><code>GET /api/v1/tickets</code> - Listar tickets (permiso de lectura)</li>
+            <li><code>GET /api/v1/assets</code> - Listar activos (permiso de lectura)</li>
+            <li><code>POST /api/v1/tickets</code> - Crear ticket (permiso de escritura)</li>
           </ul>
-          <h4 className="font-medium text-gray-800 mt-4">Example Request</h4>
+          <h4 className="font-medium text-gray-800 mt-4">Ejemplo de solicitud</h4>
           <pre className="bg-gray-100 p-3 rounded text-sm overflow-x-auto">
-{`curl -H "X-API-Key: your_api_key_here" \\
+{`curl -H "X-API-Key: tu_clave_api" \\
      http://localhost:3001/api/v1/tickets`}
           </pre>
         </div>

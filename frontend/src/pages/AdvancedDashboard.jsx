@@ -107,7 +107,7 @@ const AdvancedDashboard = () => {
                 <span className="text-gray-500 ml-2">{activity.entity_type}</span>
               </div>
               <span className="text-xs text-gray-400">
-                {new Date(activity.created_at).toLocaleString()}
+                {new Date(activity.created_at).toLocaleString('es-CO')}
               </span>
             </div>
           ))}

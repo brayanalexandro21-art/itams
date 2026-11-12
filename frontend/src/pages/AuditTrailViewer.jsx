@@ -48,7 +48,7 @@ const AuditTrailViewer = () => {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         <div className="bg-white rounded-lg shadow p-4 text-center">
           <h3 className="text-sm text-gray-500">Total Registros</h3>
-          <p className="text-2xl font-bold">{summary?.total?.toLocaleString() || 0}</p>
+          <p className="text-2xl font-bold">{summary?.total?.toLocaleString('es-CO') || 0}</p>
         </div>
         <div className="bg-white rounded-lg shadow p-4 text-center">
           <h3 className="text-sm text-gray-500">Hoy</h3>
@@ -126,7 +126,7 @@ const AuditTrailViewer = () => {
           <tbody className="divide-y divide-gray-200">
             {data?.logs?.map((log, i) => (
               <tr key={i} className="hover:bg-gray-50">
-                <td className="px-4 py-3 text-xs whitespace-nowrap">{new Date(log.created_at).toLocaleString()}</td>
+                <td className="px-4 py-3 text-xs whitespace-nowrap">{new Date(log.created_at).toLocaleString('es-CO')}</td>
                 <td className="px-4 py-3 text-sm">{log.user_name || 'N/A'}</td>
                 <td className="px-4 py-3">
                   <span className={`px-2 py-1 rounded text-xs ${getActionColor(log.action)}`}>{log.action}</span>

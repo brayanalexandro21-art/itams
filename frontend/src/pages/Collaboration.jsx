@@ -88,7 +88,7 @@ const Collaboration = () => {
                     <div key={i} className="mb-3">
                       <span className="font-medium text-blue-600">{msg.user_name}</span>
                       <span className="text-gray-500 text-sm ml-2">
-                        {new Date(msg.created_at).toLocaleTimeString()}
+                        {new Date(msg.created_at).toLocaleTimeString('es-CO')}
                       </span>
                       <p className="text-gray-800">{msg.content}</p>
                     </div>

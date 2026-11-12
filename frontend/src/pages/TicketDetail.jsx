@@ -55,7 +55,7 @@ function TicketDetail() {
   };
 
   const handleDelete = async () => {
-    if (window.confirm('Are you sure you want to delete this ticket?')) {
+    if (window.confirm('¿Seguro que deseas eliminar este ticket?')) {
       try {
         await api.delete(`/tickets/${id}`);
         navigate('/tickets');
@@ -68,7 +68,7 @@ function TicketDetail() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="text-gray-500">Loading ticket...</div>
+        <div className="text-gray-500">Cargando ticket…</div>
       </div>
     );
   }
@@ -106,7 +106,7 @@ function TicketDetail() {
             onClick={() => navigate('/tickets')}
             className="text-gray-500 hover:text-gray-700 mb-2"
           >
-            ← Back to Tickets
+            ← Volver a tickets
           </button>
           <h2 className="text-2xl font-bold text-gray-800">
             #{ticket.id} - {ticket.title}
@@ -116,7 +116,7 @@ function TicketDetail() {
           onClick={handleDelete}
           className="px-4 py-2 text-red-600 hover:text-red-800 font-medium"
         >
-          Delete Ticket
+          Eliminar ticket
         </button>
       </div>
 
@@ -125,23 +125,23 @@ function TicketDetail() {
         <div className="col-span-2 space-y-6">
           {/* Ticket Info */}
           <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Details</h3>
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">Detalles</h3>
             <div className="space-y-4">
               <div>
-                <label className="text-sm font-medium text-gray-500">Description</label>
+                <label className="text-sm font-medium text-gray-500">Descripción</label>
                 <p className="mt-1 text-gray-700 whitespace-pre-wrap">
-                  {ticket.description || 'No description provided'}
+                  {ticket.description || 'Sin descripción'}
                 </p>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-medium text-gray-500">Category</label>
+                  <label className="text-sm font-medium text-gray-500">Categoría</label>
                   <p className="mt-1 text-gray-700">{ticket.category || '-'}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-500">Created</label>
+                  <label className="text-sm font-medium text-gray-500">Creado</label>
                   <p className="mt-1 text-gray-700">
-                    {new Date(ticket.created_at).toLocaleString()}
+                    {new Date(ticket.created_at).toLocaleString('es-CO')}
                   </p>
                 </div>
               </div>
@@ -151,7 +151,7 @@ function TicketDetail() {
           {/* Comments */}
           <div className="bg-white rounded-lg shadow p-6">
             <h3 className="text-lg font-semibold text-gray-800 mb-4">
-              Comments ({ticket.comments?.length || 0})
+              Comentarios ({ticket.comments?.length || 0})
             </h3>
 
             {/* Add Comment Form */}
@@ -161,28 +161,28 @@ function TicketDetail() {
                 onChange={(e) => setNewComment(e.target.value)}
                 rows={3}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                placeholder="Add a comment..."
+                placeholder="Escribe un comentario…"
               />
               <button
                 type="submit"
                 disabled={submitting || !newComment.trim()}
                 className="mt-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50"
               >
-                {submitting ? 'Adding...' : 'Add Comment'}
+                {submitting ? 'Agregando…' : 'Agregar comentario'}
               </button>
             </form>
 
             {/* Comments List */}
             <div className="space-y-4">
               {ticket.comments?.length === 0 ? (
-                <p className="text-gray-500 text-center py-4">No comments yet</p>
+                <p className="text-gray-500 text-center py-4">Aún no hay comentarios</p>
               ) : (
                 ticket.comments?.map((comment) => (
                   <div key={comment.id} className="border-l-4 border-indigo-200 pl-4">
                     <div className="flex items-center justify-between">
                       <span className="font-medium text-gray-800">{comment.user_name}</span>
                       <span className="text-sm text-gray-500">
-                        {new Date(comment.created_at).toLocaleString()}
+                        {new Date(comment.created_at).toLocaleString('es-CO')}
                       </span>
                     </div>
                     <p className="mt-1 text-gray-600 whitespace-pre-wrap">{comment.comment}</p>
@@ -197,7 +197,7 @@ function TicketDetail() {
         <div className="space-y-6">
           {/* Status */}
           <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Status</h3>
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">Estado</h3>
             <div className="space-y-2">
               {['open', 'in_progress', 'resolved', 'closed'].map((status) => (
                 <button
@@ -209,7 +209,7 @@ function TicketDetail() {
                       : 'hover:bg-gray-100 text-gray-600'
                   }`}
                 >
-                  {status.replace('_', ' ')}
+                  {({ open: 'Abierto', in_progress: 'En progreso', resolved: 'Resuelto', closed: 'Cerrado' })[status] || status}
                 </button>
               ))}
             </div>
@@ -217,21 +217,21 @@ function TicketDetail() {
 
           {/* Priority */}
           <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Priority</h3>
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">Prioridad</h3>
             <p className={`text-xl font-bold ${getPriorityColor(ticket.priority)}`}>
-              {ticket.priority.toUpperCase()}
+              {({ low: 'Baja', medium: 'Media', high: 'Alta', urgent: 'Urgente' })[ticket.priority] || ticket.priority}
             </p>
           </div>
 
           {/* Assigned To */}
           <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Assigned To</h3>
-            <p className="text-gray-700">{ticket.assigned_to_name || 'Unassigned'}</p>
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">Asignado a</h3>
+            <p className="text-gray-700">{ticket.assigned_to_name || 'Sin asignar'}</p>
           </div>
 
           {/* Created By */}
           <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Created By</h3>
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">Creado por</h3>
             <p className="text-gray-700">{ticket.created_by_name}</p>
           </div>
         </div>

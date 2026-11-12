@@ -63,7 +63,7 @@ const SystemHealth = () => {
               <h2 className="text-xl font-bold capitalize">
                 {health?.status === 'healthy' ? 'Todo Operativo' : health?.status === 'warning' ? 'Advertencias Detectadas' : 'Problemas Críticos'}
               </h2>
-              <p className="text-sm text-gray-500">Última verificación: {health?.timestamp ? new Date(health.timestamp).toLocaleString() : 'N/A'}</p>
+              <p className="text-sm text-gray-500">Última verificación: {health?.timestamp ? new Date(health.timestamp).toLocaleString('es-CO') : 'N/A'}</p>
             </div>
           </div>
           <div className="text-right">

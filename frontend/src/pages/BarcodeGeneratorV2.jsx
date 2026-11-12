@@ -131,7 +131,7 @@ const BarcodeGeneratorV2 = () => {
             <tbody className="divide-y divide-gray-200">
               {history.slice(0, 20).map((h, i) => (
                 <tr key={i} className="hover:bg-gray-50">
-                  <td className="px-4 py-3 text-sm">{new Date(h.scanned_at).toLocaleString()}</td>
+                  <td className="px-4 py-3 text-sm">{new Date(h.scanned_at).toLocaleString('es-CO')}</td>
                   <td className="px-4 py-3 text-sm">{h.asset_name || 'N/A'}</td>
                   <td className="px-4 py-3 text-sm">{h.scanned_by_name || 'N/A'}</td>
                 </tr>

@@ -168,7 +168,7 @@ const SurveyManagement = () => {
                   {selectedSurvey.responses?.map((r, i) => (
                     <div key={i} className="p-2 bg-gray-50 rounded text-sm">
                       <span className="font-medium">{r.respondent_name}</span>
-                      <span className="text-gray-500 ml-2">{new Date(r.submitted_at).toLocaleDateString()}</span>
+                      <span className="text-gray-500 ml-2">{new Date(r.submitted_at).toLocaleDateString('es-CO')}</span>
                     </div>
                   ))}
                 </div>

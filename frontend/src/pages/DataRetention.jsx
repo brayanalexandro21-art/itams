@@ -59,7 +59,7 @@ const DataRetention = () => {
         {stats && configs.map(c => (
           <div key={c.key} className="bg-white rounded-lg shadow p-4 text-center">
             <div className="text-2xl mb-1">{c.icon}</div>
-            <p className="text-2xl font-bold">{(stats[c.key.replace('_days', '').replace('audit_logs', 'audit_logs').replace('activity_logs', 'activity_logs')] || stats[c.key.replace('_days', '')] || 0).toLocaleString()}</p>
+            <p className="text-2xl font-bold">{(stats[c.key.replace('_days', '').replace('audit_logs', 'audit_logs').replace('activity_logs', 'activity_logs')] || stats[c.key.replace('_days', '')] || 0).toLocaleString('es-CO')}</p>
             <p className="text-xs text-gray-500">{c.label}</p>
           </div>
         ))}

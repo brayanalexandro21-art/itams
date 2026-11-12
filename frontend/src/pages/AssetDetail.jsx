@@ -262,8 +262,8 @@ function AssetDetail() {
 
           {/* Timestamps */}
           <div className="flex justify-between items-center mt-4 text-sm text-gray-500">
-            <span>Creado el {new Date(asset.created_at).toLocaleString()}</span>
-            <span>Última actualización el {new Date(asset.updated_at).toLocaleString()}</span>
+            <span>Creado el {new Date(asset.created_at).toLocaleString('es-CO')}</span>
+            <span>Última actualización el {new Date(asset.updated_at).toLocaleString('es-CO')}</span>
           </div>
         </div>
 

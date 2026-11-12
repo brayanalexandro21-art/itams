@@ -145,7 +145,7 @@ const ClientPortalDashboard = () => {
                   <span className="font-medium text-sm">#{t.id} {t.title}</span>
                   <span className={`text-xs px-1 rounded ${getStatusColor(t.status)}`}>{t.status}</span>
                 </div>
-                <div className="text-xs text-gray-400 mt-1">{new Date(t.created_at).toLocaleDateString()}</div>
+                <div className="text-xs text-gray-400 mt-1">{new Date(t.created_at).toLocaleDateString('es-CO')}</div>
               </div>
             ))}
           </div>
@@ -159,7 +159,7 @@ const ClientPortalDashboard = () => {
                 <div className="flex gap-3 mt-2 text-sm">
                   <span className={`px-2 py-0.5 rounded ${getStatusColor(selectedTicket.status)}`}>{selectedTicket.status}</span>
                   <span className="text-gray-500">{selectedTicket.priority}</span>
-                  <span className="text-gray-400">{new Date(selectedTicket.created_at).toLocaleString()}</span>
+                  <span className="text-gray-400">{new Date(selectedTicket.created_at).toLocaleString('es-CO')}</span>
                 </div>
                 <p className="mt-3 text-gray-600">{selectedTicket.description}</p>
               </div>
@@ -171,7 +171,7 @@ const ClientPortalDashboard = () => {
                     <div key={i} className="p-3 bg-gray-50 rounded">
                       <div className="flex justify-between items-center mb-1">
                         <span className="font-medium text-sm">{c.user_name}</span>
-                        <span className="text-xs text-gray-400">{new Date(c.created_at).toLocaleString()}</span>
+                        <span className="text-xs text-gray-400">{new Date(c.created_at).toLocaleString('es-CO')}</span>
                       </div>
                       <p className="text-sm text-gray-600">{c.content}</p>
                     </div>

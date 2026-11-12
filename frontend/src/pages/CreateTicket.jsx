@@ -26,7 +26,7 @@ function CreateTicket() {
       await api.post('/tickets', formData);
       navigate('/tickets');
     } catch (err) {
-      setError(err.response?.data?.error || 'Failed to create ticket');
+      setError(err.response?.data?.error || 'No se pudo crear el ticket');
     } finally {
       setLoading(false);
     }
@@ -34,7 +34,7 @@ function CreateTicket() {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">Create New Ticket</h2>
+      <h2 className="text-2xl font-bold text-gray-800 mb-6">Nuevo ticket</h2>
 
       <div className="bg-white rounded-lg shadow p-6">
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -46,7 +46,7 @@ function CreateTicket() {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Title *
+              Asunto *
             </label>
             <input
               type="text"
@@ -54,14 +54,14 @@ function CreateTicket() {
               value={formData.title}
               onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-              placeholder="Brief description of the issue"
+              placeholder="Resumen breve del problema"
               required
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Description
+              Descripción
             </label>
             <textarea
               name="description"
@@ -69,14 +69,14 @@ function CreateTicket() {
               onChange={handleChange}
               rows={5}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-              placeholder="Detailed description of the issue..."
+              placeholder="Describe el problema con el mayor detalle posible…"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Priority
+                Prioridad
               </label>
               <select
                 name="priority"
@@ -84,16 +84,16 @@ function CreateTicket() {
                 onChange={handleChange}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
               >
-                <option value="low">Low</option>
-                <option value="medium">Medium</option>
-                <option value="high">High</option>
-                <option value="urgent">Urgent</option>
+                <option value="low">Baja</option>
+                <option value="medium">Media</option>
+                <option value="high">Alta</option>
+                <option value="urgent">Urgente</option>
               </select>
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Category
+                Categoría
               </label>
               <select
                 name="category"
@@ -101,13 +101,13 @@ function CreateTicket() {
                 onChange={handleChange}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
               >
-                <option value="">Select category</option>
+                <option value="">Selecciona una categoría</option>
                 <option value="hardware">Hardware</option>
                 <option value="software">Software</option>
-                <option value="network">Network</option>
-                <option value="email">Email</option>
-                <option value="access">Access/Permissions</option>
-                <option value="other">Other</option>
+                <option value="network">Red</option>
+                <option value="email">Correo</option>
+                <option value="access">Accesos y permisos</option>
+                <option value="other">Otro</option>
               </select>
             </div>
           </div>
@@ -118,14 +118,14 @@ function CreateTicket() {
               onClick={() => navigate('/tickets')}
               className="px-4 py-2 text-gray-700 hover:text-gray-900 font-medium"
             >
-              Cancel
+              Cancelar
             </button>
             <button
               type="submit"
               disabled={loading}
               className="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors disabled:opacity-50"
             >
-              {loading ? 'Creating...' : 'Create Ticket'}
+              {loading ? 'Creando…' : 'Crear ticket'}
             </button>
           </div>
         </form>

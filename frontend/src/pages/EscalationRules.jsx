@@ -120,7 +120,7 @@ const EscalationRules = () => {
           <thead className="bg-gray-50">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Regla</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Trigger</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Disparador</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Acción</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Estado</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Acciones</th>

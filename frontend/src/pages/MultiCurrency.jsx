@@ -112,7 +112,7 @@ const MultiCurrency = () => {
           ))}
         </div>
         <p className="mt-4 text-sm text-gray-500">
-          Última actualización: {rates?.updated_at ? new Date(rates.updated_at).toLocaleString() : 'N/A'}
+          Última actualización: {rates?.updated_at ? new Date(rates.updated_at).toLocaleString('es-CO') : 'N/A'}
         </p>
       </div>
     </div>

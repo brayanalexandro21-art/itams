@@ -93,7 +93,7 @@ const SLADashboard = () => {
             {data?.recentBreaches?.map((b, i) => (
               <div key={i} className="p-3 bg-red-50 rounded text-sm">
                 <div className="font-medium">#{b.id} {b.title}</div>
-                <div className="text-xs text-gray-500">{b.assigned_to} — {new Date(b.created_at).toLocaleDateString()}</div>
+                <div className="text-xs text-gray-500">{b.assigned_to} — {new Date(b.created_at).toLocaleDateString('es-CO')}</div>
               </div>
             ))}
           </div>

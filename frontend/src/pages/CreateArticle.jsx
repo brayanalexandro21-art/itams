@@ -39,7 +39,7 @@ function CreateArticle() {
       await api.post('/knowledgebase', formData);
       navigate('/knowledgebase');
     } catch (err) {
-      setError(err.response?.data?.error || 'Failed to create article');
+      setError(err.response?.data?.error || 'No se pudo crear el artículo');
     } finally {
       setLoading(false);
     }
@@ -47,7 +47,7 @@ function CreateArticle() {
 
   return (
     <div className="max-w-3xl mx-auto">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">Create Knowledge Base Article</h2>
+      <h2 className="text-2xl font-bold text-gray-800 mb-6">Nuevo artículo de la base de conocimiento</h2>
 
       <div className="bg-white rounded-lg shadow p-6">
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -59,7 +59,7 @@ function CreateArticle() {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Title *
+              Título *
             </label>
             <input
               type="text"
@@ -67,14 +67,14 @@ function CreateArticle() {
               value={formData.title}
               onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
-              placeholder="e.g., How to reset password"
+              placeholder="Ej.: Cómo restablecer la contraseña"
               required
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Category
+              Categoría
             </label>
             <div className="flex gap-2">
               <input
@@ -83,7 +83,7 @@ function CreateArticle() {
                 value={formData.category}
                 onChange={handleChange}
                 className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
-                placeholder="e.g., Password, Software, Hardware"
+                placeholder="Ej.: Contraseñas, Software, Hardware"
                 list="categories"
               />
               <datalist id="categories">
@@ -96,7 +96,7 @@ function CreateArticle() {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Content *
+              Contenido *
             </label>
             <textarea
               name="content"
@@ -104,11 +104,11 @@ function CreateArticle() {
               onChange={handleChange}
               rows={15}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
-              placeholder="Write your article content here. Use clear steps and explanations..."
+              placeholder="Escribe aquí el contenido del artículo con pasos y explicaciones claras…"
               required
             />
             <p className="mt-1 text-sm text-gray-500">
-              Tip: Use numbered steps, bullet points, and clear headings for better readability.
+              Consejo: usa pasos numerados, viñetas y títulos claros para que se lea mejor.
             </p>
           </div>
 
@@ -118,14 +118,14 @@ function CreateArticle() {
               onClick={() => navigate('/knowledgebase')}
               className="px-4 py-2 text-gray-700 hover:text-gray-900 font-medium"
             >
-              Cancel
+              Cancelar
             </button>
             <button
               type="submit"
               disabled={loading}
               className="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors disabled:opacity-50"
             >
-              {loading ? 'Creating...' : 'Create Article'}
+              {loading ? 'Creando…' : 'Crear artículo'}
             </button>
           </div>
         </form>

@@ -69,7 +69,7 @@ const BackupManagement = () => {
           </div>
           <div className="bg-gray-50 p-3 rounded">
             <span className="text-gray-500">Último backup:</span>
-            <span className="font-bold ml-2">{backups[0] ? new Date(backups[0].created_at).toLocaleDateString() : 'Nunca'}</span>
+            <span className="font-bold ml-2">{backups[0] ? new Date(backups[0].created_at).toLocaleDateString('es-CO') : 'Nunca'}</span>
           </div>
           <div className="bg-gray-50 p-3 rounded">
             <span className="text-gray-500">Tamaño total:</span>
@@ -93,7 +93,7 @@ const BackupManagement = () => {
               <tr key={i} className="hover:bg-gray-50">
                 <td className="px-6 py-4 text-sm font-mono">{backup.filename}</td>
                 <td className="px-6 py-4 text-sm">{backup.size} KB</td>
-                <td className="px-6 py-4 text-sm">{new Date(backup.created_at).toLocaleString()}</td>
+                <td className="px-6 py-4 text-sm">{new Date(backup.created_at).toLocaleString('es-CO')}</td>
                 <td className="px-6 py-4">
                   <button onClick={() => deleteBackup(backup.filename)} className="text-red-600 text-sm hover:underline">
                     Eliminar

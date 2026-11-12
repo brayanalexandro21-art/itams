@@ -49,12 +49,12 @@ function KnowledgeBase() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-gray-800">Knowledge Base</h2>
+        <h2 className="text-2xl font-bold text-gray-800">Base de conocimiento</h2>
         <Link
           to="/knowledgebase/new"
           className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
         >
-          + New Article
+          + Nuevo artículo
         </Link>
       </div>
 
@@ -65,7 +65,7 @@ function KnowledgeBase() {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search articles..."
+            placeholder="Buscar artículos…"
             className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
           />
           <select
@@ -73,7 +73,7 @@ function KnowledgeBase() {
             onChange={(e) => setCategory(e.target.value)}
             className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
           >
-            <option value="">All Categories</option>
+            <option value="">Todas las categorías</option>
             {categories.map((cat) => (
               <option key={cat} value={cat}>
                 {cat}
@@ -84,7 +84,7 @@ function KnowledgeBase() {
             type="submit"
             className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
           >
-            Search
+            Buscar
           </button>
         </form>
       </div>
@@ -92,12 +92,12 @@ function KnowledgeBase() {
       {/* Articles List */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {loading ? (
-          <div className="col-span-2 text-center py-8 text-gray-500">Loading articles...</div>
+          <div className="col-span-2 text-center py-8 text-gray-500">Cargando artículos…</div>
         ) : articles.length === 0 ? (
           <div className="col-span-2 text-center py-8 text-gray-500">
-            No articles found.{' '}
+            No se encontraron artículos.{' '}
             <Link to="/knowledgebase/new" className="text-indigo-600 hover:text-indigo-800">
-              Create one
+              Crea uno
             </Link>
           </div>
         ) : (
@@ -111,7 +111,7 @@ function KnowledgeBase() {
                 <div className="flex-1">
                   <h3 className="font-semibold text-gray-800 text-lg">{article.title}</h3>
                   <p className="text-sm text-gray-500 mt-1">
-                    By {article.author_name} • {new Date(article.created_at).toLocaleDateString()}
+                    Por {article.author_name} • {new Date(article.created_at).toLocaleDateString('es-CO')}
                   </p>
                 </div>
                 {article.category && (
@@ -124,8 +124,8 @@ function KnowledgeBase() {
                 {article.content.substring(0, 200)}...
               </p>
               <div className="mt-4 flex items-center space-x-4 text-sm text-gray-500">
-                <span>👁️ {article.views} views</span>
-                <span>👍 {article.helpful} helpful</span>
+                <span>👁️ {article.views} vistas</span>
+                <span>👍 {article.helpful} útil</span>
               </div>
             </Link>
           ))

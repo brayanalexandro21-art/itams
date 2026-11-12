@@ -51,7 +51,7 @@ const UserActivity = () => {
                   )}
                 </div>
                 <span className="text-sm text-gray-500">
-                  {new Date(activity.created_at).toLocaleString()}
+                  {new Date(activity.created_at).toLocaleString('es-CO')}
                 </span>
               </div>
             ))}

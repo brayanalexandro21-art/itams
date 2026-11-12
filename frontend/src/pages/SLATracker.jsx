@@ -78,7 +78,7 @@ const SLATracker = () => {
             <div className="p-4 bg-gray-50 rounded-lg">
               <h3 className="font-medium mb-2">Respuesta</h3>
               <div className="text-sm">
-                <span className="text-gray-500">Deadline:</span> {tracking.response.deadline ? new Date(tracking.response.deadline).toLocaleString() : 'N/A'}
+                <span className="text-gray-500">Deadline:</span> {tracking.response.deadline ? new Date(tracking.response.deadline).toLocaleString('es-CO') : 'N/A'}
               </div>
               <div className="mt-1">
                 <span className={`px-2 py-0.5 rounded text-xs ${getStatusBadge(tracking.response.status)}`}>
@@ -92,7 +92,7 @@ const SLATracker = () => {
             <div className="p-4 bg-gray-50 rounded-lg">
               <h3 className="font-medium mb-2">Resolución</h3>
               <div className="text-sm">
-                <span className="text-gray-500">Deadline:</span> {tracking.resolution.deadline ? new Date(tracking.resolution.deadline).toLocaleString() : 'N/A'}
+                <span className="text-gray-500">Deadline:</span> {tracking.resolution.deadline ? new Date(tracking.resolution.deadline).toLocaleString('es-CO') : 'N/A'}
               </div>
               <div className="mt-1">
                 <span className={`px-2 py-0.5 rounded text-xs ${getStatusBadge(tracking.resolution.status)}`}>
@@ -129,7 +129,7 @@ const SLATracker = () => {
                   <td className="px-4 py-3">
                     <span className="px-2 py-0.5 rounded text-xs bg-yellow-100 text-yellow-800">{t.status}</span>
                   </td>
-                  <td className="px-4 py-3 text-sm text-gray-500">{new Date(t.created_at).toLocaleDateString()}</td>
+                  <td className="px-4 py-3 text-sm text-gray-500">{new Date(t.created_at).toLocaleDateString('es-CO')}</td>
                 </tr>
               ))}
             </tbody>
