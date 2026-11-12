@@ -123,7 +123,45 @@ function columnsOf(db, table) {
   return db.prepare(`PRAGMA table_xinfo("${table}")`).all().map((c) => c.name);
 }
 
+// dashboard_layouts se creaba con user_id UNIQUE, pero el gestor de diseños
+// (/api/dashboard-layout-manager) guarda varios diseños por usuario.
+// SQLite no permite quitar un UNIQUE con ALTER: se reconstruye la tabla (nadie la referencia).
+function quitarUniqueLayouts(db) {
+  const t = 'dashboard_layouts';
+  const unicoUserId = db.prepare(`PRAGMA index_list("${t}")`).all()
+    .filter((i) => i.unique && i.origin === 'u')
+    .some((i) => {
+      const cols = db.prepare(`PRAGMA index_info("${i.name}")`).all().map((c) => c.name.toLowerCase());
+      return cols.length === 1 && cols[0] === 'user_id';
+    });
+  if (!unicoUserId) return;
+
+  const { sql } = db.prepare("SELECT sql FROM sqlite_master WHERE type = 'table' AND name = ?").get(t);
+  const nuevoSql = sql
+    .replace(/^CREATE TABLE\s+(IF NOT EXISTS\s+)?["`]?dashboard_layouts["`]?/i, 'CREATE TABLE dashboard_layouts_nueva')
+    .replace(/(["`]?user_id["`]?\s+INTEGER)\s+UNIQUE/i, '$1');
+  if (/user_id["`]?\s+INTEGER\s+UNIQUE/i.test(nuevoSql) || !nuevoSql.includes('dashboard_layouts_nueva')) {
+    console.warn('⚠️  No se pudo quitar UNIQUE de dashboard_layouts.user_id automáticamente');
+    return;
+  }
+  const cols = db.prepare(`PRAGMA table_xinfo("${t}")`).all()
+    .filter((c) => c.hidden === 0)
+    .map((c) => `"${c.name}"`)
+    .join(', ');
+  db.exec(`
+    BEGIN;
+    DROP TABLE IF EXISTS dashboard_layouts_nueva;
+    ${nuevoSql};
+    INSERT INTO dashboard_layouts_nueva (${cols}) SELECT ${cols} FROM "${t}";
+    DROP TABLE "${t}";
+    ALTER TABLE dashboard_layouts_nueva RENAME TO "${t}";
+    COMMIT;
+  `);
+  console.log('Migración: dashboard_layouts ahora admite varios diseños por usuario');
+}
+
 function applyMigrations(db) {
+  quitarUniqueLayouts(db);
   const cache = {};
   const has = (t, c) => (cache[t] ||= columnsOf(db, t)).includes(c);
   const add = (t, c, def) => {

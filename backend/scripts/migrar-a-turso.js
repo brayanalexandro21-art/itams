@@ -26,7 +26,8 @@ if (!fs.existsSync(LOCAL_DB)) {
 }
 
 // Réplica temporal propia del script, para no mezclarla con la del servidor
-process.env.DB_REPLICA_PATH = path.join(__dirname, '..', 'itams-migracion-replica.db');
+// (en la carpeta temporal: OneDrive/Dropbox bloquean el archivo durante la sincronización)
+process.env.DB_REPLICA_PATH = path.join(require('os').tmpdir(), `itams-migracion-replica-${Date.now()}.db`);
 
 // Al cargar database.js con las variables de Turso se crean todas las tablas en la nube
 const remote = require('../database');
@@ -56,41 +57,73 @@ async function migrarArchivo(valor) {
 }
 
 async function main() {
-  const tablas = local
+  const todas = local
     .prepare("SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%' ORDER BY name")
     .all()
     .map((t) => t.name);
+
+  // Orden por dependencias: primero las tablas referenciadas por claves foráneas
+  // (Turso las exige, así que un hijo no puede copiarse antes que su padre)
+  const deps = new Map(
+    todas.map((t) => [
+      t,
+      [
+        ...local.prepare(`PRAGMA foreign_key_list("${t}")`).all(),
+        ...remote.prepare(`PRAGMA foreign_key_list("${t}")`).all(),
+      ]
+        .map((f) => f.table)
+        .filter((p) => p !== t && todas.includes(p)),
+    ])
+  );
+  const tablas = [];
+  const visit = (t, pila = new Set()) => {
+    if (tablas.includes(t) || pila.has(t)) return;
+    pila.add(t);
+    deps.get(t).forEach((p) => visit(p, pila));
+    pila.delete(t);
+    tablas.push(t);
+  };
+  todas.forEach((t) => visit(t));
 
   console.log(`Tablas en la base local: ${tablas.length}\n`);
   let totalFilas = 0;
 
   for (const tabla of tablas) {
-    const filas = local.prepare(`SELECT * FROM "${tabla}"`).all();
+    // ORDER BY rowid: en tablas que se referencian a sí mismas, el padre va antes que el hijo
+    const filas = local.prepare(`SELECT * FROM "${tabla}" ORDER BY rowid`).all();
     if (filas.length === 0) continue;
 
     // Columnas que existen en ambos lados
     // Solo columnas reales (las generadas/alias, hidden != 0, no se pueden insertar)
     const colsRemotas = remote.prepare(`PRAGMA table_xinfo("${tabla}")`).all()
       .filter((c) => c.hidden === 0)
-      .map((c) => c.name);
+      .map((c) => c.name.toLowerCase()); // Turso puede cambiar mayúsculas (key → KEY)
     if (colsRemotas.length === 0) {
       console.warn(`⚠️  ${tabla}: no existe en Turso, se omite`);
       continue;
     }
     const enRemoto = remote.prepare(`SELECT COUNT(*) AS c FROM "${tabla}"`).get().c;
-    if (enRemoto > 0 && !FORZAR) {
-      console.log(`⏭️  ${tabla}: ya tiene ${enRemoto} filas en Turso, se omite`);
+    if (enRemoto >= filas.length && !FORZAR) {
+      console.log(`⏭️  ${tabla}: ya tiene sus ${enRemoto} filas en Turso, se omite`);
       continue;
     }
 
-    const cols = Object.keys(filas[0]).filter((c) => colsRemotas.includes(c));
+    // Si la tabla tiene id, solo se copian las filas que faltan (así una migración
+    // interrumpida se completa sin duplicar ni volver a subir imágenes)
+    const conId = colsRemotas.includes('id') && 'id' in filas[0];
+    const idsRemotos = conId
+      ? new Set(remote.prepare(`SELECT id FROM "${tabla}"`).all().map((r) => r.id))
+      : new Set();
+
+    const cols = Object.keys(filas[0]).filter((c) => colsRemotas.includes(c.toLowerCase()));
     const insert = remote.prepare(
-      `INSERT OR IGNORE INTO "${tabla}" (${cols.map((c) => `"${c}"`).join(', ')}) ` +
+      `INSERT ${conId ? '' : 'OR IGNORE '}INTO "${tabla}" (${cols.map((c) => `"${c}"`).join(', ')}) ` +
         `VALUES (${cols.map(() => '?').join(', ')})`
     );
 
     let n = 0;
     for (const fila of filas) {
+      if (conId && idsRemotos.has(fila.id)) continue;
       const valores = [];
       for (const c of cols) {
         let v = fila[c];
@@ -102,7 +135,12 @@ async function main() {
         }
         valores.push(v);
       }
-      insert.run(...valores);
+      try {
+        insert.run(...valores);
+      } catch (err) {
+        const id = fila.id !== undefined ? ` (id ${fila.id})` : '';
+        throw new Error(`${tabla}${id}: ${err.message}`);
+      }
       n++;
     }
     totalFilas += n;
@@ -121,5 +159,7 @@ main()
     process.exitCode = 1;
   })
   .finally(() => {
-    try { fs.rmSync(process.env.DB_REPLICA_PATH, { force: true }); } catch {}
+    for (const s of ['', '-wal', '-shm', '-info']) {
+      try { fs.rmSync(process.env.DB_REPLICA_PATH + s, { force: true }); } catch {}
+    }
   });

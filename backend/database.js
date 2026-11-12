@@ -13,9 +13,72 @@ if (TURSO_URL) {
   // NUBE: réplica embebida. Los datos viven en Turso (permanentes);
   // el archivo local es solo una copia de lectura que se puede borrar sin perder nada.
   // Las escrituras se envían a Turso y luego se reflejan en la réplica.
-  const replicaPath = process.env.DB_REPLICA_PATH || path.join(__dirname, 'itams-replica.db');
-  db = new Database(replicaPath, { syncUrl: TURSO_URL, authToken: TURSO_TOKEN });
-  db.sync();
+  // Por defecto va en la carpeta temporal del sistema: carpetas sincronizadas
+  // (OneDrive, Dropbox) bloquean el archivo y la sincronización falla.
+  const os = require('os');
+  const fs = require('fs');
+  const sufijo = require('crypto').createHash('sha1').update(TURSO_URL).digest('hex').slice(0, 8);
+  const replicaPath = process.env.DB_REPLICA_PATH || path.join(os.tmpdir(), `itams-replica-${sufijo}.db`);
+  // En Windows el antivirus/indexador puede bloquear un instante el archivo de la réplica
+  // justo cuando libsql lo renombra ("atomic rename ... Acceso denegado"): se reintenta.
+  const pausa = (ms) => Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
+  const sincronizar = (d) => {
+    for (let intento = 1; ; intento++) {
+      try {
+        return d.sync();
+      } catch (err) {
+        if (intento >= 8) throw err;
+        pausa(150 * intento);
+      }
+    }
+  };
+  // readYourWrites: false → la escritura va a Turso y luego sincronizamos nosotros
+  // (con reintentos); así un fallo al refrescar la réplica no hace fallar la escritura.
+  const abrir = () => {
+    const d = new Database(replicaPath, { syncUrl: TURSO_URL, authToken: TURSO_TOKEN, readYourWrites: false });
+    try {
+      sincronizar(d);
+    } catch (err) {
+      d.close();
+      throw err;
+    }
+    return d;
+  };
+  try {
+    db = abrir();
+  } catch (err) {
+    // Réplica dañada o de una base Turso que se reinició: es solo una copia, se borra y se rehace
+    console.warn('Réplica local no válida, se vuelve a descargar de Turso:', err.message);
+    for (const s of ['', '-wal', '-shm', '-info']) fs.rmSync(replicaPath + s, { force: true });
+    db = abrir();
+  }
+
+  // Después de cada escritura (fuera de transacciones) se refresca la réplica,
+  // para que la siguiente lectura ya vea el cambio.
+  const refrescar = () => {
+    if (!db.inTransaction) sincronizar(db);
+  };
+  const ES_ESCRITURA = /^\s*(insert|update|delete|replace|create|drop|alter|with[\s\S]*\b(insert|update|delete)\b)/i;
+  const prepareOriginal = db.prepare.bind(db);
+  db.prepare = (sql) => {
+    const stmt = prepareOriginal(sql);
+    if (ES_ESCRITURA.test(sql)) {
+      for (const m of ['run', 'get', 'all']) {
+        const original = stmt[m].bind(stmt);
+        stmt[m] = (...args) => {
+          const r = original(...args);
+          refrescar();
+          return r;
+        };
+      }
+    }
+    return stmt;
+  };
+  const execOriginal = db.exec.bind(db);
+  db.exec = (sql) => {
+    execOriginal(sql);
+    if (!/^\s*(select|pragma\s+\w+\s*$)/i.test(sql)) refrescar();
+  };
   console.log('Base de datos: Turso (nube)');
 } else {
   // LOCAL: archivo itams.db en esta carpeta (desarrollo en tu PC)
@@ -136,7 +199,8 @@ db.exec(`
     FOREIGN KEY (location_id) REFERENCES asset_locations(id),
     FOREIGN KEY (type_id) REFERENCES asset_types(id),
     FOREIGN KEY (manufacturer_id) REFERENCES asset_manufacturers(id),
-    FOREIGN KEY (model_id) REFERENCES asset_models(id),
+    -- el formulario de activos elige el modelo en /computer-models
+    FOREIGN KEY (model_id) REFERENCES asset_computer_models(id),
     FOREIGN KEY (network_id) REFERENCES asset_networks(id),
     FOREIGN KEY (update_source_id) REFERENCES asset_update_sources(id)
   );
@@ -751,7 +815,7 @@ db.exec(`
 
   CREATE TABLE IF NOT EXISTS dashboard_layouts (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER UNIQUE NOT NULL,
+    user_id INTEGER NOT NULL, -- sin UNIQUE: el gestor de diseños guarda varios por usuario
     layout TEXT DEFAULT '[]',
     theme TEXT DEFAULT 'default',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,

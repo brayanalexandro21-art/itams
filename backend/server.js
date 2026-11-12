@@ -533,7 +533,8 @@ if (fs.existsSync(FRONTEND_DIST)) {
   app.use(express.static(FRONTEND_DIST));
   // Cualquier ruta que no sea de la API devuelve index.html (React Router se encarga)
   app.get('/{*splat}', (req, res, next) => {
-    if (req.path.startsWith('/api') || req.path.startsWith('/uploads')) return next();
+    // /^\/(api|uploads)(\/|$)/ y no startsWith('/api'): páginas como /apikeys o /api-analytics son del frontend
+    if (/^\/(api|uploads)(\/|$)/.test(req.path)) return next();
     res.sendFile(path.join(FRONTEND_DIST, 'index.html'));
   });
 }

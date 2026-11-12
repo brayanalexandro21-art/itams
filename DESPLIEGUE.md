@@ -70,7 +70,12 @@ npm run migrar-turso
 ```
 
 Copia todas las tablas de `itams.db` a Turso y sube las imágenes de `uploads/` a Cloudinary
-(actualizando sus direcciones en la base). Si lo ejecutas de nuevo, omite las tablas que ya tienen datos.
+(actualizando sus direcciones en la base). Si se interrumpe, ejecútalo de nuevo: completa solo
+las filas que falten (no duplica ni vuelve a subir imágenes).
+
+> **Réplica local**: en modo nube el servidor guarda una copia de lectura de Turso en la carpeta
+> temporal del sistema (no en OneDrive, que bloquea el archivo). Es solo una caché: se puede borrar
+> y se vuelve a descargar sola.
 
 ### Probar
 
