@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
+import FotosActivo from '../components/FotosActivo';
 import InlineDropdown from '../components/InlineDropdown';
 import ComputerModelForm from '../components/ComputerModelForm';
 import { Icono } from '../components/Icono';
@@ -12,6 +13,7 @@ const CreateAsset = () => {
   const [models, setModels] = useState([]);
   const [groups, setGroups] = useState([]);
 
+  const [fotos, setFotos] = useState([]);
   const [form, setForm] = useState({
     name: '',
     status_id: '',
@@ -66,6 +68,7 @@ const CreateAsset = () => {
       const payload = {
         ...form,
         assigned_to: form.user_id || null,
+        photos: fotos,
       };
       const response = await api.post('/assets', payload);
       navigate(`/assets/${response.data.id}`);
@@ -223,6 +226,13 @@ const CreateAsset = () => {
             </div>
           </div>
         </div>
+        {/* Fotos del activo */}
+        <div className="bg-white rounded-lg shadow p-6 mt-6">
+          <h3 className="font-semibold text-gray-800">Fotos del activo</h3>
+          <p className="mb-4 text-sm text-gray-500">Agrega fotos del equipo: frente, etiqueta del serial, daños o accesorios.</p>
+          <FotosActivo value={fotos} onChange={setFotos} />
+        </div>
+
 
         {/* Botones */}
         <div className="flex justify-end gap-4 mt-6">

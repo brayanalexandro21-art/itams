@@ -2,6 +2,43 @@ const express = require('express');
 const router = express.Router();
 const db = require('../database');
 const { auth, adminOnly } = require('../middleware/auth');
+const path = require('path');
+const { createUpload, persistFile } = require('../storage');
+
+// Fotos propias de cada activo (Cloudinary en la nube, uploads/assets en local)
+const subirFotos = createUpload({
+  folder: 'assets',
+  prefix: 'asset_',
+  limits: { fileSize: 3 * 1024 * 1024 }, // 3 MB por foto
+  fileFilter: (req, file, cb) => {
+    const permitido = /jpeg|jpg|png|gif|webp/;
+    cb(null, permitido.test(path.extname(file.originalname).toLowerCase()) && permitido.test(file.mimetype));
+  },
+});
+
+// Normaliza la lista de fotos del formulario: solo URLs, máximo 8. null = no cambiar.
+const listaFotos = (fotos) => {
+  if (fotos === undefined || fotos === null) return null;
+  let arr = fotos;
+  if (!Array.isArray(arr)) {
+    try { arr = JSON.parse(arr); } catch { arr = []; }
+  }
+  if (!Array.isArray(arr)) arr = [];
+  return JSON.stringify(arr.filter((u) => typeof u === 'string' && /^(https?:\/\/|\/uploads\/)/.test(u)).slice(0, 8));
+};
+
+// Subir fotos de un activo (devuelve las URLs; se guardan al crear o editar el activo)
+router.post('/upload-photos', auth, adminOnly, subirFotos.array('images', 8), async (req, res) => {
+  try {
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({ error: 'No se recibieron imágenes válidas (JPG, PNG, GIF o WEBP de hasta 3 MB)' });
+    }
+    const guardadas = await Promise.all(req.files.map((f) => persistFile(f, 'assets', 'asset_')));
+    res.json({ urls: guardadas.map((g) => g.url) });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 // Get all assets
 router.get('/', auth, (req, res) => {
@@ -77,19 +114,19 @@ router.post('/', auth, adminOnly, (req, res) => {
     const { name, type, category, serial_number, model, manufacturer, status, location, purchase_date, warranty_expiry, notes,
       status_id, location_id, type_id, manufacturer_id, model_id, network_id, update_source_id, responsible_group_id, group_id,
       alt_username_number, alt_username, inventory_number, uuid, user_id,
-      assigned_to, purchase_cost, currency_code } = req.body;
+      assigned_to, purchase_cost, currency_code, photos } = req.body;
 
     const result = db.prepare(`
       INSERT INTO assets (name, type, category, serial_number, model, manufacturer, status, location, purchase_date, warranty_expiry, notes,
         status_id, location_id, type_id, manufacturer_id, model_id, network_id, update_source_id, responsible_group_id, group_id,
-        alt_username_number, alt_username, inventory_number, uuid, assigned_to, purchase_cost, currency_code)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        alt_username_number, alt_username, inventory_number, uuid, assigned_to, purchase_cost, currency_code, photos)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `).run(name, type || 'computer', category || 'hardware', serial_number, model, manufacturer, status || 'available', location,
       purchase_date, warranty_expiry, notes,
       status_id || null, location_id || null, type_id || null, manufacturer_id || null, model_id || null, network_id || null,
       update_source_id || null, responsible_group_id || null, group_id || null,
       alt_username_number, alt_username, inventory_number, uuid,
-      user_id || assigned_to || null, purchase_cost || null, currency_code || 'USD');
+      user_id || assigned_to || null, purchase_cost || null, currency_code || 'USD', listaFotos(photos) || '[]');
 
     const asset = db.prepare('SELECT * FROM assets WHERE id = ?').get(result.lastInsertRowid);
     res.status(201).json(asset);
@@ -103,7 +140,7 @@ router.put('/:id', auth, adminOnly, (req, res) => {
   try {
     const { name, type, category, serial_number, model, manufacturer, status, location, purchase_date, warranty_expiry, assigned_to, notes,
       status_id, location_id, type_id, manufacturer_id, model_id, network_id, update_source_id,
-      responsible_group_id, group_id, alt_username_number, alt_username, inventory_number, uuid } = req.body;
+      responsible_group_id, group_id, alt_username_number, alt_username, inventory_number, uuid, photos } = req.body;
 
     db.prepare(`
       UPDATE assets
@@ -132,12 +169,13 @@ router.put('/:id', auth, adminOnly, (req, res) => {
           alt_username = COALESCE(?, alt_username),
           inventory_number = COALESCE(?, inventory_number),
           uuid = COALESCE(?, uuid),
+          photos = COALESCE(?, photos),
           updated_at = CURRENT_TIMESTAMP
       WHERE id = ?
     `).run(name, type, category, serial_number, model, manufacturer, status, location, purchase_date, warranty_expiry, assigned_to, notes,
       status_id || null, location_id || null, type_id || null, manufacturer_id || null, model_id || null,
       network_id || null, update_source_id || null, responsible_group_id || null, group_id || null,
-      alt_username_number, alt_username, inventory_number, uuid, req.params.id);
+      alt_username_number, alt_username, inventory_number, uuid, listaFotos(photos), req.params.id);
 
     const asset = db.prepare(`
       SELECT a.*, u.name as assigned_to_name

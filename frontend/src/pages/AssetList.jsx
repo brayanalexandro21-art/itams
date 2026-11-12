@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Plus, Search, Monitor, Laptop, Printer, Smartphone, Server, Network, Disc3, Package, FilterX } from 'lucide-react';
 import api from '../services/api';
+import { fotosDe } from '../components/FotosActivo';
 import { Card, EmptyState, PageHeader, Spinner, StatusBadge, botonPrimario, botonSecundario, campo } from '../components/ui';
 
 const TIPOS = {
@@ -152,12 +153,13 @@ function AssetList() {
                 <tbody className="divide-y divide-gray-100">
                   {visibles.map((a) => {
                     const [tipo, Icon] = TIPOS[a.type] || [a.type || 'Otro', Package];
+                    const foto = fotosDe(a.photos)[0];
                     return (
                       <tr key={a.id} onClick={() => navigate(`/assets/${a.id}`)} className="cursor-pointer hover:bg-gray-50 transition-colors">
                         <td className="px-5 py-3.5">
                           <div className="flex items-center gap-3">
-                            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gray-100">
-                              <Icon className="h-4 w-4 text-gray-500" strokeWidth={1.8} />
+                            <span className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-gray-100">
+                              {foto ? <img src={foto} alt="" className="h-full w-full object-cover" loading="lazy" /> : <Icon className="h-4 w-4 text-gray-500" strokeWidth={1.8} />}
                             </span>
                             <div className="min-w-0">
                               <Link to={`/assets/${a.id}`} onClick={(e) => e.stopPropagation()} className="block truncate font-medium text-gray-900 hover:text-brand-600">

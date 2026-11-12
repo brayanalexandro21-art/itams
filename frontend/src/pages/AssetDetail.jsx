@@ -5,6 +5,7 @@ import InlineDropdown from '../components/InlineDropdown';
 import { Icono } from '../components/Icono';
 import { ArrowLeft, Download, Printer, QrCode, Wrench } from 'lucide-react';
 import { tipoActivo } from '../components/ui';
+import FotosActivo, { fotosDe } from '../components/FotosActivo';
 import { CodigoQr, descargarQr, urlActivo } from '../components/QrActivo';
 
 function AssetDetail() {
@@ -56,6 +57,7 @@ function AssetDetail() {
         uuid: a.uuid || '', comments: a.notes || '',
         status: a.status || '', type: a.type || '', category: a.category || '',
         purchase_date: a.purchase_date || '', warranty_expiry: a.warranty_expiry || '',
+        photos: fotosDe(a.photos),
       });
 
       // Cargar fotos del modelo
@@ -98,6 +100,7 @@ function AssetDetail() {
         inventory_number: form.inventory_number,
         uuid: form.uuid,
         notes: form.comments,
+        photos: form.photos,
         purchase_date: form.purchase_date || null,
         warranty_expiry: form.warranty_expiry || null,
       });
@@ -306,7 +309,13 @@ function AssetDetail() {
             </div>
           </div>
           <div className="bg-white rounded-lg shadow p-4">
-            <h3 className="font-semibold text-gray-800 mb-4 flex items-center gap-2"><Icono e="📸" />Fotos</h3>
+            <h3 className="font-semibold text-gray-800 mb-1 flex items-center gap-2"><Icono e="📸" />Fotos del activo</h3>
+            <p className="mb-3 text-xs text-gray-500">Los cambios se guardan con el botón «Guardar».</p>
+            <FotosActivo value={form.photos || []} onChange={(v) => handleChange('photos', v)} compacto />
+          </div>
+          {modelPhotos?.photo_front && (
+          <div className="bg-white rounded-lg shadow p-4">
+            <h3 className="font-semibold text-gray-800 mb-4 flex items-center gap-2"><Icono e="🖼️" />Fotos del modelo</h3>
             {modelPhotos?.photo_front ? (
               <div className="space-y-4">
                 <div>
@@ -333,6 +342,7 @@ function AssetDetail() {
               </div>
             )}
           </div>
+          )}
         </div>
       </div>
     </div>

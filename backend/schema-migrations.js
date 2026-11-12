@@ -12,6 +12,7 @@ const EXTRA = [
   ['api_keys', 'updated_at', 'DATETIME'],
   ['api_request_logs', 'api_key_id', 'INTEGER'],
   ['assets', 'last_maintenance', 'DATETIME'],
+  ['assets', 'photos', "TEXT DEFAULT '[]'"], // fotos propias del activo (lista JSON de URLs)
   ['asset_maintenance', 'type', 'TEXT'],
   ['asset_maintenance', 'scheduled_date', 'DATETIME'],
   ['asset_maintenance', 'assigned_to', 'INTEGER'],
