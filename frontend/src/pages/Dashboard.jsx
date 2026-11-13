@@ -1,36 +1,62 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  Ticket, Inbox, Clock, UserX, Monitor, CheckCircle2, Wrench, ArrowRight, Plus, BookOpen,
-  FileBarChart, Laptop,
+  Ticket, UserX, Monitor, ArrowRight, Plus, BookOpen, FileBarChart, TrendingUp, Layers,
+  ArrowUpRight, ArrowDownRight, BarChart3,
 } from 'lucide-react';
 import api from '../services/api';
-import { Card, EmptyState, PageHeader, Spinner, StatusBadge, botonPrimario, botonSecundario, fecha } from '../components/ui';
+import { Card, EmptyState, PageHeader, Spinner, StatusBadge, botonPrimario, botonSecundario, fecha, tipoActivo } from '../components/ui';
+import { BarrasH, Dona, Tendencia } from '../components/Graficos';
+
+// Colores de los gráficos (validados para daltonismo; siempre van con etiqueta y número)
+const COLORES = {
+  azul: '#2557eb',
+  azulClaro: '#3b74f6',
+  verde: '#059669',
+  ambar: '#f59e0b',
+  gris: '#94a3b8',
+};
+
+// Las fechas de SQLite vienen como "AAAA-MM-DD HH:MM:SS" en UTC
+const fechaLocal = (s) => {
+  if (!s) return null;
+  const d = new Date(/[zZ]|[+-]\d\d:?\d\d$/.test(s) ? s : `${String(s).replace(' ', 'T')}Z`);
+  if (Number.isNaN(d.getTime())) return null;
+  d.setHours(0, 0, 0, 0);
+  return d;
+};
 
 function saludo() {
   const h = new Date().getHours();
   return h < 12 ? 'Buenos días' : h < 19 ? 'Buenas tardes' : 'Buenas noches';
 }
 
-function Kpi({ label, value, icon: Icon, tono, to }) {
-  const tonos = {
-    brand: 'bg-brand-50 text-brand-600',
-    amber: 'bg-amber-50 text-amber-600',
-    sky: 'bg-sky-50 text-sky-600',
-    red: 'bg-red-50 text-red-600',
-    emerald: 'bg-emerald-50 text-emerald-600',
-    slate: 'bg-gray-100 text-gray-600',
-  };
+function TarjetaGrafico({ titulo, subtitulo, icono: Icon, extra, className = '', children }) {
   return (
-    <Link to={to} className="group rounded-xl bg-white p-5 shadow-sm transition-shadow hover:shadow-md">
-      <div className="flex items-start justify-between">
-        <p className="text-sm font-medium text-gray-500">{label}</p>
-        <span className={`flex h-9 w-9 items-center justify-center rounded-lg ${tonos[tono]}`}>
-          <Icon className="h-4.5 w-4.5" strokeWidth={1.8} />
-        </span>
+    <Card className={`flex flex-col p-5 ${className}`}>
+      <div className="mb-4 flex items-start justify-between gap-3">
+        <div className="flex min-w-0 items-center gap-2.5">
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-600">
+            <Icon className="h-4 w-4" strokeWidth={1.8} />
+          </span>
+          <div className="min-w-0">
+            <h3 className="truncate text-sm font-semibold text-gray-900">{titulo}</h3>
+            {subtitulo && <p className="truncate text-xs text-gray-500">{subtitulo}</p>}
+          </div>
+        </div>
+        {extra}
       </div>
-      <p className="mt-3 text-3xl font-semibold tracking-tight text-gray-900 tabular-nums">{value}</p>
-    </Link>
+      <div className="flex flex-1 flex-col justify-center">{children}</div>
+    </Card>
+  );
+}
+
+function SinDatos({ texto }) {
+  return (
+    <div className="flex flex-col items-center justify-center py-10 text-center">
+      <BarChart3 className="h-8 w-8 text-gray-300" strokeWidth={1.5} />
+      <p className="mt-2 text-sm text-gray-500">{texto}</p>
+    </div>
   );
 }
 
@@ -55,6 +81,8 @@ function Dashboard() {
   const [assetStats, setAssetStats] = useState(null);
   const [recentTickets, setRecentTickets] = useState([]);
   const [recentAssets, setRecentAssets] = useState([]);
+  const [allTickets, setAllTickets] = useState([]);
+  const [allAssets, setAllAssets] = useState([]);
   const [loading, setLoading] = useState(true);
   const usuario = (() => {
     try {
@@ -77,6 +105,8 @@ function Dashboard() {
         setAssetStats(assetStatsRes.data);
         setRecentTickets(ticketsRes.data.slice(0, 5));
         setRecentAssets(assetsRes.data.slice(0, 5));
+        setAllTickets(ticketsRes.data);
+        setAllAssets(assetsRes.data);
       } catch (error) {
         console.error('Error al cargar el panel:', error);
       } finally {
@@ -87,14 +117,59 @@ function Dashboard() {
 
   if (loading) return <Spinner label="Cargando panel…" />;
 
-  const totalActivos = assetStats?.total || 0;
-  const distribucion = [
-    { label: 'Disponibles', value: assetStats?.available || 0, color: 'bg-emerald-500' },
-    { label: 'En uso', value: assetStats?.in_use || 0, color: 'bg-brand-500' },
-    { label: 'Mantenimiento', value: assetStats?.maintenance || 0, color: 'bg-amber-400' },
+  const totalTickets = ticketStats?.total || 0;
+  const ticketsPorEstado = [
+    { clave: 'open', label: 'Abiertos', value: ticketStats?.open || 0, color: COLORES.ambar, to: '/tickets?status=open' },
+    { clave: 'in_progress', label: 'En progreso', value: ticketStats?.inProgress || 0, color: COLORES.azul, to: '/tickets?status=in_progress' },
+    { clave: 'resolved', label: 'Resueltos', value: ticketStats?.resolved || 0, color: COLORES.verde, to: '/tickets?status=resolved' },
+    { clave: 'closed', label: 'Cerrados', value: ticketStats?.closed || 0, color: COLORES.gris, to: '/tickets?status=closed' },
   ];
-  const otros = Math.max(0, totalActivos - distribucion.reduce((s, d) => s + d.value, 0));
-  if (otros) distribucion.push({ label: 'Otros', value: otros, color: 'bg-gray-300' });
+  const otrosTickets = Math.max(0, totalTickets - ticketsPorEstado.reduce((s, d) => s + d.value, 0));
+  if (otrosTickets) ticketsPorEstado.push({ clave: 'otros', label: 'Otros', value: otrosTickets, color: '#cbd5e1' });
+
+  const totalActivos = assetStats?.total || 0;
+  const activosPorEstado = [
+    { clave: 'available', label: 'Disponibles', value: assetStats?.available || 0, color: COLORES.verde, to: '/assets?status=available' },
+    { clave: 'in_use', label: 'En uso', value: assetStats?.in_use || 0, color: COLORES.azul, to: '/assets?status=in_use' },
+    { clave: 'maintenance', label: 'En mantenimiento', value: assetStats?.maintenance || 0, color: COLORES.ambar, to: '/assets?status=maintenance' },
+  ];
+  const otrosActivos = Math.max(0, totalActivos - activosPorEstado.reduce((s, d) => s + d.value, 0));
+  if (otrosActivos) activosPorEstado.push({ clave: 'otros', label: 'Retirados y otros', value: otrosActivos, color: COLORES.gris });
+
+  // Tickets creados por día en los últimos 30 días (y los 30 anteriores, para comparar)
+  const DIAS = 30;
+  const hoy = new Date();
+  hoy.setHours(0, 0, 0, 0);
+  const claveDia = (d) => `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+  const conteo = {};
+  let periodoAnterior = 0;
+  const inicioAnterior = new Date(hoy);
+  inicioAnterior.setDate(hoy.getDate() - DIAS * 2 + 1);
+  const inicioActual = new Date(hoy);
+  inicioActual.setDate(hoy.getDate() - DIAS + 1);
+  allTickets.forEach((t) => {
+    const f = fechaLocal(t.created_at);
+    if (!f) return;
+    if (f >= inicioActual) conteo[claveDia(f)] = (conteo[claveDia(f)] || 0) + 1;
+    else if (f >= inicioAnterior) periodoAnterior += 1;
+  });
+  const serie = Array.from({ length: DIAS }, (_, i) => {
+    const d = new Date(inicioActual);
+    d.setDate(inicioActual.getDate() + i);
+    return { fecha: d, valor: conteo[claveDia(d)] || 0 };
+  });
+  const periodoActual = serie.reduce((s, p) => s + p.valor, 0);
+  const cambio = periodoAnterior ? Math.round(((periodoActual - periodoAnterior) / periodoAnterior) * 100) : null;
+
+  // Activos por tipo
+  const porTipo = {};
+  allAssets.forEach((a) => {
+    const t = (a.type || 'other').toLowerCase();
+    porTipo[t] = (porTipo[t] || 0) + 1;
+  });
+  const activosPorTipo = Object.entries(porTipo)
+    .sort((a, b) => b[1] - a[1])
+    .map(([t, n]) => ({ clave: t, label: tipoActivo(t) || 'Otro', value: n, to: `/assets?type=${encodeURIComponent(t)}` }));
 
   return (
     <div className="space-y-8">
@@ -110,48 +185,56 @@ function Dashboard() {
 
       <section>
         <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-gray-500">Mesa de ayuda</h2>
-        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-          <Kpi label="Tickets totales" value={ticketStats?.total || 0} icon={Ticket} tono="brand" to="/tickets" />
-          <Kpi label="Abiertos" value={ticketStats?.open || 0} icon={Inbox} tono="amber" to="/tickets?status=open" />
-          <Kpi label="En progreso" value={ticketStats?.inProgress || 0} icon={Clock} tono="sky" to="/tickets?status=in_progress" />
-          <Kpi label="Sin asignar" value={ticketStats?.unassigned || 0} icon={UserX} tono="red" to="/tickets" />
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+          <TarjetaGrafico
+            titulo="Tickets por estado"
+            icono={Ticket}
+            extra={
+              (ticketStats?.unassigned || 0) > 0 && (
+                <Link to="/tickets" className="inline-flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/15 hover:bg-red-100">
+                  <UserX className="h-3 w-3" /> {ticketStats.unassigned} sin asignar
+                </Link>
+              )
+            }
+          >
+            {totalTickets ? <Dona datos={ticketsPorEstado} total={totalTickets} etiquetaTotal="tickets" /> : <SinDatos texto="Aún no hay tickets" />}
+          </TarjetaGrafico>
+
+          <TarjetaGrafico
+            className="lg:col-span-2"
+            titulo="Tickets creados"
+            subtitulo="Últimos 30 días"
+            icono={TrendingUp}
+            extra={
+              <div className="text-right">
+                <p className="text-2xl font-semibold leading-none tracking-tight text-gray-900 tabular-nums">{periodoActual}</p>
+                {cambio !== null ? (
+                  <p className={`mt-1 inline-flex items-center gap-0.5 text-xs font-medium ${cambio > 0 ? 'text-amber-700' : 'text-emerald-700'}`}>
+                    {cambio > 0 ? <ArrowUpRight className="h-3.5 w-3.5" /> : <ArrowDownRight className="h-3.5 w-3.5" />}
+                    {Math.abs(cambio)}% vs. 30 días previos
+                  </p>
+                ) : (
+                  <p className="mt-1 text-xs text-gray-500">en el periodo</p>
+                )}
+              </div>
+            }
+          >
+            <Tendencia serie={serie} unidad="tickets" color={COLORES.azul} />
+          </TarjetaGrafico>
         </div>
       </section>
 
       <section>
         <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-gray-500">Inventario</h2>
-        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-          <Kpi label="Activos totales" value={totalActivos} icon={Monitor} tono="slate" to="/assets" />
-          <Kpi label="Disponibles" value={assetStats?.available || 0} icon={CheckCircle2} tono="emerald" to="/assets?status=available" />
-          <Kpi label="En uso" value={assetStats?.in_use || 0} icon={Laptop} tono="brand" to="/assets?status=in_use" />
-          <Kpi label="En mantenimiento" value={assetStats?.maintenance || 0} icon={Wrench} tono="amber" to="/assets?status=maintenance" />
-        </div>
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+          <TarjetaGrafico titulo="Activos por estado" icono={Monitor}>
+            {totalActivos ? <Dona datos={activosPorEstado} total={totalActivos} etiquetaTotal="activos" /> : <SinDatos texto="Aún no hay activos" />}
+          </TarjetaGrafico>
 
-        {totalActivos > 0 && (
-          <Card className="mt-4 p-5">
-            <div className="flex items-center justify-between">
-              <p className="text-sm font-medium text-gray-900">Estado del inventario</p>
-              <p className="text-xs text-gray-500">{totalActivos} activos</p>
-            </div>
-            <div className="mt-3 flex h-2.5 overflow-hidden rounded-full bg-gray-100">
-              {distribucion.map((d) =>
-                d.value ? (
-                  <div key={d.label} className={d.color} style={{ width: `${(d.value / totalActivos) * 100}%` }} title={`${d.label}: ${d.value}`} />
-                ) : null
-              )}
-            </div>
-            <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2">
-              {distribucion.map((d) => (
-                <span key={d.label} className="inline-flex items-center gap-2 text-[13px] text-gray-600">
-                  <span className={`h-2 w-2 rounded-full ${d.color}`} />
-                  {d.label}
-                  <span className="font-medium text-gray-900 tabular-nums">{d.value}</span>
-                  <span className="text-gray-400 tabular-nums">({Math.round((d.value / totalActivos) * 100)}%)</span>
-                </span>
-              ))}
-            </div>
-          </Card>
-        )}
+          <TarjetaGrafico className="lg:col-span-2" titulo="Activos por tipo" subtitulo={`${totalActivos} equipos registrados`} icono={Layers}>
+            {activosPorTipo.length ? <BarrasH datos={activosPorTipo} color={COLORES.azulClaro} unidad="activos" /> : <SinDatos texto="Aún no hay activos" />}
+          </TarjetaGrafico>
+        </div>
       </section>
 
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
