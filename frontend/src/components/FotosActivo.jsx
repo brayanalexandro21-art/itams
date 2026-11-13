@@ -17,7 +17,7 @@ export const fotosDe = (valor) => {
 };
 
 // Campo para subir, ver y quitar las fotos propias de un activo.
-export default function FotosActivo({ value = [], onChange, compacto = false }) {
+export default function FotosActivo({ value = [], onChange, compacto = false, vertical = false }) {
   const entrada = useRef(null);
   const [subiendo, setSubiendo] = useState(false);
   const [error, setError] = useState('');
@@ -51,9 +51,9 @@ export default function FotosActivo({ value = [], onChange, compacto = false }) 
 
   return (
     <div>
-      <div className={`grid gap-3 ${compacto ? 'grid-cols-2' : 'grid-cols-2 sm:grid-cols-4'}`}>
+      <div className={`grid gap-3 ${vertical ? 'grid-cols-1' : compacto ? 'grid-cols-2' : 'grid-cols-2 sm:grid-cols-4'}`}>
         {value.map((url, i) => (
-          <div key={url} className="group relative aspect-square overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
+          <div key={url} className={`group relative overflow-hidden rounded-lg border border-gray-200 bg-gray-50 ${vertical ? 'aspect-[4/3]' : 'aspect-square'}`}>
             <button type="button" onClick={() => setAmpliada(url)} className="h-full w-full" title="Ver en grande">
               <img src={url} alt={`Foto ${i + 1} del activo`} className="h-full w-full object-cover" />
             </button>
@@ -77,7 +77,7 @@ export default function FotosActivo({ value = [], onChange, compacto = false }) 
             onDragLeave={() => setArrastrando(false)}
             onDrop={(e) => { e.preventDefault(); setArrastrando(false); subir(e.dataTransfer.files); }}
             disabled={subiendo}
-            className={`flex aspect-square flex-col items-center justify-center gap-1.5 rounded-lg border-2 border-dashed p-2 text-center transition-colors ${
+            className={`flex ${vertical ? 'h-28' : 'aspect-square'} flex-col items-center justify-center gap-1.5 rounded-lg border-2 border-dashed p-2 text-center transition-colors ${
               arrastrando ? 'border-brand-500 bg-brand-50' : 'border-gray-300 hover:border-brand-400 hover:bg-brand-50/50'
             }`}
           >
